@@ -1,0 +1,8 @@
+---
+- !host 
+  id: conjur/service-broker
+  owner: !group security_admin
+
+- !webservice
+  id: service-broker
+  owner: !host conjur/service-broker
