@@ -1,12 +1,19 @@
 class BindController < ApplicationController
   def put
-    ServiceBinding.create instance_id, binding_id, app_id
-    render '{}'
+    credentials = ServiceBinding.create instance_id, binding_id, app_id
+    render json: {
+      :credentials => {
+        :account       => ConjurClient.account,
+        :appliance_url => ConjurClient.appliance_url,
+        :authn_login   => credentials[:authn_login],
+        :authn_api_key => credentials[:authn_api_key],
+      }
+    }
   end
 
   def delete
     ServiceBinding.delete instance_id, binding_id, app_id
-    render '{}'
+    render json: {}
   end
 
   def app_id
