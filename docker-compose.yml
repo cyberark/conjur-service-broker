@@ -1,0 +1,37 @@
+version: "2"
+
+services:
+  conjur:
+    image: cyberark/conjur:0.1.0-stable
+    environment:
+      CONJUR_APPLIANCE_URL: http://localhost:3000
+      DATABASE_URL: postgres://postgres@pg/postgres
+      CONJUR_ADMIN_PASSWORD: admin
+      PORT: 3000
+      RAILS_ENV:
+    ports: [ "3000:3000" ]
+    volumes: [ "./tmp:/app_tmp"]
+    entrypoint: |
+      bash -c "rm -f /app_tmp/api_key && \
+               export CONJUR_DATA_KEY=\"`conjurctl data-key generate`\" && \
+               conjurctl db migrate && \
+               conjurctl account create default | sed 's/.*: //' | tail -n1 > /app_tmp/api_key && \
+               conjurctl server"
+
+  pg:
+    image: postgres:9.3
+
+  service-broker:
+    build: ./
+    environment:
+      CONJUR_ACCOUNT: default
+      CONJUR_AUTHN_LOGIN: admin
+      CONJUR_APPLIANCE_URL: http://conjur:3000
+      PORT: 3030
+    ports: [ "3030:3030" ]
+    volumes: [ "./:/app" ]
+    stdin_open: true
+    command: /bin/bash
+
+networks:
+  default:
