@@ -9,7 +9,8 @@ class ServiceBinding
       host = conjur_api.role role_name(binding_id, app_id)
       raise RoleAlreadyCreated if host.exists?
 
-      res = conjur_api.load_policy 'root', template_create(binding_id)
+      res = conjur_api.load_policy ConjurClient.policy,
+                                   template_create(binding_id)
 
       return {
         :authn_login => "host/#{binding_id}",
@@ -18,7 +19,7 @@ class ServiceBinding
     end
 
     def delete instance_id, binding_id, app_id
-      conjur_api.load_policy 'root', 
+      conjur_api.load_policy ConjurClient.policy, 
                              template_delete(binding_id),
                              method: Conjur::API::POLICY_METHOD_PATCH
     end

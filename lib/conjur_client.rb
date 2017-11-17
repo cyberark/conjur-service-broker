@@ -22,6 +22,10 @@ class ConjurClient
     def appliance_url
       ENV['CONJUR_APPLIANCE_URL']
     end
+
+    def policy
+      ENV['CONJUR_POLICY'] || 'root'
+    end
   
     def ssl_cert
       ENV['CONJUR_SSL_CERTIFICATE']
