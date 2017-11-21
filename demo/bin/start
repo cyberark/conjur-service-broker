@@ -41,6 +41,6 @@ echo "Done."
 
 cf create-service conjur default conjur
 
-pushd demo
+pushd demo/app
   cf push --random-route
 popd
