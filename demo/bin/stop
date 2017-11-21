@@ -8,9 +8,10 @@ fatal () {
 [[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH"
 [[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
 
+
+cf delete-space demo -f || true
+
 rm -rf tmp/api_key
 
 docker-compose stop pg conjur
 docker-compose rm -f pg conjur
-
-cf delete-space demo -f || true
