@@ -5,7 +5,10 @@
 
 docker-compose up -d pg conjur
 
-cf push --no-start
+cf create-space demo
+cf target -s demo
+
+cf push --no-start --random-route
 
 printf "Waiting for API key... "
 while [ ! -f tmp/api_key ]
@@ -22,7 +25,7 @@ cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "$(cat tmp/api_key)"
 cf start conjur-service-broker
 
 APP_URL="http://`cf app conjur-service-broker | grep urls | awk '{print $2}'`"
-cf create-service-broker conjur-service-broker "TEMPORARY" "TEMPORARY" $APP_URL
+cf create-service-broker conjur-service-broker "TEMPORARY" "TEMPORARY" $APP_URL --space-scoped
 cf create-service conjur default conjur
 
 pushd demo

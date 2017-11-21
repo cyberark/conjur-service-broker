@@ -13,4 +13,6 @@ rm -rf tmp/api_key
 docker-compose stop pg conjur
 docker-compose rm -f pg conjur
 
+cf delete-space demo -f || true
+
 # TODO: delete all service records
