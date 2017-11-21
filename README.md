@@ -17,6 +17,8 @@ Things you may want to cover:
 
 * How to run the test suite
 
+To run the test suite, call `./test.sh` from your local machine - the script will stand up the needed containers and run the full suite of rspec and cucumber tests.
+
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions
