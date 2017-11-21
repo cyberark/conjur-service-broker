@@ -1,9 +1,9 @@
 class ProvisionController < ApplicationController
   def put
-    render '{}'
+    render json: {}
   end
 
   def delete
-    render '{}'
+    render json: {}
   end
 end

@@ -10,12 +10,7 @@ cf target -s demo
 
 cf push --no-start --random-route
 
-printf "Waiting for API key... "
-while [ ! -f tmp/api_key ]
-do
-  sleep 1
-done
-echo "Done."
+sleep 10
 
 cf set-env conjur-service-broker CONJUR_ACCOUNT default
 cf set-env conjur-service-broker CONJUR_APPLIANCE_URL http://host.pcfdev.io:3000/
@@ -24,7 +19,7 @@ cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "$(cat tmp/api_key)"
 
 cf start conjur-service-broker
 
-APP_URL="http://`cf app conjur-service-broker | grep urls | awk '{print $2}'`"
+APP_URL="http://`cf app conjur-service-broker | grep -E -w 'urls:|routes:' | awk '{print $2}'`"
 cf create-service-broker conjur-service-broker "TEMPORARY" "TEMPORARY" $APP_URL --space-scoped
 cf create-service conjur default conjur
 
