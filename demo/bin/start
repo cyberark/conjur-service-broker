@@ -42,5 +42,5 @@ echo "Done."
 cf create-service conjur default conjur
 
 pushd demo
-  cf push
+  cf push --no-route
 popd
