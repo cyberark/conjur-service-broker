@@ -11,7 +11,7 @@ cf target -s demo
 cf push --no-start --random-route
 
 printf "Waiting for API key... "
-while [[ ! -f tmp/api_key && -z `cat tmp/api_key` ]]
+while [[ ! -f tmp/api_key ]]
 do
   sleep 1
 done
