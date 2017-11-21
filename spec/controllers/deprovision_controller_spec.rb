@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'spec_helper'
 
 class DeprovisionControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
+  # spec "the truth" do
   #   assert true
   # end
 end
