@@ -18,3 +18,7 @@
 !/tmp/.keep
 
 .byebug_history
+
+# Ignore test output directories
+/features/reports/
+/spec/reports/
