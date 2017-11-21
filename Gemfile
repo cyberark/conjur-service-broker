@@ -34,6 +34,7 @@ group :development, :test do
   gem 'rspec', '~> 3'
   gem 'ci_reporter_rspec', '~> 1'
   gem 'rspec_junit_formatter'
+  gem 'rest-client'
 end
 
 group :development do
