@@ -23,7 +23,7 @@ done
 echo "Done."
 
 cf set-env conjur-service-broker CONJUR_ACCOUNT default
-cf set-env conjur-service-broker CONJUR_APPLIANCE_URL http://host.pcfdev.io:3000/
+cf set-env conjur-service-broker CONJUR_APPLIANCE_URL http://host.pcfdev.io:3000
 cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN admin
 cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "$(cat tmp/api_key)"
 
