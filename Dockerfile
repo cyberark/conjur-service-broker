@@ -11,7 +11,7 @@ COPY db           /app/db
 COPY lib          /app/lib
 COPY log          /app/log
 COPY public       /app/public
-COPY test         /app/test
+COPY spec         /app/spec
 COPY tmp          /app/tmp
 COPY vendor       /app
 COPY config.ru    /app
