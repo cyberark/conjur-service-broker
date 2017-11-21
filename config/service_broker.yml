@@ -5,6 +5,6 @@ catalog:
       description: ''
       bindable: true
       plans:
-        - name: enterprise
+        - name: default
           id: E52A94A4-1516-4412-B239-2816EBCCB6A6
           description: ''
