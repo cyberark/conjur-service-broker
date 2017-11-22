@@ -16,6 +16,12 @@ pipeline {
         junit 'features/reports/**/*.xml, spec/reports/*.xml'
       }
     }
+
+    stage('Push Docker image') {
+      steps {
+        sh './push-image.sh'
+      }
+    }
   }
 
   post {
