@@ -1,13 +1,11 @@
 #!/bin/bash -ex
 
-docker-compose down
-
-docker ps
-
 finish() {
   docker-compose down
 }
 trap finish EXIT
+
+export COMPOSE_PROJECT_NAME=conjurdev
 
 # Stand up containers
 # Make sure we keep up to date with gem changes
