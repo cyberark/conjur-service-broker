@@ -19,6 +19,8 @@ COPY Gemfile      /app
 COPY Gemfile.lock /app
 COPY Rakefile     /app
 
+EXPOSE 3030
+
 WORKDIR /app
 
 RUN bundle install

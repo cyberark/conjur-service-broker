@@ -28,7 +28,6 @@ services:
       CONJUR_APPLIANCE_URL: http://conjur:3000
       PORT: 3030
     ports: [ "3030:3030" ]
-    expose: [ "3030" ]
     volumes: [ "./:/app" ]
     stdin_open: true
 
