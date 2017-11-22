@@ -18,7 +18,7 @@ class ServiceBinding
       }
     end
 
-    def delete instance_id, binding_id, app_id
+    def delete binding_id
       conjur_api.load_policy ConjurClient.policy, 
                              template_delete(binding_id),
                              method: Conjur::API::POLICY_METHOD_PATCH

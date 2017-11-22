@@ -12,10 +12,9 @@ services:
     ports: [ "3000:3000" ]
     volumes: [ "./tmp:/app_tmp"]
     entrypoint: |
-      bash -c "rm -f /app_tmp/api_key && \
-               export CONJUR_DATA_KEY=\"`conjurctl data-key generate`\" && \
+      bash -c "export CONJUR_DATA_KEY=\"`conjurctl data-key generate`\" && \
                conjurctl db migrate && \
-               conjurctl account create default | sed 's/.*: //' | tail -n1 > /app_tmp/api_key && \
+               conjurctl account create default | tail -n1 | awk '{print $$NF}' > /app_tmp/api_key && \
                conjurctl server"
 
   pg:

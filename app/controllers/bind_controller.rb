@@ -12,7 +12,7 @@ class BindController < ApplicationController
   end
 
   def delete
-    ServiceBinding.delete instance_id, binding_id, app_id
+    ServiceBinding.delete binding_id
     render json: {}
   end
 
