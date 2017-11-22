@@ -30,9 +30,6 @@ services:
     ports: [ "3030:3030" ]
     volumes: [ "./:/app" ]
     stdin_open: true
-    #command: /bin/bash
-    entrypoint: |
-      bash -c "export CONJUR_AUTHN_API_KEY=`cat tmp/api_key` && ./bin/rails s -b 0.0.0.0"
 
 networks:
   default:
