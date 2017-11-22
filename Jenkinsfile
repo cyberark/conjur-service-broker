@@ -9,6 +9,12 @@ pipeline {
   }
 
   stages {
+    stage('Build Docker image') {
+      steps {
+        sh './build.sh'
+      }
+    }
+
     stage('Run tests') {
       steps {
         sh './test.sh'
