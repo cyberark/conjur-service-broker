@@ -1,6 +1,6 @@
 TAG="${1:-$(< VERSION)-$(git rev-parse --short HEAD)}"
 
-INTERNAL_IMAGE='registry.tld/cyberark/conjur-service-broker'
+INTERNAL_IMAGE='registry.tld/conjurinc/conjur-service-broker'
 
 function main() {
   echo "TAG = $TAG"
