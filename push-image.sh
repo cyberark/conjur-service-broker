@@ -1,5 +1,6 @@
 TAG="${1:-$(< VERSION)-$(git rev-parse --short HEAD)}"
 
+SOURCE_IMAGE='conjur-service-broker'
 INTERNAL_IMAGE='registry.tld/conjurinc/conjur-service-broker'
 
 function main() {
