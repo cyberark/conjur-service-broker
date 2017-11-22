@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+docker-compose down
+
 finish() {
   docker-compose down
 }
