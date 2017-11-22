@@ -19,8 +19,10 @@ COPY Gemfile      /app
 COPY Gemfile.lock /app
 COPY Rakefile     /app
 
+EXPOSE 3030
+
 WORKDIR /app
 
 RUN bundle install
 
-CMD ["/app/bin/rails", "s"]
+CMD ["/app/bin/rails", "s", "-p", "3030", "-b", "0.0.0.0"]
