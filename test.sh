@@ -2,10 +2,12 @@
 
 docker ps
 
-docker-compose down
+docker-compose down --rmi 'local' --volumes
 
-finish() {
-  docker-compose down
+function finish {
+  echo 'Removing test environment'
+  echo '---'
+  docker-compose down --rmi 'local' --volumes
 }
 trap finish EXIT
 
