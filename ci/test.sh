@@ -2,6 +2,7 @@
 
 rspec --format RspecJunitFormatter --out spec/reports/test.xml --format progress
 
+# TODO: work rails s into cucumber bootstrap process.
 rails s -p 3000 -d
 cucumber --format junit --out features/reports  --format pretty
 
