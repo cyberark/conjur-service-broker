@@ -19,5 +19,5 @@ services:
       CONJUR_ACCOUNT: default
       CONJUR_AUTHN_LOGIN: admin
       CONJUR_APPLIANCE_URL: http://conjur
-    depends_on:
-      - conjur
+    volumes:
+      - "./:/app"
