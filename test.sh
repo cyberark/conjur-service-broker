@@ -17,9 +17,10 @@ export COMPOSE_PROJECT_NAME=conjurdev
 # Make sure we keep up to date with gem changes
 docker-compose rm -f
 
-docker-compose up -d conjur pg
+# docker-compose up -d conjur pg
 
-sleep 10
 
+docker-compose build --pull conjur-service-broker
 docker-compose up -d conjur-service-broker
-docker-compose exec -T conjur-service-broker ci/test.sh
+sleep 10
+docker-compose exec conjur-service-broker ci/test.sh
