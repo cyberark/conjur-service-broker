@@ -9,11 +9,23 @@ pipeline {
   }
 
   stages {
+    stage('Build Docker image') {
+      steps {
+        sh './build.sh'
+      }
+    }
+
     stage('Run tests') {
       steps {
         sh './test.sh'
 
         junit 'features/reports/**/*.xml, spec/reports/*.xml'
+      }
+    }
+
+    stage('Push Docker image') {
+      steps {
+        sh './push-image.sh'
       }
     }
   }
