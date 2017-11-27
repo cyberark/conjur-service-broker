@@ -9,8 +9,4 @@ WORKDIR /app
 COPY Gemfile /app/
 COPY Gemfile.lock /app/
 
-# EXPOSE 3030
-
 RUN bundle install
-
-# CMD ["/app/bin/rails", "s", "-p", "3030", "-b", "0.0.0.0"]
