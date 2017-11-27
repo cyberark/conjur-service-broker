@@ -2,6 +2,8 @@
 
 docker ps
 
+docker-compose down
+
 finish() {
   docker-compose down
 }
