@@ -1,6 +1,6 @@
 catalog:
   services:
-    - name: conjur
+    - name: cyberark-conjur
       id: C024E536-6DC4-45C6-8A53-127E7F8275AB
       description: Provide applications with a Conjur role and API key
       bindable: true
