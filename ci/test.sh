@@ -3,6 +3,8 @@
 rspec --format RspecJunitFormatter --out spec/reports/test.xml --format progress
 
 # TODO: work rails s into cucumber bootstrap process.
+export SECURITY_USER_NAME=TESTING_USER_NAME
+export SECURITY_USER_PASSWORD=TESTING_USER_PASSWORD
 rails s -p 3000 -d
 cucumber --format junit --out features/reports  --format pretty
 

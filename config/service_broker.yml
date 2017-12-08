@@ -6,8 +6,8 @@ catalog:
       bindable: true
       metadata:
         displayName: CyberArk Conjur
-        imageUrl: [link to icon]
-        longDescription: [long descript]
+        imageUrl: https://www.conjur.org/img/feature-icons/machine-identity-teal.svg
+#        longDescription: [long descript]
         providerDisplayName: CyberArk
         documentationUrl: https://www.conjur.org/api.html
         supportUrl: https://www.conjur.org/support.html
