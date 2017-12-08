@@ -11,9 +11,9 @@ Then(/^there is a list of services$/) do
 end
 
 Then(/^the singular service is named "([^"]*)"$/) do |expected_service|
-  expect(@result['services'][0]['name'] == expected_service).to be true
+  expect(@result['services'][0]['name']).to eq expected_service
 end
 
 Then(/^the singular plan is named "([^"]*)"$/) do |expected_plan|
-  expect(@result['services'][0]['plans'][0]['name'] == expected_plan).to be true
+  expect(@result['services'][0]['plans'][0]['name']).to eq expected_plan
 end
