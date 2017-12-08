@@ -18,9 +18,11 @@ class ApplicationController < ActionController::API
   private
 
   def authenticate
-    username, password = ENV['AUTH_USERNAME'], ENV['AUTH_PASSWORD']
-    if username.present? || password.present?
-      http_basic_authenticate_with(name: username, password: password)
+    auth_username, auth_password = ENV['AUTH_USERNAME'], ENV['AUTH_PASSWORD']
+    if auth_username.present? || auth_password.present?
+      authenticate_or_request_with_http_basic do |username, password|
+        username == auth_username && password == auth_password
+      end
     end
   end
 end
