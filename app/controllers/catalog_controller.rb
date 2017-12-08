@@ -7,7 +7,6 @@ class CatalogController < ApplicationController
 
   def catalog
     @CATALOG ||= generate_catalog
-    @CATALOG
   end
 
   def generate_catalog
