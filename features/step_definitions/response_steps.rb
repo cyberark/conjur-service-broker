@@ -17,7 +17,3 @@ end
 Then(/^the singular plan is named "([^"]*)"$/) do |expected_plan|
   expect(@result['services'][0]['plans'][0]['name']).to eq expected_plan
 end
-
-Then(/^the response has HTTP status code 403$/) do
-  expect(@response.code).to eq(403)
-end
