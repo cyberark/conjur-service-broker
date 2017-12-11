@@ -30,6 +30,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'cucumber', '~> 2'
+  gem 'json_spec', '~> 1.1.5'
   gem 'aruba'
   gem 'rspec', '~> 3'
   gem 'ci_reporter_rspec', '~> 1'
