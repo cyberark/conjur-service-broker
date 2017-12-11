@@ -11,7 +11,7 @@ class ApplicationController < ActionController::API
       name == ENV['SECURITY_USER_NAME'] && password == ENV['SECURITY_USER_PASSWORD']
     end
   end
-  
+
   def conflict_error e
     logger.warn(e)
     head :conflict

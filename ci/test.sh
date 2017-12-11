@@ -1,12 +1,8 @@
-#!/bin/bash -x
+#!/bin/bash -ex
 
-rspec --format RspecJunitFormatter --out spec/reports/test.xml --format progress
+# TODO - The commented arguments are throwing an exeception unreleated to the
+# success of the RSpec test.  We need to get this resolved and export the
+# resulting XML file to the `spec/reports` folder for Jenkins to pickup.
+rspec # --format RspecJunitFormatter --out spec/reports/test.xml
 
-# TODO: work rails s into cucumber bootstrap process.
-export SECURITY_USER_NAME="TEST_USER_NAME"
-export SECURITY_PASSWORD="TEST_USER_PASSWORD"
-rails s -p 3000 -d
-cucumber --format junit --out features/reports  --format pretty
-
-# exit 0 so failing tests will mark the build unstable
-exit 0
+cucumber --format junit --out features/reports  --format pretty --backtrace --verbose

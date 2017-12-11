@@ -14,7 +14,7 @@ When(/^I get "([^"]*)" with basic auth username="([^"]*)" password="([^"]*)"$/) 
 end
 
 When(/^I get "([^"]*)"$/) do |path|
-  step 'I get "%s" with basic auth username="%s" password="%s"' % [path, 'TEST_USER_NAME', 'TEST_USER_PASSWORD']
+  step %Q(I get "#{path}" with correct basic auth credentials)
 end
 
 When(/^I get "([^"]*)" with correct basic auth credentials$/) do |path|
