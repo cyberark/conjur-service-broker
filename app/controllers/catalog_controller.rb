@@ -1,5 +1,5 @@
 class CatalogController < ApplicationController
   def get
-    render json: Rails.application.config.service_broker['catalog']
+    render json: Rails.application.config.catalog
   end
 end

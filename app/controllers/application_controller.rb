@@ -6,6 +6,12 @@ class ApplicationController < ActionController::API
 
   before_action :authenticate
 
+  def authenticate
+    authenticate_or_request_with_http_basic do |name, password|
+      name == ENV['SECURITY_USER_NAME'] && password == ENV['SECURITY_USER_PASSWORD']
+    end
+  end
+  
   def conflict_error e
     logger.warn(e)
     head :conflict
