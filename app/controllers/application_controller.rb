@@ -4,8 +4,14 @@ class ApplicationController < ActionController::API
   rescue_from ServiceBinding::RoleAlreadyCreated, with: :conflict_error
   rescue_from RestClient::Unauthorized, with: :server_error
 
-  http_basic_authenticate_with name: ENV['AUTH_USERNAME'], password: ENV['AUTH_PASSWORD'] unless ENV['AUTH_USERNAME'].blank? && ENV['AUTH_PASSWORD'].blank?
+  before_action :authenticate
 
+  def authenticate
+    authenticate_or_request_with_http_basic do |name, password|
+      name == ENV['SECURITY_USER_NAME'] && password == ENV['SECURITY_PASSWORD']
+    end
+  end
+  
   def conflict_error e
     logger.warn(e)
     head :conflict
