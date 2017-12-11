@@ -11,7 +11,7 @@ class ApplicationController < ActionController::API
       name == ENV['SECURITY_USER_NAME'] && password == ENV['SECURITY_USER_PASSWORD']
     end
   end
-  
+
   def conflict_error e
     logger.warn(e)
     head :conflict
@@ -20,11 +20,5 @@ class ApplicationController < ActionController::API
   def server_error e
     logger.warn(e)
     head :internal_server_error
-  end
-
-  def authenticate
-    authenticate_or_request_with_http_basic do |username, password|
-      username == ENV['AUTH_USERNAME'] && password == ENV['AUTH_PASSWORD']
-    end
   end
 end

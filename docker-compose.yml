@@ -20,8 +20,8 @@ services:
       CONJUR_ACCOUNT: cucumber
       CONJUR_AUTHN_LOGIN: admin
       CONJUR_APPLIANCE_URL: http://conjur
-      AUTH_USERNAME: TEST_USER_NAME
-      AUTH_PASSWORD: TEST_USER_PASSWORD
+      SECURITY_USER_NAME: TEST_USER_NAME
+      SECURITY_USER_NAME: TEST_USER_PASSWORD
     command: rails s -p 3000 -b 0.0.0.0
     expose:
       - "3000"
