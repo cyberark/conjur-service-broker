@@ -1,4 +1,4 @@
-Feature: Manage service binding
+Feature: Catalog
 
   Scenario: Send a GET request to /v2/catalog
     When I get "/v2/catalog"
