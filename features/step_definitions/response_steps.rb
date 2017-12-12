@@ -10,14 +10,10 @@ Then(/^there is a list of services$/) do
   expect(@result).to have_key("services")
 end
 
-Then(/^one of the services is "([^"]*)"$/) do |expected_service|
-  have_service = false
-  @result["services"].each do |service|
-    expect(service).to have_key("name")
-    if (service["name"] == expected_service)
-      have_service = true
-    end
-  end
+Then(/^the singular service is named "([^"]*)"$/) do |expected_service|
+  expect(@result['services'][0]['name']).to eq expected_service
+end
 
-  expect(have_service).to be true
+Then(/^the singular plan is named "([^"]*)"$/) do |expected_plan|
+  expect(@result['services'][0]['plans'][0]['name']).to eq expected_plan
 end
