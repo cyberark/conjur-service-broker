@@ -1,4 +1,4 @@
-Then(/^the HTTP response status code is (\d+)$/) do |status|
+Then(/^the HTTP response status code is "(\d+)"$/) do |status|
   expect(@response.code).to eq(status.to_i)
 end
 
