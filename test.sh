@@ -14,8 +14,6 @@ trap finish EXIT
 
 export COMPOSE_PROJECT_NAME=conjurdev
 
-
-docker-compose build conjur-service-broker
 docker-compose up -d conjur pg
 
 sleep 10
