@@ -3,15 +3,23 @@ When (/^my HTTP basic auth credentials are incorrect$/) do
   @basic_auth_password = 'INCORRECT_USER_PASSWORD'
 end
 
+When (/^I use a service broker with a bad Conjur URL$/) do
+  @service_broker_host = 'http://service-broker-bad-url:3001'
+end
+
+When (/^I use a service broker with a bad Conjur API key$/) do
+  @service_broker_host = 'http://service-broker-bad-key:3002'
+end
+
 When(/^I GET "([^"]*)"$/) do |path|
   try_request do
-    get_json path, { user: @basic_auth_user, password: @basic_auth_password }
+    get_json path, { user: @basic_auth_user, password: @basic_auth_password, host: @service_broker_host }
   end
 end
 
 When(/^I PUT "([^"]*)" with body:$/) do |path, body|
   try_request do
-    put_json path, body, { user: @basic_auth_user, password: @basic_auth_password }
+    put_json path, body, { user: @basic_auth_user, password: @basic_auth_password, host: @service_broker_host }
   end
 end
 
