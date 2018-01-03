@@ -7,7 +7,7 @@ module ServiceBrokerWorld
   end
   
   def headers
-    @headers ||= {}
+    @headers ||= { content_type: 'application/json' }
   end
 
   def basic_auth_username
