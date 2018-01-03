@@ -1,7 +1,7 @@
 class BindController < ApplicationController
   def put
     credentials = ServiceBinding.create instance_id, binding_id, app_id
-    render json: {
+    render status: 201, json: {
       :credentials => {
         :account       => ConjurClient.account,
         :appliance_url => ConjurClient.appliance_url,
