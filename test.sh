@@ -19,7 +19,7 @@ docker-compose build conjur-service-broker
 docker-compose up -d conjur pg
 
 sleep 10
-api_key=$(docker-compose exec conjur bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
+api_key=$(docker-compose exec conjur bash -T -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
 echo "API KEY: $api_key"
 export CONJUR_AUTHN_API_KEY="$api_key"
 
