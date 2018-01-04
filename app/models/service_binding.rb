@@ -4,13 +4,18 @@ class ServiceBinding
   class RoleAlreadyCreated < RuntimeError
   end
 
+  class ConjurAuthenticationError < RuntimeError
+  end
+
+  class UnknownConjurHostError < RuntimeError
+  end
+
   class << self
     def create instance_id, binding_id, app_id
       host = conjur_api.role role_name(binding_id, app_id)
       raise RoleAlreadyCreated if host.exists?
 
-      res = conjur_api.load_policy ConjurClient.policy,
-                                   template_create(binding_id)
+      res = load_policy template_create(binding_id)
 
       return {
         :authn_login => "host/#{binding_id}",
@@ -19,9 +24,8 @@ class ServiceBinding
     end
 
     def delete binding_id
-      conjur_api.load_policy ConjurClient.policy, 
-                             template_delete(binding_id),
-                             method: Conjur::API::POLICY_METHOD_PATCH
+      load_policy template_delete(binding_id),
+                  method: Conjur::API::POLICY_METHOD_PATCH
     end
 
     def template_delete binding_id
@@ -35,6 +39,16 @@ class ServiceBinding
       """
       - !host #{binding_id}
       """
+    end
+
+    def load_policy policy, method: Conjur::API::POLICY_METHOD_POST
+      begin
+        conjur_api.load_policy ConjurClient.policy, policy, method: method
+      rescue SocketError
+        raise UnknownConjurHostError.new "Invalid Conjur host (#{ConjurClient.appliance_url.to_s})"
+      rescue RestClient::Unauthorized => e
+        raise ConjurAuthenticationError.new "Conjur authentication failed: #{e.message}"
+      end
     end
 
     def role_name binding_id, app_id

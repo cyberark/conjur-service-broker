@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
 
+  rescue_from ServiceBinding::UnknownConjurHostError, with: :server_error
+  rescue_from ServiceBinding::ConjurAuthenticationError, with: :invalid_configuration
   rescue_from ServiceBinding::RoleAlreadyCreated, with: :conflict_error
   rescue_from RestClient::Unauthorized, with: :server_error
 
@@ -20,5 +22,10 @@ class ApplicationController < ActionController::API
   def server_error e
     logger.warn(e)
     head :internal_server_error
+  end
+
+  def invalid_configuration e
+    logger.warn(e)
+    head :forbidden
   end
 end
