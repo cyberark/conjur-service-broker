@@ -25,6 +25,6 @@ end
 
 When(/^I DELETE "([^"]*)"$/) do |path|
   try_request do
-    delete_json path, { user: @basic_auth_user, password: @basic_auth_password }
+    delete_json path, { user: @basic_auth_user, password: @basic_auth_password, host: @service_broker_host }
   end
 end
