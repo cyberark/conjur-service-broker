@@ -22,9 +22,42 @@ services:
       CONJUR_APPLIANCE_URL: http://conjur
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
+      CONJUR_AUTHN_API_KEY:
     command: rails s -p 3000 -b 0.0.0.0
     expose:
       - "3000"
+    volumes:
+      - "./:/app"
+
+  service-broker-bad-url:
+    image: conjur-service-broker
+    build: ./
+    environment:
+      CONJUR_ACCOUNT: cucumber
+      CONJUR_AUTHN_LOGIN: admin
+      CONJUR_APPLIANCE_URL: http://192.0.2.0
+      SECURITY_USER_NAME: TEST_USER_NAME
+      SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
+      CONJUR_AUTHN_API_KEY: doesntmatter
+    command: rails s -p 3001 -b 0.0.0.0 -P tmp/pids/server1.pid
+    expose:
+      - "3001"
+    volumes:
+      - "./:/app"
+
+  service-broker-bad-key:
+    image: conjur-service-broker
+    build: ./
+    environment:
+      CONJUR_ACCOUNT: cucumber
+      CONJUR_AUTHN_LOGIN: admin
+      CONJUR_APPLIANCE_URL: http://conjur
+      SECURITY_USER_NAME: TEST_USER_NAME
+      SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
+      CONJUR_AUTHN_API_KEY: 123bad
+    command: rails s -p 3002 -b 0.0.0.0 -P tmp/pids/server2.pid
+    expose:
+      - "3002"
     volumes:
       - "./:/app"
 

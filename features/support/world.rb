@@ -7,7 +7,7 @@ module ServiceBrokerWorld
   end
   
   def headers
-    @headers ||= {}
+    @headers ||= { content_type: 'application/json' }
   end
 
   def basic_auth_username
@@ -72,7 +72,8 @@ module ServiceBrokerWorld
   private
 
   def rest_resource options
-    args = [ service_broker_host ]
+    host = options[:host] || service_broker_host
+    args = [ host ]
     args << Hash.new if args.length == 1
     args.last[:headers] ||= {}
     args.last[:headers].merge(headers) if headers
