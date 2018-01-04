@@ -8,7 +8,7 @@ function finish {
   echo 'Removing test environment'
   echo '---'
   docker-compose down --rmi 'local' --volumes
-  rm -f tmp/pids/server.pid
+  rm -f tmp/pids/server*.pid
 }
 trap finish EXIT
 
