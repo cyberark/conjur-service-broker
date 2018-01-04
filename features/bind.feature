@@ -1,8 +1,7 @@
 Feature: Binding
 
   Scenario: Bind resource
-
-    When I PUT "/v2/service_instances/9b292a9c-af66-4797-8d98-b30801f32a77/service_bindings/1020cc1d-eff2-44d0-a958-f11ca06ebc68" with body:
+    When I make a bind request with body:
     """
     {
       "service_id": "cfa8d6c0-105d-45e7-8510-2811bc57a186",
@@ -17,21 +16,14 @@ Feature: Binding
     }
     """
     Then the HTTP response status code is "201"
-    And the JSON should be:
-    """
-    {
-      "credentials": {
-        "account": "",
-        "appliance_url": "",
-        "authn_login": "",
-        "authn_api_key": ""
-      }
-    }
-    """
+    And the JSON at "credentials/account" should be "cucumber"
+    And the JSON at "credentials/appliance_url" should be "http://conjur"
+    And the JSON at "credentials/authn_login" should be a string
+    And the JSON at "credentials/authn_api_key" should be a string
 
   Scenario: Bind resource with incorrect Conjur credentials
-    When I use a service broker with an invalid Conjur key
-    And I PUT "/v2/service_instances/9b292a9c-af66-4797-8d98-b30801f32a77/service_bindings/1020cc1d-eff2-44d0-a958-f11ca06ebc68" with body:
+    When I use a service broker with a bad Conjur API key
+    And I make a bind request with body:
     """
     {
       "service_id": "cfa8d6c0-105d-45e7-8510-2811bc57a186",
@@ -47,10 +39,9 @@ Feature: Binding
     """
     Then the HTTP response status code is "401"
 
-
   Scenario: Bind resource with Conjur server error
-    When I use a service broker with an invalid Conjur url
-    And I PUT "/v2/service_instances/9b292a9c-af66-4797-8d98-b30801f32a77/service_bindings/1020cc1d-eff2-44d0-a958-f11ca06ebc68" with body:
+    When I use a service broker with a bad Conjur URL
+    And I make a bind request with body:
     """
     {
       "service_id": "cfa8d6c0-105d-45e7-8510-2811bc57a186",
