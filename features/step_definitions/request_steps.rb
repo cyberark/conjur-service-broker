@@ -11,6 +11,13 @@ When (/^I use a service broker with a bad Conjur API key$/) do
   @service_broker_host = 'http://service-broker-bad-key:3002'
 end
 
+When(/^I make a bind request with an existing binding_id and body:$/) do |body|
+  url = "/v2/service_instances/#{SecureRandom.uuid}/service_bindings/#{SecureRandom.uuid}"
+  
+  step "I PUT \"#{url}\" with body:", body
+  step "I PUT \"#{url}\" with body:", body
+end
+
 When(/^I make a bind request with body:$/) do |body|
   url = "/v2/service_instances/#{SecureRandom.uuid}/service_bindings/#{SecureRandom.uuid}"
   step "I PUT \"#{url}\" with body:", body
