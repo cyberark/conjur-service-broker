@@ -10,6 +10,9 @@ class ServiceBinding
   class UnknownConjurHostError < RuntimeError
   end
 
+  class HostNotFound < RuntimeError
+  end
+
   class << self
     def create instance_id, binding_id, app_id
       host = conjur_api.role role_name(binding_id, app_id)
@@ -24,6 +27,18 @@ class ServiceBinding
     end
 
     def delete binding_id
+      resource_id = "#{ConjurClient.account}:host:#{binding_id}"
+
+      begin
+        host = conjur_api.resource(resource_id)
+      rescue SocketError
+        raise UnknownConjurHostError.new "Invalid Conjur host (#{ConjurClient.appliance_url.to_s})"
+      rescue RestClient::Unauthorized => e
+        raise ConjurAuthenticationError.new "Conjur authentication failed: #{e.message}"
+      end
+
+      raise HostNotFound if !host.exists?
+
       load_policy template_delete(binding_id),
                   method: Conjur::API::POLICY_METHOD_PATCH
     end

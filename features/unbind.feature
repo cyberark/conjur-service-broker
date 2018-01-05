@@ -61,6 +61,7 @@ Feature: Unbinding
     And I use a service broker with a bad Conjur API key
     And I DELETE "/v2/service_instances/0da4a0b4-9266-4664-a52e-bc87f64e1b64/service_bindings/cf79a9c0-0ae7-49b8-aeaa-84d2f6b14df0"
     Then the HTTP response status code is "403"
+    And the JSON should be {}
 
   Scenario: Unbind with Conjur unavailable
     When I PUT "/v2/service_instances/0da4a0b4-9266-4664-a52e-bc87f64e1b64/service_bindings/cf79a9c0-0ae7-49b8-aeaa-84d2f6b14df0" with body:
@@ -80,3 +81,4 @@ Feature: Unbinding
     And I use a service broker with a bad Conjur URL
     And I DELETE "/v2/service_instances/0da4a0b4-9266-4664-a52e-bc87f64e1b64/service_bindings/cf79a9c0-0ae7-49b8-aeaa-84d2f6b14df0"
     Then the HTTP response status code is "500"
+    And the JSON should be {}

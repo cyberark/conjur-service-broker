@@ -3,6 +3,7 @@ class ApplicationController < ActionController::API
 
   rescue_from ServiceBinding::UnknownConjurHostError, with: :server_error
   rescue_from ServiceBinding::ConjurAuthenticationError, with: :invalid_configuration
+  rescue_from ServiceBinding::HostNotFound, with: :host_not_found
   rescue_from ServiceBinding::RoleAlreadyCreated, with: :conflict_error
   rescue_from RestClient::Unauthorized, with: :server_error
 
@@ -16,16 +17,21 @@ class ApplicationController < ActionController::API
 
   def conflict_error e
     logger.warn(e)
-    head :conflict
+    render json: {}, status: :conflict
   end
 
   def server_error e
     logger.warn(e)
-    head :internal_server_error
+    render json: {}, status: :internal_server_error
   end
 
   def invalid_configuration e
     logger.warn(e)
-    head :forbidden
+    render json: {}, status: :forbidden
+  end
+
+  def host_not_found e
+    logger.warn(e)
+    render json: {}, status: :gone
   end
 end
