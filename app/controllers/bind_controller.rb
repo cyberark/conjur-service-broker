@@ -1,11 +1,21 @@
+class MissingAppGuidError < RuntimeError
+end
+
 class BindController < ApplicationController
   def put
+    raise MissingAppGuidError if app_id.nil?
+
     credentials =
       call_conjur_api do
         ServiceBinding.create(instance_id, binding_id, app_id)
       end
 
     render status: 201, json: { credentials: credentials }
+  rescue MissingAppGuidError
+    render status: :unprocessable_entity, json: {
+      "error": "RequiresApp",
+      "description": "This service supports generation of credentials through binding an application only."
+    }    
   end
 
   def delete
@@ -17,7 +27,7 @@ class BindController < ApplicationController
   end
 
   def app_id
-    params[:bind_resource][:app_guid]
+    params[:bind_resource].try(:[], :app_guid)
   end
 
   def instance_id
