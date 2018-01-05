@@ -18,11 +18,11 @@ class ServiceBinding
       host = conjur_api.role role_name(binding_id, app_id)
       raise RoleAlreadyCreated if host.exists?
 
-      res = load_policy template_create(binding_id)
+      result = load_policy template_create(binding_id)
 
       return {
         :authn_login => "host/#{binding_id}",
-        :authn_api_key => res.created_roles.values.first['api_key']
+        :authn_api_key => result.created_roles.values.first['api_key']
       }
     end
 
