@@ -49,7 +49,7 @@ module ServiceBrokerWorld
   
   def set_result response
     @response = response
-    
+
     if response.headers[:content_type] =~ /^application\/json/
       @response_body = JSON.parse(response)
       

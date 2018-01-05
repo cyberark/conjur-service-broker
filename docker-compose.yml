@@ -35,7 +35,7 @@ services:
     environment:
       CONJUR_ACCOUNT: cucumber
       CONJUR_AUTHN_LOGIN: admin
-      CONJUR_APPLIANCE_URL: http://192.0.2.0
+      CONJUR_APPLIANCE_URL: http://badurl.invalid
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY: doesntmatter
@@ -54,7 +54,7 @@ services:
       CONJUR_APPLIANCE_URL: http://conjur
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
-      CONJUR_AUTHN_API_KEY: 123bad
+      CONJUR_AUTHN_API_KEY: 123badconjurkey
     command: rails s -p 3002 -b 0.0.0.0 -P tmp/pids/server2.pid
     expose:
       - "3002"
