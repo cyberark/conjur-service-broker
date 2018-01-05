@@ -1,6 +1,11 @@
 class BindController < ApplicationController
   def put
-    credentials = ServiceBinding.create instance_id, binding_id, app_id
+    credentials = nil
+    
+    call_api do
+      credentials = ServiceBinding.create instance_id, binding_id, app_id
+    end
+
     render status: 201, json: {
       :credentials => {
         :account       => ConjurClient.account,
@@ -12,7 +17,10 @@ class BindController < ApplicationController
   end
 
   def delete
-    ServiceBinding.delete binding_id
+    call_api do
+      ServiceBinding.delete binding_id
+    end
+    
     render json: {}
   end
 

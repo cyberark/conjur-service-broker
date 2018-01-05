@@ -37,6 +37,7 @@ Feature: Binding
     }
     """
     Then the HTTP response status code is "409"
+    And the JSON should be {}
 
   Scenario: Bind resource with incorrect Conjur credentials
     When I use a service broker with a bad Conjur API key
@@ -54,7 +55,8 @@ Feature: Binding
       }
     }
     """
-    Then the HTTP response status code is "401"
+    Then the HTTP response status code is "403"
+    And the JSON should be {}
 
   Scenario: Bind resource with Conjur server error
     When I use a service broker with a bad Conjur URL
@@ -73,3 +75,4 @@ Feature: Binding
     }
     """
     Then the HTTP response status code is "500"
+    And the JSON should be {}
