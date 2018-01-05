@@ -9,8 +9,10 @@ class ApplicationController < ActionController::API
 
   rescue_from UnknownConjurHostError, with: :server_error
   rescue_from ConjurAuthenticationError, with: :invalid_configuration
+  
   rescue_from ServiceBinding::HostNotFound, with: :host_not_found
   rescue_from ServiceBinding::RoleAlreadyCreated, with: :conflict_error
+  
   rescue_from RestClient::Unauthorized, with: :server_error
 
   before_action :authenticate
@@ -21,7 +23,7 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def call_api
+  def call_conjur_api
     begin
       yield
     rescue SocketError

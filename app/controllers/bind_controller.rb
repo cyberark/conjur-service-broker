@@ -2,7 +2,7 @@ class BindController < ApplicationController
   def put
     credentials = nil
     
-    call_api do
+    call_conjur_api do
       credentials = ServiceBinding.create instance_id, binding_id, app_id
     end
 
@@ -17,7 +17,7 @@ class BindController < ApplicationController
   end
 
   def delete
-    call_api do
+    call_conjur_api do
       ServiceBinding.delete binding_id
     end
     
