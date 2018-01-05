@@ -3,7 +3,7 @@ end
 
 class BindController < ApplicationController
   def put
-    raise MissingAppGuidError if app_id.nil?
+    raise MissingAppGuidError.new("App GUID is required") if app_id.nil?
 
     credentials =
       call_conjur_api do
@@ -11,7 +11,9 @@ class BindController < ApplicationController
       end
 
     render status: 201, json: { credentials: credentials }
-  rescue MissingAppGuidError
+  rescue MissingAppGuidError => e
+    logger.warn(e)
+    
     render status: :unprocessable_entity, json: {
       "error": "RequiresApp",
       "description": "This service supports generation of credentials through binding an application only."

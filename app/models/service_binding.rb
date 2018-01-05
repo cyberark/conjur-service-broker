@@ -26,7 +26,7 @@ class ServiceBinding
   def create(app_id)
     host = conjur_api.role(role_name)
 
-    raise RoleAlreadyCreated if host.exists?
+    raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
 
     result = load_policy(template_create)
     
