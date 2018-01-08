@@ -6,7 +6,7 @@ class BindController < ApplicationController
     raise MissingAppGuidError.new("App GUID is required") if app_id.nil?
 
     credentials =
-      call_conjur_api do
+      with_conjur_exceptions do
         ServiceBinding.create(instance_id, binding_id, app_id)
       end
 
@@ -21,7 +21,7 @@ class BindController < ApplicationController
   end
 
   def delete
-    call_conjur_api do
+    with_conjur_exceptions do
       ServiceBinding.delete(instance_id, binding_id)
     end
     

@@ -30,13 +30,11 @@ class ServiceBinding
 
     result = load_policy(template_create)
     
-    raise HostNotFound if !host.exists?
-
     return {
-      :account       => ConjurClient.account,
-      :appliance_url => ConjurClient.appliance_url,
-      :authn_login => "host/#{@binding_id}",
-      :authn_api_key => result.created_roles.values.first['api_key']
+      account: ConjurClient.account,
+      appliance_url: ConjurClient.appliance_url,
+      authn_login: "host/#{@binding_id}",
+      authn_api_key: result.created_roles.values.first['api_key']
     }
   end
 

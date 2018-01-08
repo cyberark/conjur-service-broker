@@ -23,7 +23,7 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def call_conjur_api
+  def with_conjur_exceptions
     begin
       yield
     rescue SocketError
