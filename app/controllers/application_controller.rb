@@ -35,15 +35,14 @@ class ApplicationController < ActionController::API
 
   private
 
-    def authenticate_with_basic_auth
-      authenticate_with_http_basic do |name, password|
-        name == ENV['SECURITY_USER_NAME'] && password == ENV['SECURITY_USER_PASSWORD']
-      end
-
+  def authenticate_with_basic_auth
+    authenticate_with_http_basic do |name, password|
+      name == ENV['SECURITY_USER_NAME'] && password == ENV['SECURITY_USER_PASSWORD']
     end
+  end
 
-    def render_unauthorized
-      logger.warn("HTTP Basic: Access Denied")
-      render json: {}, status: :unauthorized
-    end
+  def render_unauthorized
+    logger.warn("HTTP Basic: Access Denied")
+    render json: {}, status: :unauthorized
+  end
 end
