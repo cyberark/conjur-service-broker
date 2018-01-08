@@ -4,6 +4,6 @@ class ProvisionController < ApplicationController
   end
 
   def delete
-    render json: {}
+    render status: :gone, json: {}
   end
 end
