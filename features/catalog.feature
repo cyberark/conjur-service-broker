@@ -4,6 +4,7 @@ Feature: Catalog
     When my HTTP basic auth credentials are incorrect
     And I GET "/v2/catalog"
     Then the HTTP response status code is "401"
+    And the JSON should be {}
 
   Scenario: Retrieve catalog
     When I GET "/v2/catalog"

@@ -10,8 +10,6 @@ function finish {
 }
 trap finish EXIT
 
-export COMPOSE_PROJECT_NAME=conjurdev
-
 docker-compose up -d conjur pg
 
 sleep 10
