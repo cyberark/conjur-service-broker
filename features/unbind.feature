@@ -18,6 +18,7 @@ Feature: Unbinding
     And my HTTP basic auth credentials are incorrect
     And I DELETE "/v2/service_instances/1dedc347-64e9-4845-812f-9ab37d710f82/service_bindings/1cd14451-abca-4689-91c8-82d605852221"
     Then the HTTP response status code is "401"
+    And the JSON should be {}
 
   Scenario: Unbind where binding does not exist
     When I DELETE "/v2/service_instances/fe837829-2174-4c7a-8686-d3635e38b145/service_bindings/e765e6d3-3264-417f-a726-172e3c364911"
