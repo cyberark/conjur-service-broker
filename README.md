@@ -6,7 +6,9 @@ from applications running within a Cloud Foundry (CF) deployment.
 ## Installing the Conjur Service Broker
 
 Before installing the Conjur Service Broker, you will need to load some buildpacks into
-your CF installation.
+your CF installation. The Conjur Buildpack uses [summon](https://cyberark.github.io/summon/) to load secrets into the environment of CF-deployed applications based on the app's `secrets.yml` file. The Conjur Buildpack is a decorator buildpack, and requires the meta-buildpack to work properly.
+
+#### Installation Instructions
 
 Install the `meta-buildpack` by cloning the [meta-buildpack repo](https://github.com/cf-platform-eng/meta-buildpack) and running
 (while logged into your CF deployment via the CF CLI):
@@ -47,6 +49,7 @@ The following environment variables are required to properly configure your Conj
   authentication
 
 
+The commands to upload the Conjur Service Broker to your CF deployment are as follows:
 ```
 # Download the repo and push the Service Broker app to CF
 git clone git@github.com:conjurinc/conjur-service-broker.git
@@ -72,6 +75,27 @@ cf create-service-broker conjur-service-broker "[username value]" "[password val
 cf create-service cyberark-conjur community conjur
 ```
 
+#### Service Broker Usage
+
+To use the Conjur Service Broker with a CF-deployed application, you will update the application to grab its secrets from the environment and include a list of the secrets ... in the application's `secrets.yml` file.
+
+To bind your application to the Conjur Service Instance, you can either run
+```
+cf bind-service my-app conjur
+```
+or you can update the application's deployment manifest to include the Conjur Service:
+```
+---
+applications:
+- name: my-app
+  services:
+  - conjur
+```
+In order to update the environment to load the secrets using the Conjur Service, you will need to restage the app:
+```
+cf restage my-app
+```
+
 ## Development
 
 To test the usage of the Conjur Service Broker within a CF deployment, you can
@@ -84,7 +108,7 @@ Service Broker API](https://github.com/openservicebrokerapi/servicebroker/blob/v
 will stand up the needed containers and run the full suite of rspec and cucumber
 tests.
 
-### Contributing
+#### Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
