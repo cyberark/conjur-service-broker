@@ -12,7 +12,7 @@ trap finish EXIT
 
 docker-compose up -d conjur pg
 
-sleep 10
+./wait_for_conjur.sh
 api_key=$(docker-compose exec -T conjur bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
 export CONJUR_AUTHN_API_KEY="$api_key"
 
