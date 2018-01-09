@@ -1,14 +1,14 @@
-# README
+## Getting Started
 
-The Conjur Service Broker will allow you to interact with your external Conjur service
-from applications running within a Cloud Foundry (CF) deployment.
+The Conjur Service Broker will allow you to interact with your external Conjur instance
+from applications running within a Cloud Foundry (CF) deployment. You will need to have an existing Conjur installation in order to use the Conjur Service Broker; for more information about installing Conjur, please visit [conjur.org](http://conjur.org) or check out our [github repository](https://github.com/cyberark/conjur).
 
-## Installing the Conjur Service Broker
+## Installation Instructions
+
+#### Installing the Conjur Buildpack
 
 Before installing the Conjur Service Broker, you will need to load some buildpacks into
-your CF installation. The Conjur Buildpack uses [summon](https://cyberark.github.io/summon/) to load secrets into the environment of CF-deployed applications based on the app's `secrets.yml` file. The Conjur Buildpack is a decorator buildpack, and requires the meta-buildpack to work properly.
-
-#### Installation Instructions
+your CF installation. The Conjur Buildpack uses [Summon](https://cyberark.github.io/summon/) to load secrets into the environment of CF-deployed applications based on the app's `secrets.yml` file. The Conjur Buildpack is a decorator buildpack, and requires the meta-buildpack to work properly.
 
 Install the `meta-buildpack` by cloning the [meta-buildpack repo](https://github.com/cf-platform-eng/meta-buildpack) and running
 (while logged into your CF deployment via the CF CLI):
@@ -27,6 +27,8 @@ cd cloudfoundry-conjur-buildpack
 ./upload.sh
 ```
 
+#### Installing the Conjur Service Broker
+
 Once you've installed both buildpacks, you can load the Conjur Service Broker into your CF deployment and configure it for use with your external Conjur
 instance. To load the Conjur Service Broker and prepare to use it with your CF-deployed applications, you will:
 
@@ -36,17 +38,11 @@ instance. To load the Conjur Service Broker and prepare to use it with your CF-d
 4. Create a service instance under the `community` plan
 
 The following environment variables are required to properly configure your Conjur Service Broker to communicate with your external Conjur instance:
-- Conjur Account (as `CONJUR_ACCOUNT`)
-  - The account name for the Conjur instance you are connecting to
-- Conjur Appliance URL (as `CONJUR_APPLIANCE_URL`)
-  - The URL of the Conjur appliance instance you are connecting to
-- Conjur Login (as `CONJUR_AUTHN_LOGIN`)
-  - The username of a Conjur user with update privilege on all Conjur policies associated with PCF-deployed applications. This will be used to add and remove hosts from the Conjur policy as apps are deployed to or removed from PCF.
-- Conjur API Key (as `CONJUR_AUTHN_API_KEY`)
-  - The API Key of the Conjur user whose username you have provided in the Conjur Login field
-- Basic Auth Credentials (as `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD`)
-  - The username and password your Conjur Service Broker should use for
-  authentication
+- `CONJUR_ACCOUNT`: the account name for the Conjur instance you are connecting to
+- `CONJUR_APPLIANCE_URL`: the URL of the Conjur appliance instance you are connecting to
+- `CONJUR_AUTHN_LOGIN`: the username of a Conjur user with update privilege on all Conjur policies associated with PCF-deployed applications. This will be used to add and remove hosts from the Conjur policy as apps are deployed to or removed from PCF.
+- `CONJUR_AUTHN_API_KEY`: the API Key of the Conjur user whose username you have provided in the Conjur Login field
+- `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD`: the Basic Auth username and password your Conjur Service Broker should use for authentication
 
 
 The commands to upload the Conjur Service Broker to your CF deployment are as follows:
@@ -56,9 +52,11 @@ git clone git@github.com:conjurinc/conjur-service-broker.git
 cd conjur-service-broker
 cf push --no-start --random-route
 
-# Set the environment variables to configure the Service Broker app
+# Set the environment variables to configure the Service Broker app for Basic Authentication
 cf set-env conjur-service-broker SECURITY_USER_NAME [value]
 cf set-env conjur-service-broker SECURITY_USER_PASSWORD [value]
+
+# Set the environment variables to configure the Service Broker app to communicate with Conjur
 cf set-env conjur-service-broker CONJUR_ACCOUNT [value]
 cf set-env conjur-service-broker CONJUR_APPLIANCE_URL [value]
 cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN [value]
@@ -77,7 +75,7 @@ cf create-service cyberark-conjur community conjur
 
 #### Service Broker Usage
 
-To use the Conjur Service Broker with a CF-deployed application, you will update the application to grab its secrets from the environment and include a list of the secrets ... in the application's `secrets.yml` file.
+To use the Conjur Service Broker with a CF-deployed application, you will update the application to grab its secrets from the environment and include a list of the secrets in the application's `secrets.yml` file. The `secrets.yml` file gives a mapping of environment variable name to a location where a secret is stored in Conjur. For more information about creating this file, [see the Summon documentation](https://cyberark.github.io/summon/#secrets.yml).
 
 To bind your application to the Conjur Service Instance, you can either run
 ```
@@ -95,6 +93,8 @@ In order to update the environment to load the secrets using the Conjur Service,
 ```
 cf restage my-app
 ```
+
+The secrets are now available to be used by the application, but are not visible when you run `cf env my-app` or if you `cf ssh my-app` and run `printenv`.
 
 ## Development
 
