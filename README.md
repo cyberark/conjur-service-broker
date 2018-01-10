@@ -2,7 +2,7 @@ The Conjur Service Broker makes it easy for you to secure credentials used by ap
 
 You will need to have an existing Conjur installation in order to use the Conjur Service Broker; for more information about installing Conjur, please visit [conjur.org](http://conjur.org) or check out our [github repository](https://github.com/cyberark/conjur).
 
-The Conjur Service Broker conforms to the [Open Service Broker API](https://www.openservicebrokerapi.org/) standards (version 2.12).
+The Conjur Service Broker conforms to the [Open Service Broker API](https://www.openservicebrokerapi.org/) standards (version 2.13).
 
 ## Getting Started
 
