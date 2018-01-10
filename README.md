@@ -1,17 +1,18 @@
+The Conjur Service Broker makes it easy for you to secure credentials used by applications deployed in Cloud Foundry (CF) with CyberArk Conjur. Using the Conjur Service Broker, your CF applications will automatically assume a Conjur identity on deploy that will enable them to securely access secret values stored in Conjur.
+
+You will need to have an existing Conjur installation in order to use the Conjur Service Broker; for more information about installing Conjur, please visit [conjur.org](http://conjur.org) or check out our [github repository](https://github.com/cyberark/conjur).
+
+The Conjur Service Broker conforms to the [Open Service Broker API](https://www.openservicebrokerapi.org/) standards (version 2.12).
+
 ## Getting Started
 
-The Conjur Service Broker will allow you to interact with your external Conjur instance
-from applications running within a Cloud Foundry (CF) deployment. You will need to have an existing Conjur installation in order to use the Conjur Service Broker; for more information about installing Conjur, please visit [conjur.org](http://conjur.org) or check out our [github repository](https://github.com/cyberark/conjur).
+### Installing the Conjur Buildpack
 
-## Installation Instructions
+The Conjur Buildpack uses [Summon](https://cyberark.github.io/summon/) to load secrets into the environment of CF-deployed applications based on the app's `secrets.yml` file. The Conjur Buildpack is a decorator buildpack, and requires the meta-buildpack to work properly.
 
-#### Installing the Conjur Buildpack
+Before you begin, ensure you are logged into your CF deployment via the CF CLI.
 
-Before installing the Conjur Service Broker, you will need to load some buildpacks into
-your CF installation. The Conjur Buildpack uses [Summon](https://cyberark.github.io/summon/) to load secrets into the environment of CF-deployed applications based on the app's `secrets.yml` file. The Conjur Buildpack is a decorator buildpack, and requires the meta-buildpack to work properly.
-
-Install the `meta-buildpack` by cloning the [meta-buildpack repo](https://github.com/cf-platform-eng/meta-buildpack) and running
-(while logged into your CF deployment via the CF CLI):
+Install the [meta-buildpack repo](https://github.com/cf-platform-eng/meta-buildpack) by running:
 ```
 git clone git@github.com:cf-platform-eng/meta-buildpack
 cd meta-buildpack
@@ -19,64 +20,65 @@ cd meta-buildpack
 ./upload
 ```
 
-Install the `Conjur buildpack` by cloning the [Conjur buildpack repo](https://github.com/conjurinc/cloudfoundry-conjur-buildpack) and running
-(while logged into your CF deployment via the CF CLI):
+Install the [Conjur buildpack repo](https://github.com/conjurinc/cloudfoundry-conjur-buildpack) by running:
 ```
 git clone git@github.com:conjurinc/cloudfoundry-conjur-buildpack
 cd cloudfoundry-conjur-buildpack
 ./upload.sh
 ```
 
-#### Installing the Conjur Service Broker
+### Installing the Conjur Service Broker
 
-Once you've installed both buildpacks, you can load the Conjur Service Broker into your CF deployment and configure it for use with your external Conjur
-instance. To load the Conjur Service Broker and prepare to use it with your CF-deployed applications, you will:
+Once you've installed both buildpacks, you can load the Conjur Service Broker into your CF deployment and configure it for use with your external Conjur instance.
 
-1. Push the Service Broker application to CF
-2. Load the environment to configure the Service Broker
-3. Start the Service Broker application, and register it with the same Basic Auth credentials specified in your environment variables
-4. Create a service instance under the `community` plan
+Begin by pushing the Service Broker application to CF:
+```
+git clone git@github.com:conjurinc/conjur-service-broker.git
+cd conjur-service-broker
+cf push --no-start --random-route
+```
 
-The following environment variables are required to properly configure your Conjur Service Broker to communicate with your external Conjur instance:
+The Conjur Service Broker uses HTTP basic authentication, and the credentials it uses must be stored as environment variables in the Service Broker app:
+```
+cf set-env conjur-service-broker SECURITY_USER_NAME [value]
+cf set-env conjur-service-broker SECURITY_USER_PASSWORD [value]
+```
+
+To configure the Service Broker to communicate with your external Conjur instance, the Service Broker app requires the following environment variables:
 - `CONJUR_ACCOUNT`: the account name for the Conjur instance you are connecting to
 - `CONJUR_APPLIANCE_URL`: the URL of the Conjur appliance instance you are connecting to
 - `CONJUR_AUTHN_LOGIN`: the username of a Conjur user with update privilege on all Conjur policies associated with PCF-deployed applications. This will be used to add and remove hosts from the Conjur policy as apps are deployed to or removed from PCF.
 - `CONJUR_AUTHN_API_KEY`: the API Key of the Conjur user whose username you have provided in the Conjur Login field
-- `SECURITY_USER_NAME` and `SECURITY_USER_PASSWORD`: the Basic Auth username and password your Conjur Service Broker should use for authentication
-
-
-The commands to upload the Conjur Service Broker to your CF deployment are as follows:
+To load these environment variables, run:
 ```
-# Download the repo and push the Service Broker app to CF
-git clone git@github.com:conjurinc/conjur-service-broker.git
-cd conjur-service-broker
-cf push --no-start --random-route
-
-# Set the environment variables to configure the Service Broker app for Basic Authentication
-cf set-env conjur-service-broker SECURITY_USER_NAME [value]
-cf set-env conjur-service-broker SECURITY_USER_PASSWORD [value]
-
-# Set the environment variables to configure the Service Broker app to communicate with Conjur
 cf set-env conjur-service-broker CONJUR_ACCOUNT [value]
 cf set-env conjur-service-broker CONJUR_APPLIANCE_URL [value]
 cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN [value]
 cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY [value]
+```
 
-# Start the Service Broker app
+Once the Service Broker is configured, start the Service Broker application
+```
 cf start conjur-service-broker
-
-# Register the Service Broker
+```
+and register it with the same Basic Auth credentials specified in your environment variables:
+```
 APP_URL="http://`cf app conjur-service-broker | grep -E -w 'urls:|routes:' | awk '{print $2}'`"
 cf create-service-broker conjur-service-broker "[username value]" "[password value]" $APP_URL --space-scoped
+```
 
-# Create a service instance
+Finally, create a service instance under the `community` plan:
+```
 cf create-service cyberark-conjur community conjur
 ```
 
-#### Service Broker Usage
+### Service Broker Usage
+
+#### Creating a `secrets.yml` File
 
 To use the Conjur Service Broker with a CF-deployed application, you will update the application to grab its secrets from the environment and include a list of the secrets in the application's `secrets.yml` file. The `secrets.yml` file gives a mapping of environment variable name to a location where a secret is stored in Conjur. For more information about creating this file, [see the Summon documentation](https://cyberark.github.io/summon/#secrets.yml).
 
+#### Binding Your Application to the Conjur Service
 To bind your application to the Conjur Service Instance, you can either run
 ```
 cf bind-service my-app conjur
@@ -101,14 +103,11 @@ The secrets are now available to be used by the application, but are not visible
 To test the usage of the Conjur Service Broker within a CF deployment, you can
 follow the demo scripts in the [Cloud Foundry demo repo](https://github.com/conjurinc/cloudfoundry-conjur-demo).
 
-Other useful information for development:
-- The Conjur Service Broker follows the standard set in v2.12 of the [Open
-Service Broker API](https://github.com/openservicebrokerapi/servicebroker/blob/v2.12/spec.md).
-- To run the test suite, call `./test.sh` from your local machine - the script
+To run the test suite, call `./test.sh` from your local machine - the script
 will stand up the needed containers and run the full suite of rspec and cucumber
 tests.
 
-#### Contributing
+### Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
