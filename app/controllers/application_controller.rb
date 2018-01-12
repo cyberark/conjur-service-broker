@@ -24,7 +24,8 @@ class ApplicationController < ActionController::API
 
   def check_headers
     if !request.headers.include?("X-Broker-API-Version")
-      render json: {}, status: :precondition_failed
+      render json: { "description": "Your request is missing the required 'X-Broker-API-Version' header" },
+      status: :precondition_failed
     end
   end
 
