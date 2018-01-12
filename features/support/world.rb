@@ -6,9 +6,10 @@ module ServiceBrokerWorld
     raise "No result captured!" unless @response_body
     JSON.pretty_generate(@response_body)
   end
-  
+
   def headers
-    @headers ||= { content_type: 'application/json' }
+    @headers ||= { 'Content_Type' => 'application/json',
+                   'X-Broker-API-Version'  => '2.13'}
   end
 
   def basic_auth_username
@@ -18,7 +19,7 @@ module ServiceBrokerWorld
   def basic_auth_password
     'TEST_USER_PASSWORD'
   end
-  
+
   def service_broker_host
     'http://conjur-service-broker:3000'
   end
@@ -27,12 +28,12 @@ module ServiceBrokerWorld
     response = rest_resource(options)[path].get
     set_result response
   end
-  
+
   def post_json path, body, options = {}
     response = rest_resource(options)[path].post(body)
     set_result response
   end
-  
+
   def put_json path, body = nil, options = {}
     response = rest_resource(options)[path].put(body)
     set_result response
@@ -47,13 +48,13 @@ module ServiceBrokerWorld
     response = rest_resource(options)[path].patch(body)
     set_result response
   end
-  
+
   def set_result response
     @response = response
 
     if response.headers[:content_type] =~ /^application\/json/
       @response_body = JSON.parse(response)
-      
+
       if @response_body.respond_to?(:sort!)
         @response_body.sort! unless @response_body.first.is_a?(Hash)
       end
@@ -96,7 +97,7 @@ module ServiceBrokerWorld
       headers.each do |k,v|
         request.headers[k] = v
       end
-      
+
       request.options[:user] = options[:user] || basic_auth_username
       request.options[:password] = options[:password] || basic_auth_password
     end
