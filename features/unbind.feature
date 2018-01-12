@@ -40,9 +40,12 @@ Feature: Unbinding
       }
     }
     """
+    Then the HTTP response status code is "201"
+    And I keep the JSON response as "BIND_RESPONSE"
+    And the JSON from "BIND_RESPONSE" has valid conjur credentials
     And I DELETE "/v2/service_instances/b3b10564-6512-440e-adcb-a45cf9a7cfad/service_bindings/23d00ee2-e2c1-40e4-b5af-6d693f04bf1b"
     Then the HTTP response status code is "200"
-    And the JSON should be {}
+    And the JSON from "BIND_RESPONSE" has invalid conjur credentials
 
   Scenario: Unbind with incorrect Conjur credentials
     When I PUT "/v2/service_instances/0da4a0b4-9266-4664-a52e-bc87f64e1b64/service_bindings/cf79a9c0-0ae7-49b8-aeaa-84d2f6b14df0" with body:

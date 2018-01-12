@@ -17,3 +17,18 @@ end
 Then(/^the singular plan is named "([^"]*)"$/) do |expected_plan|
   expect(@response_body['services'][0]['plans'][0]['name']).to eq expected_plan
 end
+
+And(/^the JSON from "([^"]*)" has (in)?valid conjur credentials$/) do |memory_id, negate|
+  response_json = JsonSpec.remember("%{#{memory_id}}")
+
+  if negate
+    expect{ conjur_authenticate_from_json(response_json) }.to raise_error(RestClient::Unauthorized)
+  else
+    expect{ conjur_authenticate_from_json(response_json) }.not_to raise_error
+  end
+end
+
+
+And(/^the JSON has valid conjur credentials$/) do
+  expect{ conjur_authenticate_from_json(last_json) }.not_to raise_error
+end

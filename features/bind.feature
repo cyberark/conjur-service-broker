@@ -20,6 +20,7 @@ Feature: Binding
     And the JSON at "credentials/appliance_url" should be "http://conjur"
     And the JSON at "credentials/authn_login" should be a string
     And the JSON at "credentials/authn_api_key" should be a string
+    And the JSON has valid conjur credentials
 
   Scenario: Bind resource with existing ID
     When I make a bind request with an existing binding_id and body:

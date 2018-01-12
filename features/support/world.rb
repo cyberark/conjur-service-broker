@@ -1,4 +1,5 @@
 require 'rest_client'
+require 'conjur-api'
 
 module ServiceBrokerWorld
   def last_json
@@ -67,6 +68,20 @@ module ServiceBrokerWorld
       @exception = $!
       @status = $!.http_code
       set_result @exception.response
+    end
+  end
+
+  def conjur_authenticate_from_json(response_json)
+    account = parse_json(response_json, 'credentials/account')
+    appliance_url = parse_json(response_json, 'credentials/appliance_url')
+    login = parse_json(response_json, 'credentials/authn_login')
+    api_key = parse_json(response_json, 'credentials/authn_api_key')
+
+    Conjur.with_configuration Conjur::Configuration.new(
+        account: account,
+        appliance_url: appliance_url
+    ) do
+      Conjur::API.authenticate(login, api_key)
     end
   end
 
