@@ -9,16 +9,23 @@ class ApplicationController < ActionController::API
 
   rescue_from UnknownConjurHostError, with: :server_error
   rescue_from ConjurAuthenticationError, with: :invalid_configuration
-  
+
   rescue_from ServiceBinding::HostNotFound, with: :host_not_found
   rescue_from ServiceBinding::RoleAlreadyCreated, with: :conflict_error
-  
+
   rescue_from RestClient::Unauthorized, with: :server_error
 
+  before_action :check_headers
   before_action :authenticate
-  
+
   def authenticate
     authenticate_with_basic_auth || render_unauthorized
+  end
+
+  def check_headers
+    if !request.headers.include?("X-Broker-API-Version")
+      render json: {}, status: :precondition_failed
+    end
   end
 
   def with_conjur_exceptions
