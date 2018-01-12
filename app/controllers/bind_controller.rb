@@ -10,14 +10,14 @@ class BindController < ApplicationController
         ServiceBinding.create(instance_id, binding_id, app_id)
       end
 
-    render status: 201, json: { credentials: credentials }
+    render json: { credentials: credentials }, status: :created
   rescue MissingAppGuidError => e
     logger.warn(e)
     
-    render status: :unprocessable_entity, json: {
+    render json: {
       "error": "RequiresApp",
       "description": "This service supports generation of credentials through binding an application only."
-    }    
+    }, status: :unprocessable_entity 
   end
 
   def delete
