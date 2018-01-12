@@ -12,7 +12,7 @@ When (/^I use a service broker with a bad Conjur API key$/) do
 end
 
 When (/^my request doesn't include the X-Broker-API-Version header$/) do
-  @headers = headers.reject { |k, _| ['X-Broker-API-Version'].include? k }
+  headers.reject! { |k, _| ['X-Broker-API-Version'].include? k }
 end
 
 When(/^I make a bind request with an existing binding_id and body:$/) do |body|
