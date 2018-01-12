@@ -7,7 +7,7 @@ module ServiceBrokerWorld
   end
 
   def headers
-    @headers ||= { content_type: 'application/json',
+    @headers ||= { 'Content_Type' => 'application/json',
                    'X-Broker-API-Version'  => '2.13'}
   end
 
