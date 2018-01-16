@@ -16,13 +16,13 @@ describe ServiceBinding do
         with("root",
     """
     - !delete
-      record: !host binding_id
+      record: !host app_guid
     """,
         method: :patch
         )
       expect(host).to receive(:rotate_api_key)
 
-      ServiceBinding.new("service_id", "binding_id").delete
+      ServiceBinding.new("app_guid").delete
     end
   end
 end
