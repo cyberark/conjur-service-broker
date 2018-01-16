@@ -34,7 +34,7 @@ class ConjurClient
 
   def api
     if defined? @error
-      throw @error
+      raise @error
     end
     @api
   end
