@@ -9,21 +9,20 @@ class ServiceBinding
   end
 
   class << self
-    def create(instance_id, binding_id, app_id)
-      ServiceBinding.new(instance_id, binding_id).create(app_id)
+    def create(app_guid)
+      ServiceBinding.new(app_guid).create
     end
 
-    def delete(instance_id, binding_id)
-      ServiceBinding.new(instance_id, binding_id).delete
+    def delete(app_guid)
+      ServiceBinding.new(app_guid).delete
     end
   end
   
-  def initialize(instance_id, binding_id)
-    @instance_id = instance_id
-    @binding_id = binding_id
+  def initialize(app_guid)
+    @app_guid = app_guid
   end
 
-  def create(app_id)
+  def create
     host = conjur_api.role(role_name)
 
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
@@ -33,13 +32,16 @@ class ServiceBinding
     return {
       account: ConjurClient.account,
       appliance_url: ConjurClient.appliance_url,
-      authn_login: "host/#{@binding_id}",
+      authn_login: "host/#{@app_guid}",
       authn_api_key: result.created_roles.values.first['api_key']
     }
   end
 
   def delete
+    raise HostNotFound if @app_guid.nil?
+    
     host = conjur_api.role(role_name)
+    
     raise HostNotFound if !host.exists?
 
     host.rotate_api_key
@@ -50,14 +52,14 @@ class ServiceBinding
 
   def template_create
     """
-    - !host #{@binding_id}
+    - !host #{@app_guid}
     """
   end
   
   def template_delete
     """
     - !delete
-      record: !host #{@binding_id}
+      record: !host #{@app_guid}
     """
   end
 
@@ -66,7 +68,7 @@ class ServiceBinding
   end
 
   def role_name
-    "#{ConjurClient.account}:host:#{@binding_id}"
+    "#{ConjurClient.account}:host:#{@app_guid}"
   end
 
   def conjur_api
