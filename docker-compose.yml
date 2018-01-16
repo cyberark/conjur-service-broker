@@ -66,5 +66,7 @@ services:
     build: ./
     environment:
       << : *conjur-credentials
+      CONJUR_AUTHN_API_KEY_ROTATED:
+      SERVICE_BROKER_HOST: 'http://conjur-service-broker:3000'
     volumes:
       - "./:/app"

@@ -4,7 +4,7 @@ require 'openssl'
 class ConjurClient
   class << self
     def api
-      @@api ||= ConjurClient.new.api
+      @@client.api
     end
 
     def account
@@ -54,4 +54,6 @@ class ConjurClient
   rescue => e
     @error = e
   end
+
+  @@client = ConjurClient.new
 end
