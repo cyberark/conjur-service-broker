@@ -17,24 +17,24 @@ describe ProvisionController, :type => :controller do
         provision_put('sample_instance_id', 'sample_space_guid')
         expect(response).to be_ok
 
-        expect(@@instance_id_to_space_guid).to have_key['sample_instance_id']
-        expect(@@instance_id_to_space_guid['sample_instance_id']).to eq 'sample_space_guid'
+        expect(ProvisionController.class_variable_get(:@@instance_id_to_space_guid)).to have_key('sample_instance_id')
+        expect(ProvisionController.class_variable_get(:@@instance_id_to_space_guid)['sample_instance_id']).to eq 'sample_space_guid'
       end
 
       it "sets multiple instance/space maps" do
         provision_put('original_instance_id', 'original_space_guid')
         expect(response).to be_ok
 
-        expect(@@instance_id_to_space_guid).to have_key['original_instance_id']
-        expect(@@instance_id_to_space_guid['original_instance_id']).to eq 'original_space_guid'
+        expect(ProvisionController.class_variable_get(:@@instance_id_to_space_guid)).to have_key('original_instance_id')
+        expect(ProvisionController.class_variable_get(:@@instance_id_to_space_guid)['original_instance_id']).to eq 'original_space_guid'
 
         provision_put('new_instance_id', 'new_space_guid')
         expect(response).to be_ok
 
-        expect(@@instance_id_to_space_guid).to have_key['original_instance_id']
-        expect(@@instance_id_to_space_guid['original_instance_id']).to eq 'original_space_guid'
-        expect(@@instance_id_to_space_guid).to have_key['new_instance_id']
-        expect(@@instance_id_to_space_guid['new_instance_id']).to eq 'new_space_guid'
+        expect(ProvisionController.class_variable_get(:@@instance_id_to_space_guid)).to have_key('original_instance_id')
+        expect(ProvisionController.class_variable_get(:@@instance_id_to_space_guid)['original_instance_id']).to eq 'original_space_guid'
+        expect(ProvisionController.class_variable_get(:@@instance_id_to_space_guid)).to have_key('new_instance_id')
+        expect(ProvisionController.class_variable_get(:@@instance_id_to_space_guid)['new_instance_id']).to eq 'new_space_guid'
       end
     end
   end
