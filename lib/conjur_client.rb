@@ -4,7 +4,7 @@ require 'openssl'
 class ConjurClient
   class << self
     def api
-      @@client.api
+      @@api
     end
 
     def account
@@ -33,9 +33,6 @@ class ConjurClient
   end
 
   def api
-    if defined? @error
-      raise @error
-    end
     @api
   end
 
@@ -50,10 +47,12 @@ class ConjurClient
       OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_cert certificate
     end
 
-    @api = Conjur::API.new_from_key ConjurClient.authn_login, Conjur::API.rotate_api_key(ConjurClient.authn_login, ConjurClient.authn_api_key)
-  rescue => e
-    @error = e
+    if Rails.env.development?
+      @api = Conjur::API.new_from_key(ConjurClient.authn_login, ConjurClient.authn_api_key)
+    else
+      @api = Conjur::API.new_from_key ConjurClient.authn_login, Conjur::API.rotate_api_key(ConjurClient.authn_login, ConjurClient.authn_api_key)
+    end
   end
 
-  @@client = ConjurClient.new
+  @@api = ConjurClient.new.api
 end
