@@ -1,8 +1,8 @@
 The Conjur Service Broker makes it easy for you to secure credentials used by applications deployed in Cloud Foundry (CF) with CyberArk Conjur. Using the Conjur Service Broker, your CF applications will automatically assume a Conjur identity on deploy that will enable them to securely access secret values stored in Conjur.
 
-You will need to have an existing Conjur installation in order to use the Conjur Service Broker; for more information about installing Conjur, please visit [conjur.org](http://conjur.org) or check out our [github repository](https://github.com/cyberark/conjur).
+You will need to have an existing Conjur installation in order to use the Conjur Service Broker; for more information about installing Conjur, please visit [conjur.org](http://conjur.org) or check out our [GitHub repository](https://github.com/cyberark/conjur).
 
-The Conjur Service Broker conforms to the [Open Service Broker API](https://www.openservicebrokerapi.org/) standards (version 2.13).
+The Conjur Service Broker is an implementation of the [Open Service Broker API](https://www.openservicebrokerapi.org/) (version 2.13).
 
 ## Getting Started
 
@@ -10,9 +10,9 @@ The Conjur Service Broker conforms to the [Open Service Broker API](https://www.
 
 The Conjur Buildpack uses [Summon](https://cyberark.github.io/summon/) to load secrets into the environment of CF-deployed applications based on the app's `secrets.yml` file. The Conjur Buildpack is a decorator buildpack, and requires the meta-buildpack to work properly.
 
-Before you begin, ensure you are logged into your CF deployment via the CF CLI.
+**Before you begin, ensure you are logged into your CF deployment via the CF CLI.**
 
-Install the [meta-buildpack repo](https://github.com/cf-platform-eng/meta-buildpack) by running:
+Install the [meta-buildpack](https://github.com/cf-platform-eng/meta-buildpack):
 ```
 git clone git@github.com:cf-platform-eng/meta-buildpack
 cd meta-buildpack
@@ -20,7 +20,7 @@ cd meta-buildpack
 ./upload
 ```
 
-Install the [Conjur buildpack repo](https://github.com/conjurinc/cloudfoundry-conjur-buildpack) by running:
+Install the [Conjur buildpack](https://github.com/conjurinc/cloudfoundry-conjur-buildpack):
 ```
 git clone git@github.com:conjurinc/cloudfoundry-conjur-buildpack
 cd cloudfoundry-conjur-buildpack
