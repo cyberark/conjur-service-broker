@@ -22,6 +22,7 @@ group :development, :test do
   gem 'json_spec', '~> 1.1.5'
   gem 'aruba'
   gem 'rspec', '~> 3'
+  gem 'rspec-rails', '~> 3.7'
   gem 'ci_reporter_rspec', '~> 1'
   gem 'pry-byebug'
   gem 'rspec_junit_formatter'
