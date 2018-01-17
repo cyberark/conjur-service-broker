@@ -48,7 +48,8 @@ To configure the Service Broker to communicate with your external Conjur instanc
 - `CONJUR_ACCOUNT`: the account name for the Conjur instance you are connecting to
 - `CONJUR_APPLIANCE_URL`: the URL of the Conjur appliance instance you are connecting to
 - `CONJUR_AUTHN_LOGIN`: the username of a Conjur user with update privilege on all Conjur policies associated with PCF-deployed applications. This will be used to add and remove hosts from the Conjur policy as apps are deployed to or removed from PCF.
-- `CONJUR_AUTHN_API_KEY`: the API Key of the Conjur user whose username you have provided in the Conjur Login field
+- `CONJUR_AUTHN_API_KEY`: the API Key of the Conjur user whose username you have provided in `CONJUR_AUTHN_LOGIN`
+
 To load these environment variables, run:
 ```
 cf set-env conjur-service-broker CONJUR_ACCOUNT [value]
@@ -76,7 +77,7 @@ cf create-service cyberark-conjur community conjur
 
 #### Creating a `secrets.yml` File
 
-To use the Conjur Service Broker with a CF-deployed application, you will update the application to grab its secrets from the environment and include a list of the secrets in the application's `secrets.yml` file. The `secrets.yml` file gives a mapping of environment variable name to a location where a secret is stored in Conjur. For more information about creating this file, [see the Summon documentation](https://cyberark.github.io/summon/#secrets.yml).
+To use the Conjur Service Broker with a CF-deployed application, a `secrets.yml` file is required. The `secrets.yml` file gives a mapping of **environment variable name** to a **location where a secret is stored in Conjur**. For more information about creating this file, [see the Summon documentation](https://cyberark.github.io/summon/#secrets.yml).
 
 #### Binding Your Application to the Conjur Service
 To bind your application to the Conjur Service Instance, you can either run
@@ -100,12 +101,21 @@ The secrets are now available to be used by the application, but are not visible
 
 ## Development
 
+Before getting started, you should install some developer tools. These are not required to deploy the Conjur Service Broker but they will let you develop using a standardized,
+expertly configured environment.
+
+1. [git][get-git] to manage source code
+2. [Docker][get-docker] to manage dependencies and runtime environments
+3. [Docker Compose][get-docker-compose] to orchestrate Docker environments
+
+[get-docker]: https://docs.docker.com/engine/installation
+[get-git]: https://git-scm.com/downloads
+[get-docker-compose]: https://docs.docker.com/compose/install
+
 To test the usage of the Conjur Service Broker within a CF deployment, you can
 follow the demo scripts in the [Cloud Foundry demo repo](https://github.com/conjurinc/cloudfoundry-conjur-demo).
 
-To run the test suite, call `./test.sh` from your local machine - the script
-will stand up the needed containers and run the full suite of rspec and cucumber
-tests.
+To run the test suite, call `./test.sh` from your local machine - the script will stand up the needed containers and run the full suite of rspec and cucumber tests.
 
 ### Contributing
 
