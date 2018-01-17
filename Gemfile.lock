@@ -139,6 +139,14 @@ GEM
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
+    rspec-rails (3.7.2)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+      rspec-support (~> 3.7.0)
     rspec-support (3.7.0)
     rspec_junit_formatter (0.3.0)
       rspec-core (>= 2, < 4, != 2.12.0)
@@ -180,6 +188,7 @@ DEPENDENCIES
   railties (~> 5.1.4)
   rest-client
   rspec (~> 3)
+  rspec-rails (~> 3.7)
   rspec_junit_formatter
   spring
   spring-watcher-listen (~> 2.0.0)
