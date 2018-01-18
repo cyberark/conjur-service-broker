@@ -64,5 +64,7 @@ services:
   tests:
     image: conjur-service-broker
     build: ./
+    entrypoint: sleep
+    command: infinity
     volumes:
       - "./:/app"

@@ -8,7 +8,7 @@ function finish {
   docker-compose down --rmi 'local' --volumes
   rm -f tmp/pids/server*.pid
 }
-trap finish EXIT
+#trap finish EXIT
 
 docker-compose up -d conjur pg
 
@@ -17,4 +17,4 @@ api_key=$(docker-compose exec -T conjur bash -c 'rails r "puts Role[%Q{cucumber:
 export CONJUR_AUTHN_API_KEY="$api_key"
 
 docker-compose up -d conjur-service-broker service-broker-bad-url service-broker-bad-key
-docker-compose run tests ci/test.sh
+#docker-compose run tests ci/test.sh
