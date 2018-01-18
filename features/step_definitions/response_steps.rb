@@ -28,7 +28,6 @@ And(/^the JSON from "([^"]*)" has (in)?valid conjur credentials$/) do |memory_id
   end
 end
 
-
 And(/^the JSON has valid conjur credentials$/) do
   expect{ conjur_authenticate_from_json(last_json) }.not_to raise_error
 end

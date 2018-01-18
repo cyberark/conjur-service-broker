@@ -21,7 +21,7 @@ module ServiceBrokerWorld
   end
 
   def service_broker_host
-    'http://conjur-service-broker:3000'
+    ENV['SERVICE_BROKER_HOST']
   end
 
   def get_json path, options = {}

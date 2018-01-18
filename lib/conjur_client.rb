@@ -47,8 +47,11 @@ class ConjurClient
       OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_cert certificate
     end
 
-    @api = Conjur::API.new_from_key ConjurClient.authn_login, 
-                                    ConjurClient.authn_api_key
+    if Rails.env.development?
+      @api = Conjur::API.new_from_key(ConjurClient.authn_login, ConjurClient.authn_api_key)
+    else
+      @api = Conjur::API.new_from_key ConjurClient.authn_login, Conjur::API.rotate_api_key(ConjurClient.authn_login, ConjurClient.authn_api_key)
+    end
   end
 
   @@api = ConjurClient.new.api

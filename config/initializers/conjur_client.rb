@@ -1,0 +1,1 @@
+require 'conjur_client'

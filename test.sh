@@ -11,10 +11,10 @@ function finish {
 trap finish EXIT
 
 docker-compose up -d conjur pg
-
 docker-compose exec -T conjur conjurctl wait -r 25 -p 80
-api_key=$(docker-compose exec -T conjur bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
-export CONJUR_AUTHN_API_KEY="$api_key"
 
+export CONJUR_AUTHN_API_KEY=$(docker-compose exec -T conjur bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
 docker-compose up -d conjur-service-broker service-broker-bad-url service-broker-bad-key
+
+export CONJUR_AUTHN_API_KEY_ROTATED=$(docker-compose exec -T conjur bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
 docker-compose run tests ci/test.sh
