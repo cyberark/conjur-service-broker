@@ -56,8 +56,8 @@ Feature: Binding
     And the JSON should be:
     """
     {
-      "error": "RequiresApp",
-      "description": "This service supports generation of credentials through binding an application only."
+      "error": "ValidationError",
+      "description": "The property '#/' did not contain a required property of 'bind_resource'"
     }
     """
 

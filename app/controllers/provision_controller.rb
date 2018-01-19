@@ -1,15 +1,13 @@
 class ProvisionController < ApplicationController
   def put
-    valid, error = JSONValidator.validate('provision_put', params.to_unsafe_h)
+    Validator.validate('provision', params.to_unsafe_h)
 
-    if valid
-      render :json => {}
-    else
-      render :json => { :error => error }, :status => :unprocessable_entity
-    end
+    render :json => {}
   end
 
   def delete
+    Validator.validate('deprovision', params.to_unsafe_h)
+
     render json: {}, status: :gone
   end
 end

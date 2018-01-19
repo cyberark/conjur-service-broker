@@ -44,7 +44,8 @@ Feature: Provisioning
     And the JSON should be:
       """
       {
-        "error": "The property '#/' did not contain a required property of 'plan_id'"
+        "error": "ValidationError",
+        "description": "The property '#/' did not contain a required property of 'plan_id'"
       }
       """
 
