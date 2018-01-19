@@ -39,6 +39,11 @@ module ServiceBrokerWorld
     set_result response
   end
 
+  def patch_json path, body = nil, options = {}
+    response = rest_resource(options)[path].patch(body)
+    set_result response
+  end
+
   def delete_json path, options = {}
     response = rest_resource(options)[path].delete
     set_result response

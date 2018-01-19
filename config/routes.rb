@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   put '/v2/service_instances/:instance_id', 
     to: 'provision#put'
 
+  patch '/v2/service_instances/:instance_id', 
+    to: 'provision#patch'
+
   delete '/v2/service_instances/:instance_id', 
     to: 'provision#delete'
 
