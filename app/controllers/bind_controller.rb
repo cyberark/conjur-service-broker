@@ -1,6 +1,3 @@
-class MissingAppGuidError < RuntimeError
-end
-
 class BindController < ApplicationController
   def put
     Validator.validate('bind', params.to_unsafe_h)
