@@ -16,7 +16,7 @@ class ApplicationController < ActionController::API
   rescue_from ServiceBinding::HostNotFound, with: :host_not_found
   rescue_from ServiceBinding::RoleAlreadyCreated, with: :conflict_error
 
-  rescue_from ValidationError, with: :invalid_params
+  rescue_from ValidationError, with: :failed_validation
 
   rescue_from RestClient::Unauthorized, with: :server_error
 
@@ -64,7 +64,7 @@ class ApplicationController < ActionController::API
     render json: {}, status: :gone
   end
 
-  def invalid_params e
+  def failed_validation e
     logger.warn(e)
     render json: {
       error: "ValidationError",
