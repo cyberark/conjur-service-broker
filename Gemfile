@@ -8,6 +8,7 @@ end
 gem 'conjur-api', '~> 5.0.0'
 gem 'activesupport', '~> 5.1.4'
 gem 'railties', '~> 5.1.4'
+gem 'json-schema', '~> 2.8'
 
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
