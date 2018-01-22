@@ -6,6 +6,7 @@ class Validator
           json_body
       )
     rescue JSON::Schema::ValidationError => e
+      e.message.gsub! /did not match the regex.*/, "was invalid."
       raise ValidationError.new(e.message)
     end
   end
