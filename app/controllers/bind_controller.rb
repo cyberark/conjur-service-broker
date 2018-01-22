@@ -8,17 +8,17 @@ class BindController < ApplicationController
     Validator.validate('bind', params.to_unsafe_h)
 
     credentials =
-        with_conjur_exceptions do
-          ServiceBinding.create(instance_id, binding_id, app_id)
-        end
+      with_conjur_exceptions do
+        ServiceBinding.create(instance_id, binding_id, app_id)
+      end
 
     render json: { credentials: credentials }, status: :created
   rescue MissingAppGuidError => e
     logger.warn(e)
 
     render json: {
-        "error": "RequiresApp",
-        "description": "This service supports generation of credentials through binding an application only."
+      "error": "RequiresApp",
+      "description": "This service supports generation of credentials through binding an application only."
     }, status: :unprocessable_entity
   end
 
