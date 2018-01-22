@@ -6,7 +6,9 @@ class ProvisionController < ApplicationController
   end
 
   def patch
-    render json: {}, status: :ok
+    Validator.validate('patch_provision', params.to_unsafe_h)
+
+    render json: {}
   end
 
   def delete

@@ -1,0 +1,33 @@
+{
+  "$id": "http://service-broker.cyberark-conjur/provision.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "properties": {
+    "context": {
+      "$id": "/properties/context",
+      "type": "object"
+    },
+    "service_id": {
+      "$id": "/properties/service_id",
+      "type": "string",
+      "title": "service_id"
+    },
+    "plan_id": {
+      "$id": "/properties/plan_id",
+      "type": "string",
+      "title": "plan_id"
+    },
+    "parameters": {
+      "$id": "/properties/parameters",
+      "type": "object"
+    },
+    "previous_values": {
+      "$id": "/properties/context",
+      "type": "object"
+    }
+  },
+  "required": [
+    "service_id"
+  ]
+}
