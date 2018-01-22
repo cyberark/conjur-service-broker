@@ -7,12 +7,14 @@
     "service_id": {
       "$id": "/properties/service_id",
       "type": "string",
-      "title": "service_id"
+      "title": "service_id",
+      "pattern": "^c024e536-6dc4-45c6-8a53-127e7f8275ab$"
     },
     "plan_id": {
       "$id": "/properties/plan_id",
       "type": "string",
-      "title": "plan_id"
+      "title": "plan_id",
+      "pattern": "^3a116ac2-fc8b-496f-a715-e9a1b205d05c.community$"
     },
     "context": {
       "$id": "/properties/context",
