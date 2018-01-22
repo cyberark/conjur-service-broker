@@ -69,7 +69,7 @@ class ApplicationController < ActionController::API
     render json: {
       error: "ValidationError",
       description: e
-    }, status: :unprocessable_entity
+    }, status: :bad_request
   end
 
   private
