@@ -14,8 +14,6 @@ Feature: Provisioning
       "organization_guid": "e027f3f6-80fe-4d22-9374-da23a035ba0a",
       "space_guid": "8c56f85c-c16e-4158-be79-5dac74f970db",
       "parameters": {
-        "parameter1": 1,
-        "parameter2": "foo"
       }
     }
     """
@@ -35,8 +33,6 @@ Feature: Provisioning
       "organization_guid": "e027f3f6-80fe-4d22-9374-da23a035ba0a",
       "space_guid": "8c56f85c-c16e-4158-be79-5dac74f970db",
       "parameters": {
-        "parameter1": 1,
-        "parameter2": "foo"
       }
     }
     """
@@ -62,8 +58,6 @@ Feature: Provisioning
       "organization_guid": "e027f3f6-80fe-4d22-9374-da23a035ba0a",
       "space_guid": "8c56f85c-c16e-4158-be79-5dac74f970db",
       "parameters": {
-        "parameter1": 1,
-        "parameter2": "foo"
       }
     }
     """
@@ -81,13 +75,9 @@ Feature: Provisioning
       "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
       "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
       "parameters": {
-        "parameter1": 1,
-        "parameter2": "foo"
       },
       "previous_values": {
-        "plan_id": "we-only-have-one-plan",
-        "parameter1": 2,
-        "parameter2": "foo2"
+        "plan_id": "we-only-have-one-plan"
       }
     }
     """
@@ -105,13 +95,9 @@ Feature: Provisioning
       "not_service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
       "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
       "parameters": {
-        "parameter1": 1,
-        "parameter2": "foo"
       },
       "previous_values": {
-        "plan_id": "we-only-have-one-plan",
-        "parameter1": 2,
-        "parameter2": "foo2"
+        "plan_id": "we-only-have-one-plan"
       }
     }
     """
@@ -135,13 +121,9 @@ Feature: Provisioning
       "service_id": "XXXXXXX-6dc4-45c6-8a53-127e7f8275ab",
       "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
       "parameters": {
-        "parameter1": 1,
-        "parameter2": "foo"
       },
       "previous_values": {
-        "plan_id": "we-only-have-one-plan",
-        "parameter1": 2,
-        "parameter2": "foo2"
+        "plan_id": "we-only-have-one-plan"
       }
     }
     """
@@ -165,13 +147,9 @@ Feature: Provisioning
       "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
       "plan_id": "XXXXXXX-fc8b-496f-a715-e9a1b205d05c.community",
       "parameters": {
-        "parameter1": 1,
-        "parameter2": "foo"
       },
       "previous_values": {
-        "plan_id": "we-only-have-one-plan",
-        "parameter1": 2,
-        "parameter2": "foo2"
+        "plan_id": "we-only-have-one-plan"
       }
     }
     """
@@ -197,8 +175,6 @@ Feature: Provisioning
       "organization_guid": "e027f3f6-80fe-4d22-9374-da23a035ba0a",
       "space_guid": "8c56f85c-c16e-4158-be79-5dac74f970db",
       "parameters": {
-        "parameter1": 1,
-        "parameter2": "foo"
       }
     }
     """
@@ -224,6 +200,31 @@ Feature: Provisioning
       "organization_guid": "e027f3f6-80fe-4d22-9374-da23a035ba0a",
       "space_guid": "8c56f85c-c16e-4158-be79-5dac74f970db",
       "parameters": {
+      }
+    }
+    """
+    Then the HTTP response status code is "400"
+    And the JSON should be:
+    """
+    {
+      "error": "ValidationError",
+      "description": "The property '#/plan_id' value \"XXXXXXX-fc8b-496f-a715-e9a1b205d05c.community\" was invalid."
+    }
+    """
+
+  Scenario: Provision resource with invalid parameters
+    When I PUT "/v2/service_instances/9b292a9c-af66-4797-8d98-b30801f32ax7" with body:
+    """
+    {
+      "context": {
+        "organization_guid": "e027f3f6-80fe-4d22-9374-da23a035ba0a",
+        "space_guid": "8c56f85c-c16e-4158-be79-5dac74f970db"
+      },
+      "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
+      "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
+      "organization_guid": "e027f3f6-80fe-4d22-9374-da23a035ba0a",
+      "space_guid": "8c56f85c-c16e-4158-be79-5dac74f970db",
+      "parameters": {
         "parameter1": 1,
         "parameter2": "foo"
       }
@@ -231,9 +232,9 @@ Feature: Provisioning
     """
     Then the HTTP response status code is "400"
     And the JSON should be:
-      """
-      {
-        "error": "ValidationError",
-        "description": "The property '#/plan_id' value \"XXXXXXX-fc8b-496f-a715-e9a1b205d05c.community\" was invalid."
-      }
-      """
+    """
+    {
+      "error": "ValidationError",
+      "description": "The property '#/parameters' had more properties than the allowed 0"
+    }
+    """

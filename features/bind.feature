@@ -64,27 +64,6 @@ Feature: Binding
     Then the HTTP response status code is "409"
     And the JSON should be {}
 
-  Scenario: Bind resource with missing app GUID
-    When I make a bind request with an existing binding_id and body:
-    """
-    {
-      "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
-      "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
-      "parameters": {
-        "parameter1": 1,
-        "parameter2": "foo"
-      }
-    }
-    """
-    Then the HTTP response status code is "422"
-    And the JSON should be:
-    """
-    {
-      "error": "RequiresApp",
-      "description": "This service supports generation of credentials through binding an application only."
-    }
-    """
-
   Scenario: Bind resource with incorrect Conjur credentials
     When I use a service broker with a bad Conjur API key
     And I make a bind request with body:
