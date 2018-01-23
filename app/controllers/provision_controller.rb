@@ -14,6 +14,6 @@ class ProvisionController < ApplicationController
   def delete
     Validator.validate('deprovision', params.to_unsafe_h)
 
-    render json: {}, status: :gone
+    render json: {}
   end
 end
