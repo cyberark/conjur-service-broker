@@ -39,7 +39,8 @@
     },
     "parameters": {
       "$id": "/properties/parameters",
-      "type": "object"
+      "type": "object",
+      "maxProperties": 0
     }
   },
   "required": [
