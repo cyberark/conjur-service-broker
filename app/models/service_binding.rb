@@ -29,11 +29,16 @@ class ServiceBinding
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
 
     result = load_policy(template_create)
+    if ConjurClient.policy != 'root'
+      host = "host/#{ConjurClient.policy}/#{@binding_id}"
+    else
+      host = "host/#{@binding_id}"
+    end
     
     return {
       account: ConjurClient.account,
       appliance_url: ConjurClient.appliance_url,
-      authn_login: "host/#{@binding_id}",
+      authn_login: host,
       authn_api_key: result.created_roles.values.first['api_key']
     }
   end
