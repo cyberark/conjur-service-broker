@@ -29,11 +29,12 @@ class ServiceBinding
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
 
     result = load_policy(template_create)
-    if ConjurClient.policy != 'root'
-      host = "host/#{ConjurClient.policy}/#{@binding_id}"
-    else
-      host = "host/#{@binding_id}"
-    end
+    host =
+      if ConjurClient.policy != 'root'
+        "host/#{ConjurClient.policy}/#{@binding_id}"
+      else
+        "host/#{@binding_id}"
+      end
     
     return {
       account: ConjurClient.account,
