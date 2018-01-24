@@ -11,6 +11,10 @@ When (/^I use a service broker with a bad Conjur API key$/) do
   @service_broker_host = 'http://service-broker-bad-key:3002'
 end
 
+When (/^I use a service broker with a non-root policy$/) do
+  @service_broker_host = 'http://service-broker-alt-policy:3003'
+end
+
 When (/^my request doesn't include the X-Broker-API-Version header$/) do
   headers.reject! { |k, _| ['X-Broker-API-Version'].include? k }
 end

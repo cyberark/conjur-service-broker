@@ -10,8 +10,21 @@ services:
     environment:
       DATABASE_URL: postgres://postgres@pg/postgres
       CONJUR_DATA_KEY: 'WMfApcDBtocRWV+ZSUP3Tjr5XNU+Z2FdBb6BEezejIs='
+    ports:
+      - 80:80
     depends_on:
       - pg
+
+  client:
+    image: conjurinc/cli5
+    depends_on: [ conjur ]
+    environment:
+      CONJUR_APPLIANCE_URL: http://conjur
+      CONJUR_ACCOUNT: cucumber
+      CONJUR_AUTHN_API_KEY:
+      CONJUR_AUTHN_LOGIN: admin
+    volumes:
+      - "./:/app"
 
   conjur-service-broker:
     image: conjur-service-broker
@@ -24,8 +37,8 @@ services:
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY:
     command: rails s -p 3000 -b 0.0.0.0
-    expose:
-      - "3000"
+    ports:
+      - 3000:3000
     volumes:
       - "./:/app"
 
@@ -58,6 +71,23 @@ services:
     command: rails s -p 3002 -b 0.0.0.0 -P tmp/pids/server2.pid
     expose:
       - "3002"
+    volumes:
+      - "./:/app"
+
+  service-broker-alt-policy:
+    image: conjur-service-broker
+    build: ./
+    environment:
+      CONJUR_ACCOUNT: cucumber
+      CONJUR_AUTHN_LOGIN: admin
+      CONJUR_APPLIANCE_URL: http://conjur
+      SECURITY_USER_NAME: TEST_USER_NAME
+      SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
+      CONJUR_AUTHN_API_KEY:
+      CONJUR_POLICY:
+    command: rails s -p 3003 -b 0.0.0.0 -P tmp/pids/server3.pid
+    expose:
+      - "3003"
     volumes:
       - "./:/app"
 
