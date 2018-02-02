@@ -44,7 +44,7 @@ services:
     environment:
       CONJUR_ACCOUNT: cucumber
       CONJUR_AUTHN_LOGIN: admin
-      CONJUR_APPLIANCE_URL: http://conjur_5
+      CONJUR_APPLIANCE_URL:
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY:
@@ -78,7 +78,7 @@ services:
     environment:
       CONJUR_ACCOUNT: cucumber
       CONJUR_AUTHN_LOGIN: admin
-      CONJUR_APPLIANCE_URL: http://conjur_5
+      CONJUR_APPLIANCE_URL:
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY: 123badconjurkey
@@ -95,7 +95,7 @@ services:
     environment:
       CONJUR_ACCOUNT: cucumber
       CONJUR_AUTHN_LOGIN: admin
-      CONJUR_APPLIANCE_URL: http://conjur_5
+      CONJUR_APPLIANCE_URL:
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY:
