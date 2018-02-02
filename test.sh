@@ -13,7 +13,7 @@ function main() {
   startConjur
   runTests5
   cleanUpServiceBrokers
-#  runTests4
+  runTests4
 }
 
 function startConjur() {
