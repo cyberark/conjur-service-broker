@@ -22,6 +22,7 @@ Feature: Binding
     And the JSON at "credentials/authn_login" should be a string
     And the JSON at "credentials/authn_login" should include "pcf/"
     And the JSON at "credentials/authn_api_key" should be a string
+    And the JSON at "credentials/version" should be a string
     And the JSON has valid conjur credentials
 
   Scenario: Bind resource
@@ -44,6 +45,7 @@ Feature: Binding
     And the JSON at "credentials/appliance_url" should be "http://conjur_5"
     And the JSON at "credentials/authn_login" should be a string
     And the JSON at "credentials/authn_api_key" should be a string
+    And the JSON at "credentials/version" should be a string
     And the JSON has valid conjur credentials
 
   Scenario: Bind resource with invalid body - missing key
