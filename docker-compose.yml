@@ -19,6 +19,13 @@ services:
     image: registry2.itci.conjur.net/conjur-appliance-cuke-master:4.9-stable
     security_opt:
       - seccomp:unconfined
+    environment:
+      CONJUR_AUTHN_LOGIN: admin
+      CONJUR_AUTHN_API_KEY: secret
+    volumes:
+      - ./ci/policy.yml:/etc/policy.yml:ro
+    ports:
+      - 8443:443
 
   client:
     image: conjurinc/cli5
@@ -41,6 +48,7 @@ services:
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY:
+      CONJUR_VERSION:
     command: rails s -p 3000 -b 0.0.0.0
     ports:
       - 3000:3000
@@ -57,6 +65,7 @@ services:
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY: doesntmatter
+      CONJUR_VERSION:
     command: rails s -p 3001 -b 0.0.0.0 -P tmp/pids/server1.pid
     expose:
       - "3001"
@@ -73,6 +82,7 @@ services:
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY: 123badconjurkey
+      CONJUR_VERSION:
     command: rails s -p 3002 -b 0.0.0.0 -P tmp/pids/server2.pid
     expose:
       - "3002"
@@ -90,6 +100,7 @@ services:
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY:
       CONJUR_POLICY:
+      CONJUR_VERSION:
     command: rails s -p 3003 -b 0.0.0.0 -P tmp/pids/server3.pid
     expose:
       - "3003"

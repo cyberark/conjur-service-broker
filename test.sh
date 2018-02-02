@@ -12,6 +12,7 @@ function main() {
 
   startConjur
   runTests5
+  cleanUpServiceBrokers
 #  runTests4
 }
 
@@ -25,19 +26,41 @@ function runTests5() {
   echo "Waiting for Conjur v5 to come up, and configuring it..."
   ./ci/configure_v5.sh
 
-  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
+  export CONJUR_VERSION=5
+
+  local api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
   export CONJUR_AUTHN_API_KEY="$api_key"
 
   # load the pcf policy for the non-empty CONJUR_POLICY test
   docker-compose run --rm --entrypoint bash client -c "conjur policy load root /app/ci/policy.yml"
-  export CONJUR_POLICY=pcf
 
-  docker-compose up -d conjur-service-broker service-broker-bad-url service-broker-bad-key service-broker-alt-policy
-  docker-compose run tests ci/test.sh
+  runTests
+}
+
+function cleanUpServiceBrokers() {
+  echo "Cleaning up running service brokers..."
+  docker-compose rm -f -s -v conjur-service-broker service-broker-bad-url service-broker-bad-key service-broker-alt-policy
 }
 
 function runTests4() {
-  echo "running the v4 tests"
+  echo "Waiting for Conjur v4 to come up, and configuring it..."
+  ./ci/configure_v4.sh
+
+  export CONJUR_VERSION=4
+
+  local api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['admin'].api_key\" 2>/dev/null")
+  export CONJUR_AUTHN_API_KEY="$api_key"
+
+  runTests
+}
+
+function runTests() {
+  export CONJUR_POLICY=pcf
+  docker-compose up -d conjur-service-broker service-broker-bad-url service-broker-bad-key service-broker-alt-policy
+
+  echo "Running tests"
+  echo "---"
+  docker-compose run tests ci/test.sh
 }
 
 main
