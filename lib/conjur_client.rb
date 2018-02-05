@@ -30,6 +30,10 @@ class ConjurClient
     def ssl_cert
       ENV['CONJUR_SSL_CERTIFICATE']
     end
+
+    def version
+      ENV['CONJUR_VERSION'] || '5'
+    end
   end
 
   def api
