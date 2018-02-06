@@ -28,7 +28,7 @@ class ConjurClient
     end
   
     def ssl_cert
-      ENV['CONJUR_SSL_CERTIFICATE']
+      ENV['CONJUR_SSL_CERTIFICATE'] unless ENV['CONJUR_SSL_CERTIFICATE'].blank?
     end
 
     def version
