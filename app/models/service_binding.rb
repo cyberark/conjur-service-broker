@@ -46,13 +46,15 @@ class ServiceBinding
   end
 
   def delete
-    binding.pry
     host = conjur_api.role(role_name)
     
     raise HostNotFound if !host.exists?
 
     host.rotate_api_key
-    load_policy template_delete, method: Conjur::API::POLICY_METHOD_PATCH
+
+    if ConjurClient.version == 5
+      load_policy template_delete, method: Conjur::API::POLICY_METHOD_PATCH
+    end
   end
 
   private

@@ -1,8 +1,8 @@
 Feature: Catalog
 
   Scenario: Retrieve catalog with incorrect HTTP basic auth credentials
-    When my HTTP basic auth credentials are incorrect
-    And I GET "/v2/catalog"
+    Given my HTTP basic auth credentials are incorrect
+    When I GET "/v2/catalog"
     Then the HTTP response status code is "401"
     And the JSON should be {}
 
