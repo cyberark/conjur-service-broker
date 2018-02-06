@@ -82,12 +82,15 @@ module ServiceBrokerWorld
     login = parse_json(response_json, 'credentials/authn_login')
     api_key = parse_json(response_json, 'credentials/authn_api_key')
 
-    Conjur.with_configuration Conjur::Configuration.new(
-        account: account,
-        appliance_url: appliance_url
-    ) do
-      Conjur::API.authenticate(login, api_key)
+    Conjur.configure do |config|
+      config.account = account
+      config.appliance_url = appliance_url
+      config.cert_file = "./tmp/conjur.pem"
     end
+
+    Conjur.configuration.apply_cert_config!
+    
+    Conjur::API.authenticate(login, api_key)
   end
 
   private

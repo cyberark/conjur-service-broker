@@ -11,4 +11,9 @@
 - !policy
   id: pcf
   owner: !group pcf-admin-group
-  body: []
+  body:
+  - !layer pcf-apps
+    
+  - !host-factory
+    id: pcf-apps
+    layers: [ !layer pcf-apps ]

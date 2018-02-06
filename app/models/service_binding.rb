@@ -23,29 +23,32 @@ class ServiceBinding
     @binding_id = binding_id
   end
 
-  def create(app_id)
+  def create(app_id)    
     host = conjur_api.role(role_name)
 
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
 
-    result = load_policy(template_create)
-    host =
+    host_id =
       if ConjurClient.policy != 'root'
-        "host/#{ConjurClient.policy}/#{@binding_id}"
+        "#{ConjurClient.policy}/#{@binding_id}"
       else
-        "host/#{@binding_id}"
+        @binding_id
       end
     
+    api_key = (ConjurClient.version == 4 ? create_v4(host_id) : create_v5)
+
     return {
       account: ConjurClient.account,
       appliance_url: ConjurClient.appliance_url,
-      authn_login: host,
-      authn_api_key: result.created_roles.values.first['api_key']
+      authn_login: "host/#{host_id}",
+      authn_api_key: api_key
     }
   end
 
   def delete
+    binding.pry
     host = conjur_api.role(role_name)
+    
     raise HostNotFound if !host.exists?
 
     host.rotate_api_key
@@ -53,6 +56,22 @@ class ServiceBinding
   end
 
   private
+
+  def create_v4(host_id)
+    hf_token =
+      conjur_api.
+        resource("cucumber:host_factory:pcf%2Fpcf-apps").
+        create_token(Time.now + 1.hour)
+
+    host = Conjur::API.host_factory_create_host(hf_token, host_id)
+
+    host.api_key
+  end
+
+  def create_v5
+    result = load_policy(template_create)
+    result.created_roles.values.first['api_key']
+  end
 
   def template_create
     """

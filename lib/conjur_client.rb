@@ -4,7 +4,11 @@ require 'openssl'
 class ConjurClient
   class << self
     def api
-      @@api
+      ConjurClient.new.api
+    end
+
+    def version
+      ENV['CONJUR_VERSION'].to_i
     end
 
     def account
@@ -33,23 +37,15 @@ class ConjurClient
   end
 
   def api
-    @api
-  end
-
-  def initialize
     Conjur.configure do |config|
       config.account = ConjurClient.account
       config.appliance_url = ConjurClient.appliance_url
+      config.cert_file = "./tmp/conjur.pem"
     end
 
-    if ConjurClient.ssl_cert
-      certificate = OpenSSL::X509::Certificate.new ConjurClient.ssl_cert
-      OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_cert certificate
-    end
+    Conjur.configuration.apply_cert_config!
 
-    @api = Conjur::API.new_from_key ConjurClient.authn_login, 
-                                    ConjurClient.authn_api_key
+    Conjur::API.new_from_key ConjurClient.authn_login, 
+                             ConjurClient.authn_api_key
   end
-
-  @@api = ConjurClient.new.api
 end

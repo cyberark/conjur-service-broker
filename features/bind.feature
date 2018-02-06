@@ -18,7 +18,7 @@ Feature: Binding
     """
     Then the HTTP response status code is "201"
     And the JSON at "credentials/account" should be "cucumber"
-    And the JSON at "credentials/appliance_url" should be "http://conjur_5"
+    And the JSON at "credentials/appliance_url" should be a string
     And the JSON at "credentials/authn_login" should be a string
     And the JSON at "credentials/authn_login" should include "pcf/"
     And the JSON at "credentials/authn_api_key" should be a string
@@ -41,7 +41,7 @@ Feature: Binding
     """
     Then the HTTP response status code is "201"
     And the JSON at "credentials/account" should be "cucumber"
-    And the JSON at "credentials/appliance_url" should be "http://conjur_5"
+    And the JSON at "credentials/appliance_url" should be a string
     And the JSON at "credentials/authn_login" should be a string
     And the JSON at "credentials/authn_api_key" should be a string
     And the JSON has valid conjur credentials
