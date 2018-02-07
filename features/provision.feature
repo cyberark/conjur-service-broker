@@ -1,8 +1,8 @@
 Feature: Provisioning
 
   Scenario: Provision resource with incorrect HTTP basic auth credentials
-    When my HTTP basic auth credentials are incorrect
-    And I PUT "/v2/service_instances/9b292a9c-af66-4797-8d98-b30801f32a77" with body:
+    Given my HTTP basic auth credentials are incorrect
+    When I PUT "/v2/service_instances/9b292a9c-af66-4797-8d98-b30801f32a77" with body:
     """
     {
       "context": {

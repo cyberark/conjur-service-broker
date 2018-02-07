@@ -1,21 +1,21 @@
-When (/^my HTTP basic auth credentials are incorrect$/) do
+Given (/^my HTTP basic auth credentials are incorrect$/) do
   @basic_auth_user = 'INCORRECT_USER_NAME'
   @basic_auth_password = 'INCORRECT_USER_PASSWORD'
 end
 
-When (/^I use a service broker with a bad Conjur URL$/) do
+Given (/^I use a service broker with a bad Conjur URL$/) do
   @service_broker_host = 'http://service-broker-bad-url:3001'
 end
 
-When (/^I use a service broker with a bad Conjur API key$/) do
+Given (/^I use a service broker with a bad Conjur API key$/) do
   @service_broker_host = 'http://service-broker-bad-key:3002'
 end
 
-When (/^I use a service broker with a non-root policy$/) do
+Given (/^I use a service broker with a non-root policy$/) do
   @service_broker_host = 'http://service-broker-alt-policy:3003'
 end
 
-When (/^my request doesn't include the X-Broker-API-Version header$/) do
+Given (/^my request doesn't include the X-Broker-API-Version header$/) do
   headers.reject! { |k, _| ['X-Broker-API-Version'].include? k }
 end
 
@@ -27,8 +27,17 @@ When(/^I make a bind request with an existing binding_id and body:$/) do |body|
 end
 
 When(/^I make a bind request with body:$/) do |body|
-  url = "/v2/service_instances/#{SecureRandom.uuid}/service_bindings/#{SecureRandom.uuid}"
+  @service_id = SecureRandom.uuid
+  @binding_id = SecureRandom.uuid
+  
+  url = "/v2/service_instances/#{@service_id}/service_bindings/#{@binding_id}"
   step "I PUT \"#{url}\" with body:", body
+end
+
+When(/^I make a corresponding unbind request$/) do
+  url = "/v2/service_instances/#{@service_id}/service_bindings/#{@binding_id}?service_id=service-id-here&plan_id=plan-id-here"
+
+  step "I DELETE \"#{url}\""
 end
 
 When(/^I GET "([^"]*)"$/) do |path|
