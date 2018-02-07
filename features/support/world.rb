@@ -86,8 +86,11 @@ module ServiceBrokerWorld
 
     Conjur.with_configuration Conjur::Configuration.new(
         account: account,
-        appliance_url: appliance_url
+        appliance_url: appliance_url,
+        ssl_certificate: ssl_cert,
+        version: version
     ) do
+      Conjur.configuration.apply_cert_config!
       Conjur::API.authenticate(login, api_key)
     end
   end

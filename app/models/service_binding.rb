@@ -41,7 +41,7 @@ class ServiceBinding
       appliance_url: ConjurClient.appliance_url,
       authn_login: host,
       authn_api_key: result.created_roles.values.first['api_key'],
-      ssl_certificate: ConjurClient.ssl_cert,
+      ssl_certificate: ConjurClient.ssl_cert || "",
       version: ConjurClient.version
     }
   end
