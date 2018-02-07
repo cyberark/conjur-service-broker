@@ -112,7 +112,7 @@ class ServiceBinding
   end
 
   def role_name
-    "#{ConjurClient.account}:host:#{@binding_id}"
+    "#{ConjurClient.account}:host:#{host_id}"
   end
 
   def conjur_api
