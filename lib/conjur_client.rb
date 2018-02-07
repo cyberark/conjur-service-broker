@@ -32,7 +32,11 @@ class ConjurClient
     end
   
     def ssl_cert
-      ENV['CONJUR_SSL_CERTIFICATE']
+      ENV['CONJUR_SSL_CERTIFICATE'] unless ENV['CONJUR_SSL_CERTIFICATE'].blank?
+    end
+
+    def version
+      (ENV['CONJUR_VERSION'] || 5).to_i
     end
   end
 
@@ -40,7 +44,8 @@ class ConjurClient
     Conjur.configure do |config|
       config.account = ConjurClient.account
       config.appliance_url = ConjurClient.appliance_url
-      config.cert_file = ConjurClient.ssl_cert
+      config.ssl_certificate = ConjurClient.ssl_cert
+      config.version = ConjurClient.version
     end
 
     Conjur.configuration.apply_cert_config!
