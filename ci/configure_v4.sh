@@ -11,4 +11,3 @@ env CONJUR_AUTHN_LOGIN=admin CONJUR_AUTHN_API_KEY=secret conjur policy load --as
 CONFIGURE
 
 docker cp $(docker-compose ps -q conjur_4):/opt/conjur/etc/ssl/ca.pem ./tmp/conjur.pem
-export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"
