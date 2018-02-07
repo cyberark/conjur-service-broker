@@ -6,7 +6,11 @@ require 'conjur_client'
 
 begin
   conjur_api = ConjurClient.api
-  conjur_api.resources limit: 5
+  if ConjurClient.version == 5
+    conjur_api.resources limit: 5
+  else
+    conjur_api.resource("#{ConjurClient.account}:user:admin").exists?
+  end
   puts "Successfully validated Conjur credentials."
 rescue
   raise "Error: There is an issue with your Conjur configuration. Please verify that the credentials are correct and try again."

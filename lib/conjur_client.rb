@@ -32,7 +32,7 @@ class ConjurClient
     end
 
     def version
-      ENV['CONJUR_VERSION'] || '5'
+      (ENV['CONJUR_VERSION'] || 5).to_i
     end
   end
 
@@ -44,12 +44,11 @@ class ConjurClient
     Conjur.configure do |config|
       config.account = ConjurClient.account
       config.appliance_url = ConjurClient.appliance_url
+      config.ssl_certificate = ConjurClient.ssl_cert
+      config.version = ConjurClient.version
     end
 
-    if ConjurClient.ssl_cert
-      certificate = OpenSSL::X509::Certificate.new ConjurClient.ssl_cert
-      OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_cert certificate
-    end
+    Conjur.configuration.apply_cert_config!
 
     @api = Conjur::API.new_from_key ConjurClient.authn_login, 
                                     ConjurClient.authn_api_key

@@ -48,6 +48,7 @@ services:
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY:
+      CONJUR_SSL_CERTIFICATE:
       CONJUR_VERSION:
     command: rails s -p 3000 -b 0.0.0.0
     ports:
@@ -65,6 +66,7 @@ services:
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY: doesntmatter
+      CONJUR_SSL_CERTIFICATE:
       CONJUR_VERSION:
     command: rails s -p 3001 -b 0.0.0.0 -P tmp/pids/server1.pid
     expose:
@@ -82,6 +84,7 @@ services:
       SECURITY_USER_NAME: TEST_USER_NAME
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY: 123badconjurkey
+      CONJUR_SSL_CERTIFICATE:
       CONJUR_VERSION:
     command: rails s -p 3002 -b 0.0.0.0 -P tmp/pids/server2.pid
     expose:
@@ -100,6 +103,7 @@ services:
       SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
       CONJUR_AUTHN_API_KEY:
       CONJUR_POLICY:
+      CONJUR_SSL_CERTIFICATE:
       CONJUR_VERSION:
     command: rails s -p 3003 -b 0.0.0.0 -P tmp/pids/server3.pid
     expose:
