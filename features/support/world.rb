@@ -83,7 +83,7 @@ module ServiceBrokerWorld
     api_key = parse_json(response_json, 'credentials/authn_api_key')
     version = parse_json(response_json, 'credentials/version')
     ssl_cert = parse_json(response_json, 'credentials/ssl_certificate')
-
+    
     Conjur.with_configuration Conjur::Configuration.new(
       account: account,
       appliance_url: appliance_url,
@@ -93,10 +93,6 @@ module ServiceBrokerWorld
       Conjur.configuration.apply_cert_config!
       Conjur::API.authenticate(login, api_key)
     end
-
-    Conjur.configuration.apply_cert_config!
-    
-    Conjur::API.authenticate(login, api_key)
   end
 
   private
