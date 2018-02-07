@@ -8,7 +8,7 @@ class ConjurClient
     end
 
     def v4_host_factory_id
-      "#{account}:host_factory:#{policy}/pcf-apps"
+      "#{account}:host_factory:#{policy}/#{policy}-apps"
     end
 
     def version
