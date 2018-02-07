@@ -28,7 +28,7 @@ class ServiceBinding
 
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
 
-    api_key = (ConjurClient.version == 4 ? create_v4 : create_v5)
+    api_key = (ConjurClient.version == 4 ? create_host_v4 : create_host_v5)
 
     return {
       account: ConjurClient.account,
@@ -54,7 +54,7 @@ class ServiceBinding
 
   private
   
-  def create_v4
+  def create_host_v4
     hf_token =
       conjur_api.
         resource(URI::encode(ConjurClient.v4_host_factory_id)).
@@ -65,7 +65,7 @@ class ServiceBinding
     host.api_key
   end
 
-  def create_v5
+  def create_host_v5
     result = load_policy(template_create)
     result.created_roles.values.first['api_key']
   end
