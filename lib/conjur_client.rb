@@ -40,7 +40,7 @@ class ConjurClient
     Conjur.configure do |config|
       config.account = ConjurClient.account
       config.appliance_url = ConjurClient.appliance_url
-      config.cert_file = "./tmp/conjur.pem"
+      config.cert_file = ConjurClient.ssl_cert
     end
 
     Conjur.configuration.apply_cert_config!
