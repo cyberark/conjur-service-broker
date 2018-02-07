@@ -173,7 +173,7 @@ DEPENDENCIES
   aruba
   byebug
   ci_reporter_rspec (~> 1)
-  conjur-api (~> 5.1)
+  conjur-api (~> 5.1.0)
   cucumber (~> 2)
   json-schema (~> 2.8)
   json_spec (~> 1.1.5)

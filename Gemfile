@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'conjur-api', '~> 5.1'
+gem 'conjur-api', '~> 5.1.0'
 gem 'activesupport', '~> 5.1.4'
 gem 'railties', '~> 5.1.4'
 gem 'json-schema', '~> 2.8'
