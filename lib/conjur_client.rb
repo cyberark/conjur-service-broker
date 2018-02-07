@@ -7,6 +7,10 @@ class ConjurClient
       ConjurClient.new.api
     end
 
+    def v4_host_factory_id
+      "#{account}:host_factory:#{policy}/pcf-apps"
+    end
+
     def version
       (ENV['CONJUR_VERSION'] || 5).to_i
     end
@@ -33,10 +37,6 @@ class ConjurClient
   
     def ssl_cert
       ENV['CONJUR_SSL_CERTIFICATE'] unless ENV['CONJUR_SSL_CERTIFICATE'].blank?
-    end
-
-    def version
-      (ENV['CONJUR_VERSION'] || 5).to_i
     end
   end
 

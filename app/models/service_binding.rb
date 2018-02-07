@@ -28,14 +28,7 @@ class ServiceBinding
 
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
 
-    host_id =
-      if ConjurClient.policy != 'root'
-        "#{ConjurClient.policy}/#{@binding_id}"
-      else
-        @binding_id
-      end
-    
-    api_key = (ConjurClient.version == 4 ? create_v4(host_id) : create_v5)
+    api_key = (ConjurClient.version == 4 ? create_v4 : create_v5)
 
     return {
       account: ConjurClient.account,
@@ -60,11 +53,11 @@ class ServiceBinding
   end
 
   private
-
-  def create_v4(host_id)
+  
+  def create_v4
     hf_token =
       conjur_api.
-        resource("cucumber:host_factory:pcf%2Fpcf-apps").
+        resource(URI::encode(ConjurClient.v4_host_factory_id)).
         create_token(Time.now + 1.hour)
 
     host = Conjur::API.host_factory_create_host(hf_token, host_id)
@@ -92,6 +85,14 @@ class ServiceBinding
 
   def load_policy(policy, method: Conjur::API::POLICY_METHOD_POST)
     conjur_api.load_policy(ConjurClient.policy, policy, method: method)
+  end
+
+  def host_id
+    if ConjurClient.policy != 'root'
+      "#{ConjurClient.policy}/#{@binding_id}"
+    else
+      @binding_id
+    end
   end
 
   def role_name
