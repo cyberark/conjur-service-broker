@@ -4,7 +4,11 @@ require 'openssl'
 class ConjurClient
   class << self
     def api
-      @@api
+      ConjurClient.new.api
+    end
+
+    def version
+      (ENV['CONJUR_VERSION'] || 5).to_i
     end
 
     def account
@@ -37,10 +41,6 @@ class ConjurClient
   end
 
   def api
-    @api
-  end
-
-  def initialize
     Conjur.configure do |config|
       config.account = ConjurClient.account
       config.appliance_url = ConjurClient.appliance_url
@@ -50,9 +50,7 @@ class ConjurClient
 
     Conjur.configuration.apply_cert_config!
 
-    @api = Conjur::API.new_from_key ConjurClient.authn_login, 
-                                    ConjurClient.authn_api_key
+    Conjur::API.new_from_key ConjurClient.authn_login, 
+                             ConjurClient.authn_api_key
   end
-
-  @@api = ConjurClient.new.api
 end
