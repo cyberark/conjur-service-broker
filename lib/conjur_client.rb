@@ -8,7 +8,7 @@ class ConjurClient
     end
 
     def version
-      ENV['CONJUR_VERSION'].to_i
+      (ENV['CONJUR_VERSION'] || 5).to_i
     end
 
     def account

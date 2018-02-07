@@ -23,7 +23,7 @@ class ServiceBinding
     @binding_id = binding_id
   end
 
-  def create(app_id)    
+  def create(app_id)
     host = conjur_api.role(role_name)
 
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
