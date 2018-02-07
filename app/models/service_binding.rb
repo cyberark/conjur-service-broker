@@ -70,22 +70,6 @@ class ServiceBinding
     result.created_roles.values.first['api_key']
   end
 
-  def create_v4(host_id)
-    hf_token =
-      conjur_api.
-        resource("cucumber:host_factory:pcf%2Fpcf-apps").
-        create_token(Time.now + 1.hour)
-
-    host = Conjur::API.host_factory_create_host(hf_token, host_id)
-
-    host.api_key
-  end
-
-  def create_v5
-    result = load_policy(template_create)
-    result.created_roles.values.first['api_key']
-  end
-
   def template_create
     """
     - !host #{@binding_id}
