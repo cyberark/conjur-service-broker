@@ -81,6 +81,8 @@ module ServiceBrokerWorld
     appliance_url = parse_json(response_json, 'credentials/appliance_url')
     login = parse_json(response_json, 'credentials/authn_login')
     api_key = parse_json(response_json, 'credentials/authn_api_key')
+    version = parse_json(response_json, 'credentials/version')
+    ssl_cert = parse_json(response_json, 'credentials/ssl_certificate')
 
     Conjur.with_configuration Conjur::Configuration.new(
         account: account,
