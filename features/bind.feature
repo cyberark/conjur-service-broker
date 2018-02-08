@@ -23,7 +23,7 @@ Feature: Binding
     And the JSON at "credentials/ssl_certificate" should be a string
     And the JSON has valid conjur credentials
 
-  Scenario: Bind resource with specified pcf policy
+  Scenario: Bind resource with pcf policy configured
     Given I use a service broker with a non-root policy
     When I make a bind request with body:
     """
@@ -74,6 +74,25 @@ Feature: Binding
     """
 
   Scenario: Bind resource with existing ID
+    When I make a bind request with an existing binding_id and body:
+    """
+    {
+      "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
+      "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
+      "bind_resource": {
+        "app_guid": "bb841d2b-8287-47a9-ac8f-eef4c16106f8"
+      },
+      "parameters": {
+        "parameter1": 1,
+        "parameter2": "foo"
+      }
+    }
+    """
+    Then the HTTP response status code is "409"
+    And the JSON should be {}
+
+  Scenario: Bind resource with existing ID with pcf policy configured
+    Given I use a service broker with a non-root policy
     When I make a bind request with an existing binding_id and body:
     """
     {

@@ -8,7 +8,11 @@ class ConjurClient
     end
 
     def v4_host_factory_id
-      "#{account}:host_factory:#{policy}/#{policy}-apps"
+      if policy == "root"
+        "#{account}:host_factory:apps"
+      else
+        "#{account}:host_factory:#{policy}/#{policy}-apps"
+      end
     end
 
     def version
