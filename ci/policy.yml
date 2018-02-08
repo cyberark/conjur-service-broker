@@ -8,6 +8,12 @@
   role: !group pcf-admin-group
   member: !user pcf-admin
 
+- !layer apps
+
+- !host-factory
+  id: apps
+  layers: [ !layer apps ]
+  
 - !policy
   id: pcf
   owner: !group pcf-admin-group
