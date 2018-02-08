@@ -57,7 +57,7 @@ class ServiceBinding
   def create_host_v4
     hf_token =
       conjur_api.
-        resource(URI::encode(ConjurClient.v4_host_factory_id)).
+        resource(URI::encode(ConjurClient.v4_host_factory_id, "/")).
         create_token(Time.now + 1.hour)
 
     host = Conjur::API.host_factory_create_host(hf_token, host_id)
