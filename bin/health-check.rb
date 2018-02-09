@@ -15,13 +15,16 @@ begin
   
   puts "Successfully validated Conjur credentials."
 rescue
-  raise "Error: There is an issue with your Conjur configuration. Please verify that the credentials are correct and try again."
+  raise "Error: There is an issue with your Conjur configuration. Please verify" \
+        " that the credentials are correct and try again."
 end
 
 if ConjurClient.version == 4
-  begin
-    conjur_api.resource(URI::encode(ConjurClient.v4_host_factory_id, "/")).exists?
-  rescue
-    raise "Error: There is an issue with your Conjur configuration. Please verify that your policy contains a host factory."
+  hf_id = ConjurClient.v4_host_factory_id
+  
+  if !conjur_api.resource(URI::encode(hf_id, "/")).exists?
+    raise "Error: There is an issue with your Conjur configuration. Please" \
+          " verify that your Conjur policy contains a host factory named " \
+          "'#{hf_id.split(':')[-1]}' under the '#{ConjurClient.policy}' policy."
   end
 end
