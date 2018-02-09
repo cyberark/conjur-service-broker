@@ -25,6 +25,6 @@ if ConjurClient.version == 4
   if !conjur_api.resource(URI::encode(hf_id, "/")).exists?
     raise "Error: There is an issue with your Conjur configuration. Please" \
           " verify that your Conjur policy contains a host factory named " \
-          "'#{hf_id.split(':')[-1]}' under the '#{ConjurClient.policy}' policy."
+          "'#{hf_id.split(/[:\/]/)[-1]}' under the '#{ConjurClient.policy}' policy."
   end
 end
