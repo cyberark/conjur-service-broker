@@ -45,17 +45,46 @@ cf set-env conjur-service-broker SECURITY_USER_PASSWORD [value]
 ```
 
 To configure the Service Broker to communicate with your external Conjur instance, the Service Broker app requires the following environment variables:
+- `CONJUR_VERSION`: the version of your Conjur instance (`4` or `5`); defaults to 5
 - `CONJUR_ACCOUNT`: the account name for the Conjur instance you are connecting to
 - `CONJUR_APPLIANCE_URL`: the URL of the Conjur appliance instance you are connecting to
-- `CONJUR_AUTHN_LOGIN`: the username of a Conjur user with update privilege on all Conjur policies associated with PCF-deployed applications. This will be used to add and remove hosts from the Conjur policy as apps are deployed to or removed from PCF.
+- `CONJUR_POLICY`: the policy namespace where new hosts should be added - the Conjur account specified in `CONJUR_AUTHN_LOGIN` needs `create` and `update` privilege on this policy.
+  - The `CONJUR_POLICY` is optional, but is strongly recommended. By default, if this value is not specified, hosts will be added to the `root` Conjur policy, and the Conjur account that the Service Broker uses to manage the hosts will need `create` and `update` privileges on the `root` Conjur policy.
+- `CONJUR_AUTHN_LOGIN`: the username of a Conjur user with `create` and `update` privileges on `CONJUR_POLICY`. This account will be used to add and remove hosts from the Conjur policy as apps are deployed to or removed from PCF.
 - `CONJUR_AUTHN_API_KEY`: the API Key of the Conjur user whose username you have provided in `CONJUR_AUTHN_LOGIN`
+- `CONJUR_SSL_CERTIFICATE`: the x509 certificate that was created when Conjur was initiated; this is required for v4 Conjur, but is optional otherwise. If the certificate is stored in a PEM file, you can load it into a local environment variable by calling `export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"`
 
-To load these environment variables, run:
+_Note:_ If you are using v4 Conjur, the Service Broker requires your `CONJUR_POLICY` to have a Host Factory called `CONJUR_POLICY-apps`. For example, if your `CONJUR_POLICY` is `cf`, you can add a Host Factory by updating your policy file to include the following:
 ```
+- !policy
+  id: cf
+  owner: !group cf-admin-group
+  body:
+   - !layer cf-apps
+
+   - !host-factory
+     id: cf-apps
+     layers: [ !layer cf-apps ]
+```
+If you do not specify a `CONJUR_POLICY` (this is not recommended) in your Service Broker configuration and you are using `CONJUR_VERSION` 4, then you will need to add a Host Factory to the `root` Conjur policy by including:
+```
+- !layer apps
+
+- !host-factory
+  id: apps
+  layers: [ !layer apps ]
+```
+
+
+To load these environment variables into the Service Broker's environment, run:
+```
+cf set-env conjur-service-broker CONJUR_VERSION [value]
 cf set-env conjur-service-broker CONJUR_ACCOUNT [value]
 cf set-env conjur-service-broker CONJUR_APPLIANCE_URL [value]
 cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN [value]
 cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY [value]
+cf set-env conjur-service-broker CONJUR_POLICY [value]
+cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE [value]
 ```
 
 Once the Service Broker is configured, start the Service Broker application
@@ -67,6 +96,7 @@ and register it with the same Basic Auth credentials specified in your environme
 APP_URL="http://`cf app conjur-service-broker | grep -E -w 'urls:|routes:' | awk '{print $2}'`"
 cf create-service-broker conjur-service-broker "[username value]" "[password value]" $APP_URL --space-scoped
 ```
+When the Service Broker application is started, it will run a health check that validates its connection to your Conjur instance, including checking that the Host Factory exists if you are using Conjur version 4.
 
 Finally, create a service instance under the `community` plan:
 ```
