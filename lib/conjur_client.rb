@@ -30,6 +30,10 @@ class ConjurClient
     def authn_login
       ENV['CONJUR_AUTHN_LOGIN']
     end
+
+    def login_host_id
+      authn_login.sub /host\//, "" if authn_login.include? "host"
+    end
   
     def appliance_url
       ENV['CONJUR_APPLIANCE_URL']
@@ -41,6 +45,17 @@ class ConjurClient
   
     def ssl_cert
       ENV['CONJUR_SSL_CERTIFICATE'] unless ENV['CONJUR_SSL_CERTIFICATE'].blank?
+    end
+
+    def platform
+      platform_annotation = ""
+      if authn_login.include? "host"
+        host = api.resource("#{account}:host:#{login_host_id}")
+        JSON.parse(host.attributes["annotations"].to_json).each do |annotation|
+          platform_annotation = annotation["value"] if annotation["name"] == "platform"
+        end
+      end
+      return platform_annotation
     end
   end
 
