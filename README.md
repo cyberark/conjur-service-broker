@@ -44,6 +44,14 @@ To configure the Service Broker to communicate with your external Conjur instanc
 - `CONJUR_POLICY`: the Policy where new Hosts should be added - the Conjur account specified in `CONJUR_AUTHN_LOGIN` needs `create` and `update` privilege on this Policy.
   - The `CONJUR_POLICY` is optional, but is strongly recommended. By default, if this value is not specified, Hosts will be added to the `root` Conjur policy, and the Conjur account that the Service Broker uses to manage the Hosts will need `create` and `update` privileges on the `root` Conjur policy.
 - `CONJUR_AUTHN_LOGIN`: the identity of a Conjur Host (of the form `host/host-id`) with `create` and `update` privileges on `CONJUR_POLICY`. This account will be used to add and remove Hosts from Conjur policy as apps are deployed to or removed from PCF.
+If you are using Enterprise Conjur, you will want to add an annotation on the Service Broker Host in policy to indicate which platform the Service Broker will be used on. The policy you load may look something like:
+```
+- !host
+  id: cf-service-broker
+  annotations:
+    platform: cloudfoundry
+```
+You may elect to set `platform` to `cloudfoundry` or to `pivotalcloudfoundry`, for example. This annotation will be used to set annotations on Hosts added by the Service Broker, so that they will show in the Conjur UI with the appropriate platform logo.
 - `CONJUR_AUTHN_API_KEY`: the API Key of the Conjur Host whose identity you have provided in `CONJUR_AUTHN_LOGIN`
 - `CONJUR_SSL_CERTIFICATE`: the x509 certificate that was created when Conjur was initiated; this is required for v4 Conjur, but is optional otherwise. If the certificate is stored in a PEM file, you can load it into a local environment variable by calling `export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"`
 
