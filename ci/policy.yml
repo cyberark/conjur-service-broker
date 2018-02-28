@@ -1,12 +1,14 @@
-- !user
-  id: pcf-admin
+- !host
+  id: cf-service-broker
+  annotations:
+    platform: cloudfoundry
 
 - !group
-  id: pcf-admin-group
+  id: cf-admin-group
 
 - !grant
-  role: !group pcf-admin-group
-  member: !user pcf-admin
+  role: !group cf-admin-group
+  member: !host cf-service-broker
 
 - !layer apps
 
@@ -15,11 +17,11 @@
   layers: [ !layer apps ]
   
 - !policy
-  id: pcf
-  owner: !group pcf-admin-group
+  id: cf
+  owner: !group cf-admin-group
   body:
-  - !layer pcf-apps
+  - !layer cf-apps
     
   - !host-factory
-    id: pcf-apps
-    layers: [ !layer pcf-apps ]
+    id: cf-apps
+    layers: [ !layer cf-apps ]
