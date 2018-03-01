@@ -4,7 +4,7 @@ class ServiceBinding
 
   class RoleAlreadyCreated < RuntimeError
   end
-  
+
   class HostNotFound < RuntimeError
   end
 
@@ -17,7 +17,7 @@ class ServiceBinding
       ServiceBinding.new(instance_id, binding_id).delete
     end
   end
-  
+
   def initialize(instance_id, binding_id)
     @instance_id = instance_id
     @binding_id = binding_id
@@ -42,7 +42,7 @@ class ServiceBinding
 
   def delete
     host = conjur_api.role(role_name)
-    
+
     raise HostNotFound if !host.exists?
 
     host.rotate_api_key
@@ -53,14 +53,21 @@ class ServiceBinding
   end
 
   private
-  
+
   def create_host_v4
     hf_token =
       conjur_api.
         resource(URI::encode(ConjurClient.v4_host_factory_id, "/")).
         create_token(Time.now + 1.hour)
 
-    host = Conjur::API.host_factory_create_host(hf_token, host_id)
+    options =
+      if ConjurClient.platform.to_s.empty?
+        {}
+      else
+        { annotations: { "#{ConjurClient.platform}": "true" } }
+      end
+
+    host = Conjur::API.host_factory_create_host(hf_token, host_id, options)
 
     host.api_key
   end
@@ -71,11 +78,20 @@ class ServiceBinding
   end
 
   def template_create
-    """
-    - !host #{@binding_id}
-    """
+    if ConjurClient.platform.to_s.empty?
+      """
+      - !host #{@binding_id}
+      """
+    else
+      """
+      - !host
+        id: #{@binding_id}
+        annotations:
+          #{ConjurClient.platform}: true
+      """
+    end
   end
-  
+
   def template_delete
     """
     - !delete

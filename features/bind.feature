@@ -23,7 +23,7 @@ Feature: Binding
     And the JSON at "credentials/ssl_certificate" should be a string
     And the JSON has valid conjur credentials
 
-  Scenario: Bind resource with pcf policy configured
+  Scenario: Bind resource with cf policy configured
     Given I use a service broker with a non-root policy
     When I make a bind request with body:
     """
@@ -40,14 +40,16 @@ Feature: Binding
     }
     """
     Then the HTTP response status code is "201"
+    And I keep the JSON response as "BIND_RESPONSE"
     And the JSON at "credentials/account" should be "cucumber"
     And the JSON at "credentials/appliance_url" should be a string
     And the JSON at "credentials/authn_login" should be a string
-    And the JSON at "credentials/authn_login" should include "pcf/"
+    And the JSON at "credentials/authn_login" should include "cf/"
     And the JSON at "credentials/authn_api_key" should be a string
     And the JSON at "credentials/version" should be a Fixnum
     And the JSON at "credentials/ssl_certificate" should be a string
     And the JSON has valid conjur credentials
+    And the host in "BIND_RESPONSE" has annotation "'cloudfoundry': 'true'" in Conjur
 
   Scenario: Bind resource with invalid body - missing key
     When I make a bind request with body:
@@ -91,7 +93,7 @@ Feature: Binding
     Then the HTTP response status code is "409"
     And the JSON should be {}
 
-  Scenario: Bind resource with existing ID with pcf policy configured
+  Scenario: Bind resource with existing ID with cf policy configured
     Given I use a service broker with a non-root policy
     When I make a bind request with an existing binding_id and body:
     """

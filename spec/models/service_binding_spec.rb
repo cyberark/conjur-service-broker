@@ -11,15 +11,17 @@ describe ServiceBinding do
     end
     
     it "uses the Conjur API to load policy to delete the host" do
-      expect_any_instance_of(Conjur::API).
-        to receive(:load_policy).
-        with("root",
-    """
-    - !delete
-      record: !host binding_id
-    """,
-        method: :patch
-        )
+      if ENV['CONJUR_VERSION'] == 5
+        expect_any_instance_of(Conjur::API).
+          to receive(:load_policy).
+          with("root",
+      """
+      - !delete
+        record: !host binding_id
+      """,
+          method: :patch
+          )
+      end
       expect(host).to receive(:rotate_api_key)
 
       ServiceBinding.new("service_id", "binding_id").delete

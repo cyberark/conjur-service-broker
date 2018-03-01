@@ -22,15 +22,19 @@ class ConjurClient
     def account
       ENV['CONJUR_ACCOUNT']
     end
-  
+
     def authn_api_key
       ENV['CONJUR_AUTHN_API_KEY']
     end
-  
+
     def authn_login
       ENV['CONJUR_AUTHN_LOGIN']
     end
-  
+
+    def login_host_id
+      authn_login.sub /^host\//, "" unless authn_login.index(/^host\//).nil?
+    end
+
     def appliance_url
       ENV['CONJUR_APPLIANCE_URL']
     end
@@ -38,9 +42,21 @@ class ConjurClient
     def policy
       ENV['CONJUR_POLICY'] || 'root'
     end
-  
+
     def ssl_cert
       ENV['CONJUR_SSL_CERTIFICATE'] unless ENV['CONJUR_SSL_CERTIFICATE'].blank?
+    end
+
+    def platform
+      platform_annotation = ""
+      if !login_host_id.nil?
+        host = api.resource("#{account}:host:#{login_host_id}")
+        JSON.parse(host.attributes["annotations"].to_json).each do |annotation|
+          platform_annotation = annotation["value"] if annotation["name"] == "platform"
+        end
+      end
+      
+      return platform_annotation
     end
   end
 
@@ -54,7 +70,7 @@ class ConjurClient
 
     Conjur.configuration.apply_cert_config!
 
-    Conjur::API.new_from_key ConjurClient.authn_login, 
+    Conjur::API.new_from_key ConjurClient.authn_login,
                              ConjurClient.authn_api_key
   end
 end
