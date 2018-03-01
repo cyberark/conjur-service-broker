@@ -61,10 +61,10 @@ class ServiceBinding
         create_token(Time.now + 1.hour)
 
     options =
-      if ConjurClient.platform
-        { annotations: "{ \"#{ConjurClient.platform}\": \"true\" }" }
-      else
+      if ConjurClient.platform.to_s.empty?
         {}
+      else
+        { annotations: { "#{ConjurClient.platform}": "true" } }
       end
 
     host = Conjur::API.host_factory_create_host(hf_token, host_id, options)
@@ -78,16 +78,16 @@ class ServiceBinding
   end
 
   def template_create
-    if !ConjurClient.platform.to_s.empty?
+    if ConjurClient.platform.to_s.empty?
+      """
+      - !host #{@binding_id}
+      """
+    else
       """
       - !host
         id: #{@binding_id}
         annotations:
           #{ConjurClient.platform}: true
-      """
-    else
-      """
-      - !host #{@binding_id}
       """
     end
   end

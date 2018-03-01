@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+If the service broker host identity has a `platform` annotation in Conjur, hosts added to policy by the service broker will include an annotation for the platform also.
+
 ## [0.2.0] - 2018-02-12
 
 ### Added

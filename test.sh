@@ -27,7 +27,7 @@ function runTests() {
   export CONJUR_POLICY=cf
   if [[ $1 -eq 4 ]]
   then
-    export CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['admin'].api_key\" 2>/dev/null")"
+    export CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/cf-service-broker'].api_key\" 2>/dev/null")"
   else
     export CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:cf-service-broker}].api_key" 2>/dev/null')"
   fi
