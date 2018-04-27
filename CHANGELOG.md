@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.0] - 2018-04-27
+
+### Security
+Updated dependencies to address potential vulnerability in `rails-html-sanitizer` ([more info](https://nvd.nist.gov/vuln/detail/CVE-2018-3741)) and `loofah` ([more info](https://github.com/flavorjones/loofah/issues/144))
+
 ### Added
 If the service broker host identity has a `platform` annotation in Conjur, hosts added to policy by the service broker will also include an annotation for the platform.
 
@@ -20,3 +25,4 @@ The first tagged version.
 
 [Unreleased]: https://github.com/conjurinc/conjur-service-broker/compare/v0.2.0...HEAD
 [0.2.0]: https://github.com/conjurinc/conjur-service-broker/compare/v0.1.0...v0.2.0
+[0.3.0]: https://github.com/conjurinc/conjur-service-broker/compare/v0.2.0...v0.3.0
