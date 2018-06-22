@@ -212,6 +212,15 @@ follow the demo scripts in the [Cloud Foundry demo repo](https://github.com/conj
 
 To run the test suite, call `./test.sh` from your local machine - the script will stand up the needed containers and run the full suite of rspec and cucumber tests.
 
+### Releases
+
+When releasing a new version of the Service Broker, you will need to include a
+ZIP file with the release of the repository with all dependencies. Running the
+`./build.sh` script will run `bundle pack --all`, which creates a
+`vendor/cache/` directory with the project dependencies. It will also produce a ZIP
+file of the project which includes this directory. The ZIP file should be uploaded
+to the release in GitHub; it will be used to build the PCF tile.
+
 ### Contributing
 
 1. Fork it

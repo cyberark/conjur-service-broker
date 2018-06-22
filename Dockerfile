@@ -1,7 +1,7 @@
 FROM ruby:2.2.5
 
 RUN apt-get update && \
-    apt-get install -y build-essential libpq-dev
+    apt-get install -y build-essential libpq-dev zip
 
 RUN mkdir /app
 WORKDIR /app

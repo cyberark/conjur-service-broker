@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.1] - 2018-06-15
+
+### Added
+The build is updated to run in deployment mode and produce a ZIP file of the project with all dependencies included.
+
 ## [0.3.0] - 2018-04-27
 
 ### Security
@@ -23,6 +28,7 @@ Added support for v4 Conjur, including health check that verifies HF existence
 
 The first tagged version.
 
-[Unreleased]: https://github.com/conjurinc/conjur-service-broker/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/conjurinc/conjur-service-broker/compare/v0.1.0...v0.2.0
-[0.3.0]: https://github.com/conjurinc/conjur-service-broker/compare/v0.2.0...v0.3.0
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/cyberark/conjur-service-broker/compare/v0.1.0...v0.2.0
+[0.3.0]: https://github.com/cyberark/conjur-service-broker/compare/v0.2.0...v0.3.0
+[0.3.1]: https://github.com/cyberark/conjur-service-broker/compare/v0.3.0...v0.3.1
