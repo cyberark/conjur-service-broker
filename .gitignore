@@ -23,3 +23,6 @@ logfile
 # Ignore test output directories
 /features/reports/
 /spec/reports/
+
+# Ignore build relics
+/vendor/cache/
