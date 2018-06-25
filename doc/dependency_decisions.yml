@@ -340,3 +340,31 @@
     :versions:
     - 12.3.1
     :when: 2018-04-27 14:58:06.451009022 Z
+- - :approve
+  - domain_name
+  - :who: 
+    :why: 
+    :versions:
+    - 0.5.20180417
+    :when: 2018-06-25 18:26:16.341978509 Z
+- - :approve
+  - nokogiri
+  - :who: 
+    :why: 
+    :versions:
+    - 1.8.3
+    :when: 2018-06-25 18:26:28.132392823 Z
+- - :approve
+  - public_suffix
+  - :who: 
+    :why: 
+    :versions:
+    - 3.0.2
+    :when: 2018-06-25 18:26:43.548389094 Z
+- - :approve
+  - puma
+  - :who: 
+    :why: 
+    :versions:
+    - 3.11.4
+    :when: 2018-06-25 18:26:54.157982365 Z
