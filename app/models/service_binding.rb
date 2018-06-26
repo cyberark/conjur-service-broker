@@ -28,7 +28,11 @@ class ServiceBinding
 
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
 
-    api_key = (ConjurClient.version == 4 ? create_host_v4 : create_host_v5)
+    begin
+      api_key = (ConjurClient.version == 4 ? create_host_v4 : create_host_v5)
+    rescue RestClient::NotFound => e
+      raise ConjurAuthenticationError.new "Conjur configuration invalid: #{e.message}"
+    end
 
     return {
       account: ConjurClient.account,

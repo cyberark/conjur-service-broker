@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.2] - 2018-06-26
+
+### Added
+- Health check now verifies that the Service Broker Conjur identity has read privileges on its own resource
+- Added cukes to check that Service Broker returns 403 if host does not have proper privileges
+
+### Fixed
+- ServiceBinding handles RestClient::NotFound errors on host creation gracefully
+
+### Changed
+- Tests now run against Conjur 0.7.0
+
 ## [0.3.1] - 2018-06-15
 
 ### Added

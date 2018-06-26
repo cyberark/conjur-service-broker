@@ -34,6 +34,15 @@ function runTests() {
 
   docker-compose up -d service-broker-alt-policy
 
+  if [[ $1 -eq 4 ]]
+  then
+    export CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/bad-service-broker'].api_key\" 2>/dev/null")"
+  else
+    export CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:bad-service-broker}].api_key" 2>/dev/null')"
+  fi
+
+  docker-compose up -d service-broker-bad-host
+
   echo "Running tests"
   echo "---"
   docker-compose run -e CONJUR_AUTHN_API_KEY=$api_key tests ci/test.sh
