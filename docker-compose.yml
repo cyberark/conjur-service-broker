@@ -5,7 +5,7 @@ services:
     image: postgres:9.3
 
   conjur_5:
-    image: cyberark/conjur:0.3.0-stable
+    image: cyberark/conjur:0.7.0-stable
     command: server -a cucumber
     environment:
       DATABASE_URL: postgres://postgres@pg/postgres
@@ -108,6 +108,25 @@ services:
     command: rails s -p 3003 -b 0.0.0.0 -P tmp/pids/server3.pid
     expose:
       - "3003"
+    volumes:
+      - "./:/app"
+
+  service-broker-bad-host:
+    image: conjur-service-broker
+    build: ./
+    environment:
+      CONJUR_ACCOUNT: cucumber
+      CONJUR_AUTHN_LOGIN: host/bad-service-broker
+      CONJUR_APPLIANCE_URL:
+      SECURITY_USER_NAME: TEST_USER_NAME
+      SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
+      CONJUR_AUTHN_API_KEY:
+      CONJUR_POLICY:
+      CONJUR_SSL_CERTIFICATE:
+      CONJUR_VERSION:
+    command: rails s -p 3004 -b 0.0.0.0 -P tmp/pids/server4.pid
+    expose:
+      - "3004"
     volumes:
       - "./:/app"
 

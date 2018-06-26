@@ -51,6 +51,26 @@ Feature: Binding
     And the JSON has valid conjur credentials
     And the host in "BIND_RESPONSE" has annotation "'cloudfoundry': 'true'" in Conjur
 
+  @conjur-version-5
+  Scenario: Bind resource with improperly privileged host configuration
+    Given I use a service broker with an improperly privileged host
+    When I make a bind request with body:
+    """
+    {
+      "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
+      "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
+      "bind_resource": {
+        "app_guid": "bb841d2b-8287-47a9-ac8f-eef4c16106f8"
+      },
+      "parameters": {
+        "parameter1": 1,
+        "parameter2": "foo"
+      }
+    }
+    """
+    Then the HTTP response status code is "403"
+    And the JSON should be {}
+
   Scenario: Bind resource with invalid body - missing key
     When I make a bind request with body:
     """

@@ -7,12 +7,19 @@ require 'conjur_client'
 conjur_api = ConjurClient.api
 
 begin
-  if ConjurClient.version == 5
-    conjur_api.resources limit: 5
-  else
-    conjur_api.resource("#{ConjurClient.account}:user:admin").exists?
+  resource_id =
+    if !ConjurClient.login_host_id.nil?
+      "#{ConjurClient.account}:host:#{ConjurClient.login_host_id}"
+    else
+      "#{ConjurClient.account}:user:#{ConjurClient.authn_login}"
+    end
+
+  # This will throw an exception if the creds are invalid
+  resource_exists = conjur_api.resource(resource_id).exists?
+  unless resource_exists || ConjurClient.login_host_id.nil?
+    raise StandardError.new("Host identity not privileged to read itself")
   end
-  
+
   puts "Successfully validated Conjur credentials."
 rescue
   raise "Error: There is an issue with your Conjur configuration. Please verify" \
