@@ -24,6 +24,8 @@ to use the Conjur Service Broker when deploying applications, see the
 
 **Before you begin, ensure you are logged into your CF deployment via the CF CLI.**
 
+You will need to target the org and space where you want the Service Broker application to run.
+
 Begin by pushing the Service Broker application to CF:
 ```
 git clone git@github.com:conjurinc/conjur-service-broker.git
