@@ -5,9 +5,9 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'conjur-api', '~> 5.1.0'
-gem 'activesupport', '~> 5.2.0'
-gem 'railties', '~> 5.2.0'
+gem 'conjur-api', '~> 5.3.1'
+gem 'activesupport', '~> 5.2.1'
+gem 'railties', '~> 5.2.1'
 gem 'json-schema', '~> 2.8'
 
 # Use Puma as the app server
