@@ -70,7 +70,7 @@ GEM
     json_spec (1.1.5)
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
-    license_finder (5.3.0)
+    license_finder (5.5.2)
       bundler
       rubyzip
       thor
@@ -142,13 +142,13 @@ GEM
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
     ruby_dep (1.5.0)
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
       spring (>= 1.2, < 3.0)
-    thor (0.20.0)
+    thor (0.20.3)
     thread_safe (0.3.6)
     toml (0.2.0)
       parslet (~> 1.8.0)
