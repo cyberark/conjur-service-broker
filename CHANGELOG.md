@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Updated dependencies and Ruby version of Docker image
+
 ## [0.3.2] - 2018-06-26
 
 ### Added
