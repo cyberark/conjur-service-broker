@@ -5,7 +5,7 @@ services:
     image: postgres:9.3
 
   conjur_5:
-    image: cyberark/conjur:0.7.0-stable
+    image: cyberark/conjur:latest
     command: server -a cucumber
     environment:
       DATABASE_URL: postgres://postgres@pg/postgres
