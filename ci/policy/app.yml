@@ -1,0 +1,34 @@
+# Top-level policy file
+
+- !policy
+  id: app
+  body:
+  - &variables
+    - !variable
+      id: database/username
+      annotations:
+        description: Application database username
+    - !variable
+      id: database/password
+      annotations:
+        description: Application database password
+
+  - !group secrets-users
+  - !group secrets-managers
+
+  # secrets-managers has role secrets-users
+  - !grant
+    role: !group secrets-users
+    member: !group secrets-managers
+
+  # secrets-users can read and execute
+  - !permit
+    resource: *variables
+    privileges: [ read, execute ]
+    role: !group secrets-users
+
+  # secrets-managers can update (and read and execute, via role grant)
+  - !permit
+    resource: *variables
+    privileges: [ update ]
+    role: !group secrets-managers
