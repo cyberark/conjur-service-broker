@@ -59,6 +59,13 @@ function runTests5() {
   api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
   export CONJUR_AUTHN_API_KEY="$api_key"
 
+
+  remote_appliance_host=$(echo $PCF_CONJUR_APPLIANCE_URL | sed 's~http[s]*://~~g')
+  
+  export PCF_CONJUR_SSL_CERT=$(openssl s_client -showcerts \
+    -connect $remote_appliance_host:443 </dev/null 2>/dev/null \
+    | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p')
+
   runTests 5
 }
 

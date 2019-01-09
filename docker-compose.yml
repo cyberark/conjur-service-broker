@@ -131,8 +131,10 @@ services:
       - "./:/app"
 
   tests:
-    image: conjur-service-broker
-    build: ./
+    image: conjur-service-broker-tests
+    build: 
+      context: ./
+      dockerfile: Dockerfile.test
     environment:
       CONJUR_ACCOUNT: cucumber
       CONJUR_AUTHN_LOGIN: admin
@@ -142,5 +144,13 @@ services:
       CONJUR_AUTHN_API_KEY:
       CONJUR_SSL_CERTIFICATE:
       CONJUR_VERSION:
+      CF_API_ENDPOINT: 
+      PCF_CONJUR_APPLIANCE_URL: 
+      CF_CI_USER: 
+      CF_CI_PASSWORD:
+      PCF_CONJUR_ACCOUNT: 
+      PCF_CONJUR_USERNAME: 
+      PCF_CONJUR_API_KEY:
+      PCF_CONJUR_SSL_CERT:
     volumes:
       - "./:/app"
