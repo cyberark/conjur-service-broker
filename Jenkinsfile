@@ -17,7 +17,7 @@ pipeline {
 
     stage('Run tests') {
       steps {
-        sh './test.sh'
+        sh 'summon ./test.sh'
 
         junit 'features/reports/**/*.xml, spec/reports/*.xml'
       }
