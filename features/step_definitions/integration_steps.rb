@@ -9,14 +9,18 @@ Given(/^I load a secret into Conjur$/) do
   store_secret_in_remote_conjur('myorg:variable:app/database/password', ci_secret_pass)
 end
 
+Given(/^I install the service broker$/) do
+  install_service_broker
+end
+
 Given(/^I create a service instance for Conjur$/) do
-  puts `cf create-service cyberark-conjur community conjur`
+  `cf create-service cyberark-conjur community conjur`
 end
 
 When(/^I push the sample app to PCF$/) do
+  `cf delete hello-world -f`
   Dir.chdir('/app/ci/test-app') do
-    puts `pwd`
-    puts `cf push --no-start --random-route`
+    `cf push --no-start --random-route`
   end
 end
 
@@ -26,7 +30,7 @@ end
 
 When(/^I start the app$/) do
   Dir.chdir('/app/ci/test-app') do
-    puts `cf start hello-world`
+    `cf start hello-world`
   end
 end
 

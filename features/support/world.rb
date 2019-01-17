@@ -151,6 +151,55 @@ module ServiceBrokerWorld
       end
   end
 
+  def install_service_broker
+    output = []
+
+    # Remove existing service broker
+    output << `cf unbind-service hello-world conjur`
+    output << `cf delete-service conjur -f`
+    output << `cf delete-service-broker cyberark-conjur -f`
+    output << `cf delete conjur-service-broker -f`
+
+    # Push this version of the service broker
+    Dir.chdir('/app') do
+      output << `cf push --no-start --random-route`
+    end
+
+    # Configure the service broker
+    api_key = rotate_api_key('myorg:host:pcf/service-broker')
+    output << `cf set-env conjur-service-broker SECURITY_USER_NAME "#{service_broker_user}"`
+    output << `cf set-env conjur-service-broker SECURITY_USER_PASSWORD "#{service_broker_pass}"`
+    output << `cf set-env conjur-service-broker CONJUR_ACCOUNT "#{ENV['PCF_CONJUR_ACCOUNT']}"`
+    output << `cf set-env conjur-service-broker CONJUR_APPLIANCE_URL "#{ENV['PCF_CONJUR_APPLIANCE_URL']}"`
+    output << `cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN "host/pcf/service-broker"`
+    output << `cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "#{api_key}"`
+    output << `cf set-env conjur-service-broker CONJUR_VERSION "5"`
+    output << `cf set-env conjur-service-broker CONJUR_POLICY pcf`
+    output << `cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE "#{ENV['PCF_CONJUR_SSL_CERT']}"`
+    
+    # Start the service broker and make it available
+    output << `cf start conjur-service-broker`
+    sb_url="https://#{`cf app conjur-service-broker | grep -E -w 'urls:|routes:' | awk '{print $2}'`}"
+    output << `cf create-service-broker --space-scoped cyberark-conjur "#{service_broker_user}" "#{service_broker_pass}" #{sb_url}`
+  rescue => ex
+    puts output.join("\n")
+    raise
+  end
+
+  def rotate_api_key(id)
+    remote_conjur do |api|
+      api.role(id).rotate_api_key
+    end
+  end
+
+  def service_broker_user
+    @service_broker_user ||= SecureRandom.hex
+  end
+
+  def service_broker_pass
+    @service_broker_pass ||= SecureRandom.hex
+  end
+
   def store_secret_in_remote_conjur(var_id, value)
     remote_conjur do |api|
       api.resource(var_id).add_value(value)
@@ -215,7 +264,7 @@ module ServiceBrokerWorld
   end
 
   def cf_target(org, space)
-    puts `cf target -o "#{org}" -s "#{space}"`
+    `cf target -o "#{org}" -s "#{space}"`
   end
 end
 

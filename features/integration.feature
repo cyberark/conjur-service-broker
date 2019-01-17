@@ -4,6 +4,7 @@ Feature: Integration Tests
   
     Given I login to PCF and target my organization and space
     And I load a secret into Conjur
+    And I install the service broker
     And I create a service instance for Conjur
 
     When I push the sample app to PCF
