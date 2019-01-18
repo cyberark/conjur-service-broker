@@ -5,8 +5,8 @@ Given(/^I login to PCF and target my organization and space$/) do
 end
 
 Given(/^I load a secret into Conjur$/) do
-  store_secret_in_remote_conjur('myorg:variable:app/database/username', ci_secret_user)
-  store_secret_in_remote_conjur('myorg:variable:app/database/password', ci_secret_pass)
+  store_secret_in_remote_conjur("#{ENV['PCF_CONJUR_ACCOUNT']}:variable:app/database/username", ci_secret_user)
+  store_secret_in_remote_conjur("#{ENV['PCF_CONJUR_ACCOUNT']}:variable:app/database/password", ci_secret_pass)
 end
 
 Given(/^I install the service broker$/) do
@@ -19,7 +19,7 @@ end
 
 When(/^I push the sample app to PCF$/) do
   `cf delete hello-world -f`
-  Dir.chdir('/app/ci/test-app') do
+  Dir.chdir(integration_test_app_dir) do
     `cf push --no-start --random-route`
   end
 end
@@ -29,7 +29,7 @@ When(/^I privilege the app to access the secret in Conjur$/) do
 end
 
 When(/^I start the app$/) do
-  Dir.chdir('/app/ci/test-app') do
+  Dir.chdir(integration_test_app_dir) do
     `cf start hello-world`
   end
 end
