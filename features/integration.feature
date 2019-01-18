@@ -1,3 +1,4 @@
+@integration
 Feature: Integration Tests
 
   Scenario: Service broker functions correctly with PCF 2.4
