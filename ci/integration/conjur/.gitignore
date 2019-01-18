@@ -1,0 +1,6 @@
+.terraform
+id_conjur
+admin_key
+admin_password
+*.tfstate
+*.tfstate.backup

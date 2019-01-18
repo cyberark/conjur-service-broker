@@ -1,0 +1,50 @@
+#!/bin/bash -eux
+
+: ${AWS_ACCESS_KEY_ID?"Need to set AWS_ACCESS_KEY_ID"}
+: ${AWS_SECRET_ACCESS_KEY?"Need to set AWS_SECRET_ACCESS_KEY"}
+: ${AWS_SESSION_TOKEN?"Need to set AWS_SESSION_TOKEN"}
+: ${CONJUR_AMI_ID?"Need to set CONJUR_AMI_ID"}
+: ${CONJUR_ROUTE53_ZONE?"Need to set CONJUR_ROUTE53_ZONE"}
+
+# Create AWS resources
+export TF_VAR_conjur_ami_id=$CONJUR_AMI_ID
+export TF_VAR_route53_zone_name=$CONJUR_ROUTE53_ZONE
+
+terraform init
+terraform plan
+terraform apply
+
+# Initialize Conjur
+rm -f id_conjur
+terraform output ssh_key > id_conjur
+chmod 400 id_conjur
+
+openssl rand -base64 16 > admin_password
+
+ssh -i id_conjur \
+  -o IdentitiesOnly=yes \
+  -o IdentityFile=id1.key \
+  -o "StrictHostKeyChecking no" \
+  core@$(terraform output address) /bin/bash << SSH
+  docker exec conjur-appliance evoke configure master \
+    -h conjur-pcf.$CONJUR_ROUTE53_ZONE \
+    -p $(<./admin_password) \
+    pcf
+SSH
+
+# Load PCF policy
+pushd ..
+  docker run --rm -v "$(pwd):/data" --entrypoint /bin/bash cyberark/conjur-cli:5 -c "
+  yes yes | conjur init -u https://conjur-pcf.$CONJUR_ROUTE53_ZONE -a pcf --force=true
+  conjur authn login -u admin -p \$(cat /data/conjur/admin_password)
+
+  pushd /data/policy
+    conjur policy load root pcf.yml
+    conjur policy load pcf pcf/service-broker.yml
+    conjur policy load root app.yml
+    conjur policy load root entitle-service-broker.yml
+  popd
+
+  conjur user rotate_api_key > /data/conjur/admin_key
+  "
+popd

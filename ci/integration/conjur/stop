@@ -1,0 +1,15 @@
+#!/bin/bash -eu
+
+: ${AWS_ACCESS_KEY_ID?"Need to set AWS_ACCESS_KEY_ID"}
+: ${AWS_SECRET_ACCESS_KEY?"Need to set AWS_SECRET_ACCESS_KEY"}
+: ${AWS_SESSION_TOKEN?"Need to set AWS_SESSION_TOKEN"}
+: ${CONJUR_AMI_ID?"Need to set CONJUR_AMI_ID"}
+: ${CONJUR_ROUTE53_ZONE?"Need to set CONJUR_ROUTE53_ZONE"}
+
+
+export TF_VAR_conjur_ami_id=$CONJUR_AMI_ID
+export TF_VAR_route53_zone_name=$CONJUR_ROUTE53_ZONE
+
+terraform destroy
+
+rm -f id_conjur admin_key admin_password
