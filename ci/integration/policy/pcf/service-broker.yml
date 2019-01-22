@@ -1,0 +1,4 @@
+- !host
+  id: service-broker
+  annotations:
+    platform: pivotalcloudfoundry

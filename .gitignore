@@ -26,3 +26,4 @@ logfile
 
 # Ignore build relics
 /vendor/cache/
+.DS_Store

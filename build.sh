@@ -7,6 +7,7 @@ docker-compose pull conjur_4 conjur_5
 
 echo "Building conjur-service-broker Docker image"
 docker-compose build conjur-service-broker
+docker-compose build tests
 
 echo "Tagging conjur-service-broker:$TAG"
 docker tag conjur-service-broker "conjur-service-broker:$TAG"

@@ -196,40 +196,10 @@ into the running application's environment.
 The secrets are now available to be used by the application, but are not visible
 when you run `cf env my-app` or if you `cf ssh my-app` and run `printenv`.
 
-## Development
+## Contributing
 
-Before getting started, you should install some developer tools. These are not required to deploy the Conjur Service Broker but they will let you develop using a standardized,
-expertly configured environment.
-
-1. [git][get-git] to manage source code
-2. [Docker][get-docker] to manage dependencies and runtime environments
-3. [Docker Compose][get-docker-compose] to orchestrate Docker environments
-
-[get-docker]: https://docs.docker.com/engine/installation
-[get-git]: https://git-scm.com/downloads
-[get-docker-compose]: https://docs.docker.com/compose/install
-
-To test the usage of the Conjur Service Broker within a CF deployment, you can
-follow the demo scripts in the [Cloud Foundry demo repo](https://github.com/conjurinc/cloudfoundry-conjur-demo).
-
-To run the test suite, call `./test.sh` from your local machine - the script will stand up the needed containers and run the full suite of rspec and cucumber tests.
-
-### Releases
-
-When releasing a new version of the Service Broker, you will need to include a
-ZIP file with the release of the repository with all dependencies. Running the
-`./build.sh` script will run `bundle pack --all`, which creates a
-`vendor/cache/` directory with the project dependencies. It will also produce a ZIP
-file of the project which includes this directory. The ZIP file should be uploaded
-to the release in GitHub; it will be used to build the PCF tile.
-
-### Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+Information for developing and testing the service broker can be found in the
+[Contributing Guide](CONTRIBUTING.md).
 
 ## License
 
