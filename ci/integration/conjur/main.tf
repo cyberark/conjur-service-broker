@@ -40,7 +40,7 @@ resource "aws_security_group" "allow_http_ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow SSH remote acces
+  # Allow SSH remote access
   ingress {
     from_port   = 22
     to_port     = 22
