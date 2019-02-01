@@ -43,13 +43,15 @@ RSpec.describe BindController, type: :request do
     context 'when the app cf context is not present' do
       it "does not ensure the policy structure exists" do
         expect_any_instance_of(OrgSpacePolicy).to_not receive(:ensure_exists)
-        expect_any_instance_of(ServiceBinding).to receive(:create)
+        expect_any_instance_of(ServiceBinding).to receive(:create).and_return('test_creds')
         
         put('/v2/service_instances/test_instance/service_bindings/test_binding', 
           params: legacy_params, headers: headers)
 
         expect(response.content_type).to eq("application/json")
         expect(response).to have_http_status(:created)
+        data = JSON.parse(response.body)
+        expect(data["credentials"]).to eq("test_creds")
       end
     end
 

@@ -39,6 +39,6 @@ class BindController < ApplicationController
 
   def use_context?
     # Only create the policy for Conjur V5
-    v5? && org_guid.present? && space_guid.present?
+    ConjurClient.v5? && org_guid.present? && space_guid.present?
   end
 end
