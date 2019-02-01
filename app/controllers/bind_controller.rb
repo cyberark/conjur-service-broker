@@ -4,7 +4,8 @@ class BindController < ApplicationController
 
     credentials =
       with_conjur_exceptions do
-        ServiceBinding.create(instance_id, binding_id, app_id)
+        OrgSpacePolicy.ensure_exists(org_guid, space_guid) if use_context?
+        ServiceBinding.create(instance_id, binding_id, org_guid, space_guid)
       end
 
     render json: { credentials: credentials }, status: :created
@@ -14,14 +15,18 @@ class BindController < ApplicationController
     Validator.validate('unbind', params.to_unsafe_h)
 
     with_conjur_exceptions do
-      ServiceBinding.delete(instance_id, binding_id)
+      ServiceBinding.delete(instance_id, binding_id, org_guid, space_guid)
     end
     
     render json: {}
   end
 
-  def app_id
-    params[:bind_resource].try(:[], :app_guid)
+  def org_guid
+    params.dig(:context, :organization_guid)
+  end
+
+  def space_guid
+    params.dig(:context, :space_guid)
   end
 
   def instance_id
@@ -30,5 +35,10 @@ class BindController < ApplicationController
 
   def binding_id
     params[:binding_id]
+  end
+
+  def use_context?
+    # Only create the policy for Conjur V5
+    v5? && org_guid.present? && space_guid.present?
   end
 end

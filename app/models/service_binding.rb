@@ -9,21 +9,23 @@ class ServiceBinding
   end
 
   class << self
-    def create(instance_id, binding_id, app_id)
-      ServiceBinding.new(instance_id, binding_id).create(app_id)
+    def create(instance_id, binding_id, org_guid, space_guid)
+      ServiceBinding.new(instance_id, binding_id, org_guid, space_guid).create
     end
 
-    def delete(instance_id, binding_id)
-      ServiceBinding.new(instance_id, binding_id).delete
+    def delete(instance_id, binding_id, org_guid, space_guid)
+      ServiceBinding.new(instance_id, binding_id, org_guid, space_guid).delete
     end
   end
 
-  def initialize(instance_id, binding_id)
+  def initialize(instance_id, binding_id, org_guid, space_guid)
     @instance_id = instance_id
     @binding_id = binding_id
+    @org_guid = org_guid
+    @space_guid = space_guid
   end
 
-  def create(app_id)
+  def create
     host = conjur_api.role(role_name)
 
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
@@ -97,10 +99,10 @@ class ServiceBinding
   end
 
   def template_delete
-    """
+    <<~YAML
     - !delete
       record: !host #{@binding_id}
-    """
+    YAML
   end
 
   def load_policy(policy, method: Conjur::API::POLICY_METHOD_POST)
@@ -121,5 +123,9 @@ class ServiceBinding
 
   def conjur_api
     ConjurClient.api
+  end
+
+  def use_space?
+    @org_guid.present? && @space_guid.present?
   end
 end

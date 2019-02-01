@@ -28,6 +28,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rspec_junit_formatter'
   gem 'rest-client'
+  gem 'rspec-rails', '~> 3.7'
 end
 
 group :development do

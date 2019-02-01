@@ -84,4 +84,8 @@ class ApplicationController < ActionController::API
     logger.warn("HTTP Basic: Access Denied")
     render json: {}, status: :unauthorized
   end
+
+  def v5?
+    ConjurClient.version == 5
+  end
 end
