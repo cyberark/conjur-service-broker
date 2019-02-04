@@ -1,9 +1,0 @@
-- !permit
-    resource: !policy pcf
-    privileges: [ create, update, read ]
-    roles: !host pcf/service-broker
-
-- !permit
-    resource: !host pcf/service-broker
-    privileges: [ read ]
-    roles: !host pcf/service-broker

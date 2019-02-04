@@ -17,6 +17,10 @@ Given(/^I create a service instance for Conjur$/) do
   `cf create-service cyberark-conjur community conjur`
 end
 
+Given(/^I load policy to define my org and space$/) do
+  load_space_policy_in_remote_conjur('ci', 'conjur-service-broker')
+end
+
 When(/^I push the sample app to PCF$/) do
   `cf delete hello-world -f`
   Dir.chdir(integration_test_app_dir) do

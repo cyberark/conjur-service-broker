@@ -46,15 +46,38 @@ module ServiceBrokerWorld
   end
 
   def entitle_host_in_remote_conjur(host_id)
+    policy = <<-POLICY
+    - !grant
+      role: !group app/secrets-users
+      member: !host pcf/#{host_id}
+    POLICY
+
     remote_conjur do |api|
-      api.load_policy('root', <<-POLICY
-      - !grant
-        role: !group app/secrets-users
-        member: !host pcf/#{host_id}
-      POLICY
-      )
-      end
+      api.load_policy('root', policy)
+    end
   end  
+
+  def load_space_policy_in_remote_conjur(org_name, space_name)
+    policy = <<-POLICY
+    - !policy
+      id: #{org_guid(org_name)}
+      body:
+        - !layer
+
+        - !policy
+          id: #{space_guid(org_name, space_name)}
+          body:
+            - !layer
+
+        - !grant
+          role: !layer
+          member: !layer #{space_guid(org_name, space_name)}
+    POLICY
+
+    remote_conjur do |api|
+      api.load_policy('pcf/ci', policy)
+    end
+  end
 
   def service_broker_user
     @service_broker_user ||= SecureRandom.hex

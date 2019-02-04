@@ -7,6 +7,7 @@ Feature: Integration Tests
     And I load a secret into Conjur
     And I install the service broker
     And I create a service instance for Conjur
+    And I load policy to define my org and space
 
     When I push the sample app to PCF
     And I privilege the app to access the secret in Conjur
