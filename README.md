@@ -40,12 +40,13 @@ cf set-env conjur-service-broker SECURITY_USER_PASSWORD [value]
 ```
 
 To configure the Service Broker to communicate with your external Conjur instance, the Service Broker app requires the following environment variables:
-- `CONJUR_VERSION`: the version of your Conjur instance (`4` or `5`); defaults to 5
-- `CONJUR_ACCOUNT`: the account name for the Conjur instance you are connecting to
-- `CONJUR_APPLIANCE_URL`: the URL of the Conjur appliance instance you are connecting to
-- `CONJUR_POLICY`: the Policy where new Hosts should be added - the Conjur account specified in `CONJUR_AUTHN_LOGIN` needs `create` and `update` privilege on this Policy.
-  - The `CONJUR_POLICY` is optional, but is strongly recommended. By default, if this value is not specified, Hosts will be added to the `root` Conjur policy, and the Conjur account that the Service Broker uses to manage the Hosts will need `create` and `update` privileges on the `root` Conjur policy.
-- `CONJUR_AUTHN_LOGIN`: the identity of a Conjur Host (of the form `host/host-id`) with `create` and `update` privileges on `CONJUR_POLICY`. This account will be used to add and remove Hosts from Conjur policy as apps are deployed to or removed from PCF.
+- `CONJUR_VERSION`: The version of your Conjur instance (`4` or `5`); defaults to 5.
+- `CONJUR_ACCOUNT`: The account name for the Conjur instance you are connecting to.
+- `CONJUR_APPLIANCE_URL`: The URL of the Conjur appliance instance you are connecting to. If using high availability, this should be the URL for the Master host in the cluster. This is the URL that the service broker will use to communicate with Conjur.
+- `CONJUR_FOLLOWER_URL` (HA only): If using high availability, this should be the URL for a load balancer that manages the cluster's Follower instances. This is the URL that applications that bind to the service broker will use to communicate with Conjur.
+- `CONJUR_POLICY`: The Policy where new Hosts should be added - the Conjur account specified in `CONJUR_AUTHN_LOGIN` needs `create` and `update` privilege on this Policy.
+  - `CONJUR_POLICY` is optional, but is strongly recommended. By default, if this value is not specified, Hosts will be added to the `root` Conjur policy, and the Conjur account that the Service Broker uses to manage the Hosts will need `create` and `update` privileges on the `root` Conjur policy.
+- `CONJUR_AUTHN_LOGIN`: The identity of a Conjur Host (of the form `host/host-id`) with `create` and `update` privileges on `CONJUR_POLICY`. This account will be used to add and remove Hosts from Conjur policy as apps are deployed to or removed from PCF.
 
   If you are using Enterprise Conjur, you will want to add an annotation on the Service Broker Host in policy to indicate which platform the Service Broker will be used on. The policy you load may look something like:
   ```
