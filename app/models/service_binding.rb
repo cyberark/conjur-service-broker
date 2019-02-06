@@ -36,7 +36,7 @@ class ServiceBinding
 
     return {
       account: ConjurClient.account,
-      appliance_url: ConjurClient.appliance_url,
+      appliance_url: ConjurClient.application_conjur_url,
       authn_login: "host/#{host_id}",
       authn_api_key: api_key,
       ssl_certificate: ConjurClient.ssl_cert || "",
