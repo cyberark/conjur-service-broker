@@ -39,6 +39,10 @@ class ConjurClient
       ENV['CONJUR_APPLIANCE_URL']
     end
 
+    def application_conjur_url
+      ENV['CONJUR_FOLLOWER_URL'] || appliance_url
+    end
+
     def policy
       ENV['CONJUR_POLICY'] || 'root'
     end
