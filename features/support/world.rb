@@ -37,47 +37,30 @@ module ServiceBrokerWorld
     JSON.parse(host.attributes["annotations"].to_json)
   end
 
-  def ci_secret_user
-    @test_user ||= SecureRandom.hex
+  def ci_secret_org
+    @ci_secret_org ||= 'org-' + SecureRandom.hex
   end
 
-  def ci_secret_pass
-    @test_password ||= SecureRandom.hex
+  def ci_secret_space
+    @ci_secret_space ||= 'space-' + SecureRandom.hex
   end
 
-  def entitle_host_in_remote_conjur(host_id)
+  def ci_secret_app
+    @ci_secret_app ||= 'app-' + SecureRandom.hex
+  end
+
+  def privilege_in_remote_conjur(role, resource)
     policy = <<-POLICY
-    - !grant
-      role: !group app/secrets-users
-      member: !host pcf/#{host_id}
+    - !permit
+      resource: #{resource}
+      privileges: [ read, execute ]
+      role: #{role}
     POLICY
 
     remote_conjur do |api|
       api.load_policy('root', policy)
     end
   end  
-
-  def load_space_policy_in_remote_conjur(org_name, space_name)
-    policy = <<-POLICY
-    - !policy
-      id: #{org_guid(org_name)}
-      body:
-        - !layer
-
-        - !policy
-          id: #{space_guid(org_name, space_name)}
-          body:
-            - !layer
-
-        - !grant
-          role: !layer
-          member: !layer #{space_guid(org_name, space_name)}
-    POLICY
-
-    remote_conjur do |api|
-      api.load_policy('pcf/ci', policy)
-    end
-  end
 
   def service_broker_user
     @service_broker_user ||= SecureRandom.hex
@@ -89,6 +72,32 @@ module ServiceBrokerWorld
 
   def integration_test_app_dir
     '/app/ci/integration/test-app'
+  end
+
+  def cf_ci_org
+    'ci'
+  end
+
+  def cf_ci_space
+    'conjur-service-broker'
+  end
+
+  def cf_ci_service_broker_name
+    @cf_ci_service_broker_name ||= 'cyberark-conjur-' + SecureRandom.hex
+  end
+
+  def org_policy_id
+    "#{ENV['PCF_CONJUR_ACCOUNT']}:policy:pcf/ci/#{org_guid(cf_ci_org)}"
+  end
+
+  def space_policy_id
+    ci_org_guid = org_guid(cf_ci_org)
+    ci_space_guid = space_guid(cf_ci_org, cf_ci_space)
+    "#{ENV['PCF_CONJUR_ACCOUNT']}:policy:pcf/ci/#{ci_org_guid}/#{ci_space_guid}"
+  end
+
+  def instance_resource_id
+    "#{ENV['PCF_CONJUR_ACCOUNT']}:cf-service-instance:pcf/ci/#{cf_service_instance_id}"
   end
 
 end
