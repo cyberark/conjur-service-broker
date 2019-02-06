@@ -16,12 +16,31 @@ Feature: Binding
     """
     Then the HTTP response status code is "201"
     And the JSON at "credentials/account" should be "cucumber"
-    And the JSON at "credentials/appliance_url" should be a string
+    And the JSON at "credentials/appliance_url" should be "http://conjur_5"
     And the JSON at "credentials/authn_login" should be a string
     And the JSON at "credentials/authn_api_key" should be a string
     And the JSON at "credentials/version" should be a Fixnum
     And the JSON at "credentials/ssl_certificate" should be a string
     And the JSON has valid conjur credentials
+
+  Scenario: Bind resource when follower URL is set
+    Given I use a service broker with the follower URL environment variable set
+    When I make a bind request with body:
+    """
+    {
+      "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
+      "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
+      "bind_resource": {
+        "app_guid": "bb841d2b-8287-47a9-ac8f-eef4c16106f8"
+      },
+      "parameters": {
+        "parameter1": 1,
+        "parameter2": "foo"
+      }
+    }
+    """
+    Then the HTTP response status code is "201"
+    And the JSON at "credentials/appliance_url" should be "http://conjur_5-follower"
 
   Scenario: Bind resource with cf policy configured
     Given I use a service broker with a non-root policy
