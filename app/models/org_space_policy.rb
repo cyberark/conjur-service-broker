@@ -1,6 +1,8 @@
 require 'conjur_client'
 
 class OrgSpacePolicy
+  include ConjurApiModel
+
   class OrgPolicyNotFound < RuntimeError
   end
 
@@ -13,6 +15,14 @@ class OrgSpacePolicy
   class << self
     def ensure_exists(org_id, space_id)
       OrgSpacePolicy.new(org_id, space_id).ensure_exists
+    end
+
+    def create(org_id, space_id)
+      OrgSpacePolicy.new(org_id, space_id).create
+    end
+
+    def delete(org_id, space_id)
+      OrgSpacePolicy.new(org_id, space_id).delete
     end
   end
 
@@ -27,7 +37,27 @@ class OrgSpacePolicy
     ensure_space_layer
   end
 
+  def create
+    load_policy(template_create_org_space)
+  end
+
+  def delete
+    load_policy(template_delete_space, 
+      method: Conjur::API::POLICY_METHOD_PATCH)
+
+    load_policy(template_delete_org, 
+      method: Conjur::API::POLICY_METHOD_PATCH) if org_empty?
+  end
+
   private
+
+  def org_empty?
+    ConjurClient.api.resources(
+      kind: 'policy',
+      account: ConjurClient.account, 
+      search: "#{policy_base}#{@org_id}"
+      ).count == 1
+  end
 
   def ensure_org_policy
     raise OrgPolicyNotFound unless org_policy.exists?
@@ -65,11 +95,38 @@ class OrgSpacePolicy
     "#{ConjurClient.account}:layer:#{policy_base}#{@org_id}/#{@space_id}"
   end
 
-  def policy_base
-    ConjurClient.policy != 'root' ? ConjurClient.policy + '/' : ''
+  def template_create_org_space
+    <<~YAML
+    ---
+    - !policy
+      id: #{@org_id}
+      body:
+        - !layer
+
+        - !policy
+          id: #{@space_id}
+          body:
+            - !layer
+
+        - !grant
+          role: !layer
+          member: !layer #{@space_id}
+    YAML
   end
 
-  def conjur_api
-    ConjurClient.api
+  def template_delete_org
+    <<~YAML
+    ---
+    - !delete
+      record: !policy #{@org_id}
+    YAML
+  end
+
+  def template_delete_space
+    <<~YAML
+    ---
+    - !delete
+      record: !policy #{@org_id}/#{@space_id}
+    YAML
   end
 end
