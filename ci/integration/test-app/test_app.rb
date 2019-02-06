@@ -8,8 +8,9 @@ class TestApp < Sinatra::Application
   
   get '/' do
     "
-      <p>Database Username: #{ENV['DB_USERNAME']}</p>
-      <p>Database Password: #{ENV['DB_PASSWORD']}</p>
+      <p>Org Secret: #{ENV['ORG_SECRET']}</p>
+      <p>Space Secret: #{ENV['SPACE_SECRET']}</p>
+      <p>App Secret: #{ENV['APP_SECRET']}</p>
     "
   end
 

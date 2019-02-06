@@ -1,12 +1,6 @@
 module CfHelper
-  def install_service_broker
+  def install_service_broker(preserve)
     output = []
-
-    # Remove existing service broker
-    output << `cf unbind-service hello-world conjur`
-    output << `cf delete-service conjur -f`
-    output << `cf delete-service-broker cyberark-conjur -f`
-    output << `cf delete conjur-service-broker -f`
 
     # Push this version of the service broker
     Dir.chdir('/app') do
@@ -22,16 +16,25 @@ module CfHelper
     output << `cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN "host/pcf/service-broker"`
     output << `cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "#{api_key}"`
     output << `cf set-env conjur-service-broker CONJUR_VERSION "5"`
-    output << `cf set-env conjur-service-broker CONJUR_POLICY pcf/ci`
+    output << `cf set-env conjur-service-broker CONJUR_POLICY "pcf/ci"`
     output << `cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE "#{ENV['PCF_CONJUR_SSL_CERT']}"`
+    output << `cf set-env conjur-service-broker CONJUR_PRESERVE_POLICY "#{preserve.to_s}"`
+
     
     # Start the service broker and make it available
     output << `cf start conjur-service-broker`
     sb_url="https://#{`cf app conjur-service-broker | grep -E -w 'urls:|routes:' | awk '{print $2}'`}"
-    output << `cf create-service-broker --space-scoped cyberark-conjur "#{service_broker_user}" "#{service_broker_pass}" #{sb_url}`
+    output << `cf create-service-broker --space-scoped "#{cf_ci_service_broker_name}" "#{service_broker_user}" "#{service_broker_pass}" #{sb_url}`
   rescue => ex
     puts output.join("\n")
     raise
+  end
+
+  def cleanup_service_broker
+    output = []
+    output << `cf purge-service-instance conjur -f`
+    output << `cf delete-service-broker "#{cf_ci_service_broker_name}" -f`
+    output << `cf delete conjur-service-broker -f`
   end
 
   def org_guid(org_name)
@@ -85,5 +88,9 @@ module CfHelper
 
   def cf_target(org, space)
     `cf target -o "#{org}" -s "#{space}"`
+  end
+
+  def cf_service_instance_id
+    @cf_service_instance_id ||= `cf service --guid conjur`.chomp
   end
 end

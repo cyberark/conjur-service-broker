@@ -24,6 +24,12 @@ module ConjurHelper
     end
   end
 
+  def remote_conjur_resource_exists?(id)
+    remote_conjur do |api|
+      api.resource(id).exists?
+    end
+  end
+
   def store_secret_in_remote_conjur(var_id, value)
     remote_conjur do |api|
       api.resource(var_id).add_value(value)

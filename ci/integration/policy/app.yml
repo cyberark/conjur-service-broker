@@ -3,32 +3,17 @@
 - !policy
   id: app
   body:
-  - &variables
     - !variable
-      id: database/username
+      id: secrets/org
       annotations:
-        description: Application database username
+        description: Org-wide secret
+
     - !variable
-      id: database/password
+      id: secrets/space
       annotations:
-        description: Application database password
+        description: Space-wide secret
 
-  - !group secrets-users
-  - !group secrets-managers
-
-  # secrets-managers has role secrets-users
-  - !grant
-    role: !group secrets-users
-    member: !group secrets-managers
-
-  # secrets-users can read and execute
-  - !permit
-    resource: *variables
-    privileges: [ read, execute ]
-    role: !group secrets-users
-
-  # secrets-managers can update (and read and execute, via role grant)
-  - !permit
-    resource: *variables
-    privileges: [ update ]
-    role: !group secrets-managers
+    - !variable
+      id: secrets/app
+      annotations:
+        description: App-specific secret
