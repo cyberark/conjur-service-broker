@@ -83,4 +83,21 @@ class ApplicationController < ActionController::API
     logger.warn("HTTP Basic: Access Denied")
     render json: {}, status: :unauthorized
   end
+
+  def use_context?
+    # Only create the policy for Conjur V5
+    ConjurClient.v5? && org_guid.present? && space_guid.present?
+  end
+
+  def instance_id
+    params[:instance_id]
+  end
+
+  def org_guid
+    params.dig(:context, :organization_guid)
+  end
+
+  def space_guid
+    params.dig(:context, :space_guid)
+  end
 end

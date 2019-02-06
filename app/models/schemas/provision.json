@@ -45,8 +45,6 @@
   },
   "required": [
     "service_id",
-    "plan_id",
-    "organization_guid",
-    "space_guid"
+    "plan_id"
   ]
 }

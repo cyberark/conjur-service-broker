@@ -21,24 +21,7 @@ class BindController < ApplicationController
     render json: {}
   end
 
-  def org_guid
-    params.dig(:context, :organization_guid)
-  end
-
-  def space_guid
-    params.dig(:context, :space_guid)
-  end
-
-  def instance_id
-    params[:instance_id]
-  end
-
   def binding_id
     params[:binding_id]
-  end
-
-  def use_context?
-    # Only create the policy for Conjur V5
-    ConjurClient.v5? && org_guid.present? && space_guid.present?
   end
 end
