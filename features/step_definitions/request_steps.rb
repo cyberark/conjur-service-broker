@@ -19,6 +19,10 @@ Given (/^I use a service broker with an improperly privileged host$/) do
   @service_broker_host = 'http://service-broker-bad-host:3004'
 end
 
+Given (/^I use a service broker with the follower URL environment variable set$/) do
+  @service_broker_host = 'http://service-broker-follower-url:3005'
+end
+
 Given (/^my request doesn't include the X-Broker-API-Version header$/) do
   headers.reject! { |k, _| ['X-Broker-API-Version'].include? k }
 end

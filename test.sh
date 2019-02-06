@@ -8,6 +8,8 @@ function finish {
 }
 trap finish EXIT
 
+SERVICE_BROKERS='conjur-service-broker service-broker-bad-url service-broker-bad-key service-broker-follower-url'
+
 function main() {
   startConjur
   runTests5
@@ -22,7 +24,7 @@ function startConjur() {
 }
 
 function runTests() {
-  docker-compose up -d conjur-service-broker service-broker-bad-url service-broker-bad-key
+  docker-compose up -d $SERVICE_BROKERS
 
   export CONJUR_POLICY=cf
   if [[ $1 -eq 4 ]]
@@ -71,7 +73,7 @@ function runTests5() {
 
 function cleanUpServiceBrokers() {
   echo "Cleaning up running service brokers..."
-  docker-compose rm -f -s -v conjur-service-broker service-broker-bad-url service-broker-bad-key service-broker-alt-policy
+  docker-compose rm -f -s -v $SERVICE_BROKERS service-broker-alt-policy
 }
 
 function runTests4() {

@@ -130,6 +130,26 @@ services:
     volumes:
       - "./:/app"
 
+  service-broker-follower-url:
+    image: conjur-service-broker
+    build: ./
+    environment:
+      CONJUR_ACCOUNT: cucumber
+      CONJUR_AUTHN_LOGIN: admin
+      CONJUR_APPLIANCE_URL:
+      CONJUR_FOLLOWER_URL: http://conjur_5-follower
+      SECURITY_USER_NAME: TEST_USER_NAME
+      SECURITY_USER_PASSWORD: TEST_USER_PASSWORD
+      CONJUR_AUTHN_API_KEY:
+      CONJUR_POLICY:
+      CONJUR_SSL_CERTIFICATE:
+      CONJUR_VERSION:
+    command: rails s -p 3005 -b 0.0.0.0 -P tmp/pids/server5.pid
+    expose:
+      - "3005"
+    volumes:
+      - "./:/app"
+      
   tests:
     image: conjur-service-broker-tests
     build: 
