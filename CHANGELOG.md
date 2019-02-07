@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- The service broker will now automatically generate the org and space policy when 
+  the service is provisioned into a CF space.
+
 ### Changed
 - Updated dependencies and Ruby version of Docker image
 - The service broker now adds application Hosts to a Conjur Layer for a Space when the
