@@ -1,4 +1,6 @@
 Feature: Binding
+  
+  @conjur-version-5
   Scenario: Bind resource
     When I make a bind request with body:
     """
@@ -23,6 +25,7 @@ Feature: Binding
     And the JSON at "credentials/ssl_certificate" should be a string
     And the JSON has valid conjur credentials
 
+  @conjur-version-5
   Scenario: Bind resource when follower URL is set
     Given I use a service broker with the follower URL environment variable set
     When I make a bind request with body:

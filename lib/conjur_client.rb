@@ -2,6 +2,10 @@ require 'conjur-api'
 require 'openssl'
 
 class ConjurClient
+
+  class ConjurAuthenticationError < RuntimeError
+  end
+
   class << self
     def api
       ConjurClient.new.api
@@ -13,6 +17,10 @@ class ConjurClient
       else
         "#{account}:host_factory:#{policy}/#{policy}-apps"
       end
+    end
+
+    def v5?
+      version == 5
     end
 
     def version

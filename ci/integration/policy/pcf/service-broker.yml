@@ -2,3 +2,20 @@
   id: service-broker
   annotations:
     platform: pivotalcloudfoundry
+
+- !group
+  id: ci-admin-group
+
+- !grant
+  role: !group ci-admin-group
+  member: !host service-broker
+
+# Allow host read access to its own resource, to read annotations
+- !permit
+  role: !host service-broker
+  privilege: read
+  resource: !host service-broker
+
+- !policy
+  id: ci
+  owner: !group ci-admin-group

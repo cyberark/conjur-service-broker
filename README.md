@@ -40,16 +40,48 @@ cf set-env conjur-service-broker SECURITY_USER_PASSWORD [value]
 ```
 
 To configure the Service Broker to communicate with your external Conjur instance, the Service Broker app requires the following environment variables:
-- `CONJUR_VERSION`: The version of your Conjur instance (`4` or `5`); defaults to 5.
-- `CONJUR_ACCOUNT`: The account name for the Conjur instance you are connecting to.
-- `CONJUR_APPLIANCE_URL`: The URL of the Conjur appliance instance you are connecting to. If using high availability, this should be the URL for the Master host in the cluster. This is the URL that the service broker will use to communicate with Conjur.
+- `CONJUR_VERSION`: the version of your Conjur instance (`4` or `5`); defaults to 5.
+
+- `CONJUR_ACCOUNT`: the account name for the Conjur instance you are connecting to.
+
+- `CONJUR_APPLIANCE_URL`: the URL of the Conjur appliance instance you are connecting to. When using an HA Conjur master cluster, this should be the URL of the master load balancer.
+
 - `CONJUR_FOLLOWER_URL` (HA only): If using high availability, this should be the URL for a load balancer that manages the cluster's Follower instances. This is the URL that applications that bind to the service broker will use to communicate with Conjur.
-- `CONJUR_POLICY`: The Policy where new Hosts should be added - the Conjur account specified in `CONJUR_AUTHN_LOGIN` needs `create` and `update` privilege on this Policy.
-  - `CONJUR_POLICY` is optional, but is strongly recommended. By default, if this value is not specified, Hosts will be added to the `root` Conjur policy, and the Conjur account that the Service Broker uses to manage the Hosts will need `create` and `update` privileges on the `root` Conjur policy.
-- `CONJUR_AUTHN_LOGIN`: The identity of a Conjur Host (of the form `host/host-id`) with `create` and `update` privileges on `CONJUR_POLICY`. This account will be used to add and remove Hosts from Conjur policy as apps are deployed to or removed from PCF.
+
+- `CONJUR_POLICY`: the Policy where new Hosts should be added - the Conjur account specified in `CONJUR_AUTHN_LOGIN` needs `create` and `update` privilege on this Policy.
+  > **NOTE:** The `CONJUR_POLICY` is optional, but is strongly recommended. By default, if this value is not specified, Hosts will be added to the `root` Conjur policy, and the Conjur account that the Service Broker uses to manage the Hosts will need `create` and `update` privileges on the `root` Conjur policy.
+
+  > **NOTE:** If you use multiple CloudFoundry foundations, this policy should include an identifier for the foundation to distinguish applications deployed in each. For example, if you have both a `production` and `development` foundation, then your policy branches for the Conjur Service Broker might be `cf/prod` and `cf/dev`.
+
+  > **NOTE:** If you are using v4 Conjur, the Service Broker requires your `CONJUR_POLICY` to have a Host Factory called `CONJUR_POLICY-apps`. For example, if your `CONJUR_POLICY` is `cf/prod`, you can add a Host Factory by updating your  policy file to include the following:
+  > ```yaml
+  > - !policy
+  >   id: cf
+  >   body:
+  >     - !policy prod
+  >       owner: !group cf-admin-group
+  >       body:
+  >       - !layer cf/prod-apps
+  > 
+  >       - !host-factory
+  >         id: cf/prod-apps
+  >         layers: [ !layer cf/prod-apps ]
+  > ```
+  > 
+  > If you do not specify a `CONJUR_POLICY` (this is not recommended) in your Service Broker configuration and you are using > `CONJUR_VERSION` 4, then you will need to add a Host Factory to the `root` Conjur policy by including:
+  > ```yaml
+  > - !layer apps
+  > 
+  > - !host-factory
+  >   id: apps
+  >   layers: [ !layer apps ]
+  > ```
+  > 
+
+- `CONJUR_AUTHN_LOGIN`: the identity of a Conjur Host (of the form `host/host-id`) with `create` and `update` privileges on `CONJUR_POLICY`. This account will be used to add and remove Hosts from Conjur policy as apps are deployed to or removed from PCF.
 
   If you are using Enterprise Conjur, you will want to add an annotation on the Service Broker Host in policy to indicate which platform the Service Broker will be used on. The policy you load may look something like:
-  ```
+  ```yaml
   - !host
     id: cf-service-broker
     annotations:
@@ -57,30 +89,11 @@ To configure the Service Broker to communicate with your external Conjur instanc
   ```
   You may elect to set `platform` to `cloudfoundry` or to `pivotalcloudfoundry`, for example. This annotation will be used to set annotations on Hosts added by the Service Broker, so that they will show in the Conjur UI with the appropriate platform logo.
 
-  Note: the `CONJUR_AUTHN_LOGIN` value for the Host created in policy above is `host/cf-service-broker`.
+  > **NOTE:** The `CONJUR_AUTHN_LOGIN` value for the Host created in policy above is `host/cf-service-broker`.
+
 - `CONJUR_AUTHN_API_KEY`: the API Key of the Conjur Host whose identity you have provided in `CONJUR_AUTHN_LOGIN`
+
 - `CONJUR_SSL_CERTIFICATE`: the x509 certificate that was created when Conjur was initiated; this is required for v4 Conjur, but is optional otherwise. If the certificate is stored in a PEM file, you can load it into a local environment variable by calling `export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"`
-
-_Note:_ If you are using v4 Conjur, the Service Broker requires your `CONJUR_POLICY` to have a Host Factory called `CONJUR_POLICY-apps`. For example, if your `CONJUR_POLICY` is `cf`, you can add a Host Factory by updating your policy file to include the following:
-```
-- !policy
-  id: cf
-  owner: !group cf-admin-group
-  body:
-   - !layer cf-apps
-
-   - !host-factory
-     id: cf-apps
-     layers: [ !layer cf-apps ]
-```
-If you do not specify a `CONJUR_POLICY` (this is not recommended) in your Service Broker configuration and you are using `CONJUR_VERSION` 4, then you will need to add a Host Factory to the `root` Conjur policy by including:
-```
-- !layer apps
-
-- !host-factory
-  id: apps
-  layers: [ !layer apps ]
-```
 
 
 To load these environment variables into the Service Broker's environment, run:
@@ -179,14 +192,63 @@ applications:
   - conjur
 ```
 
+In PCF version 2.0+, when the service broker creates the Host identity for your application
+in Conjur, it will automatically add it to a Conjur Layer representing the `Organization`
+and `Space` the application is deployed into on PCF. This allows `Spaces` to be privileged
+and any apps deployed into that space to inherit those privileges.
+
+To accomplish this the service broker requires that the Org and Space policy exist prior
+to binding applications with Conjur. The policy to define an organizaiton and space is:
+```yaml
+---
+# Policy for the Organization
+- !policy
+  # Organization GUID from PCF.
+  # This may be obtained by running `cf org --guid {org name}
+  id: cbd7a05a-b304-42a9-8f66-6827ae6f78a1
+  body:
+    # Layer to allow privileging an entire organzation to a resource
+    - !layer
+
+    # Policy for the Space
+    - !policy
+      # Space GUID from PCF.
+      # This may be obtained by running `cf space --guid {space name}
+      id: 8bf39f4a-ebde-437b-9c38-3d234b80631a
+      body:
+        # Layer to allow privileging an entire space to a resource
+        # The service broker will add applications to this layer automatically.
+        - !layer
+
+    # Grant to add the Space layer to the Org Layer
+    - !grant
+      role: !layer
+      member: !layer 8bf39f4a-ebde-437b-9c38-3d234b80631a
+```
+
+> **NOTE:** If you modify the recommended policy structure, it is important to ensure
+> that the service broker is granted `read`, `create`, and `update` permissions for the
+> org and space policy resources and `update` and `read` permissions on the space layer.
+>
+> By default the service broker receives these permissions through ownership of the base
+> `cf/prod` policy.
+
+This policy should be loaded to the location specified by `CONJUR_POLICY`.
+
 ### Update Conjur Policy to Privilege Your Application
 
 Once your app has a Host identity in Conjur, you can update Conjur policy to add
 entitlements for the app to access secret values in Conjur. The host identity of
 the application is stored in the `authn_login` field in the `cyberark-conjur`
 credentials in the application's environment, and might look something like
-`host/cf/0299a19d-7de4-4e98-89f6-372ac7c0521f` (for example, if your `CONJUR_POLICY`
-was set to `cf`).
+`host/cf/prod/0299a19d-7de4-4e98-89f6-372ac7c0521f` (for example, if your `CONJUR_POLICY`
+was set to `cf/prod`).
+
+In PCF version 2.0+, the host identity will include the Organization and Space GUIDs in
+the Host identity, for example:
+```
+host/cf/prod/cbd7a05a-b304-42a9-8f66-6827ae6f78a1/8bf39f4a-ebde-437b-9c38-3d234b80631a/c363669e-e43b-40b9-b650-493d3bdb4663
+```
 
 ### Run Your Application
 

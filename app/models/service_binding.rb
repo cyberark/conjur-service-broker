@@ -9,21 +9,23 @@ class ServiceBinding
   end
 
   class << self
-    def create(instance_id, binding_id, app_id)
-      ServiceBinding.new(instance_id, binding_id).create(app_id)
+    def create(instance_id, binding_id, org_guid, space_guid)
+      ServiceBinding.new(instance_id, binding_id, org_guid, space_guid).create
     end
 
-    def delete(instance_id, binding_id)
-      ServiceBinding.new(instance_id, binding_id).delete
+    def delete(instance_id, binding_id, org_guid, space_guid)
+      ServiceBinding.new(instance_id, binding_id, org_guid, space_guid).delete
     end
   end
 
-  def initialize(instance_id, binding_id)
+  def initialize(instance_id, binding_id, org_guid, space_guid)
     @instance_id = instance_id
     @binding_id = binding_id
+    @org_guid = org_guid
+    @space_guid = space_guid
   end
 
-  def create(app_id)
+  def create
     host = conjur_api.role(role_name)
 
     raise RoleAlreadyCreated.new("Host identity already exists.") if host.exists?
@@ -31,7 +33,7 @@ class ServiceBinding
     begin
       api_key = (ConjurClient.version == 4 ? create_host_v4 : create_host_v5)
     rescue RestClient::NotFound => e
-      raise ConjurAuthenticationError.new "Conjur configuration invalid: #{e.message}"
+      raise ConjurClient::ConjurAuthenticationError.new "Conjur configuration invalid: #{e.message}"
     end
 
     return {
@@ -82,37 +84,52 @@ class ServiceBinding
   end
 
   def template_create
-    if ConjurClient.platform.to_s.empty?
-      """
-      - !host #{@binding_id}
-      """
-    else
-      """
-      - !host
-        id: #{@binding_id}
-        annotations:
-          #{ConjurClient.platform}: true
-      """
-    end
+    <<~YAML.strip + "\n"
+    - !host
+      id: #{@binding_id}
+    #{template_create_annotations}
+    #{template_create_grant}
+    YAML
+  end
+
+  def template_create_annotations
+    template = <<~YAML.chomp.indent(2)
+    annotations:
+      #{ConjurClient.platform}: true
+    YAML
+    template if ConjurClient.platform.to_s.present?
+  end
+
+  def template_create_grant
+    template = <<~YAML.chomp
+    - !grant
+      role: !layer
+      member: !host #{@binding_id}
+    YAML
+    template if use_space?
   end
 
   def template_delete
-    """
+    <<~YAML
     - !delete
       record: !host #{@binding_id}
-    """
+    YAML
   end
 
   def load_policy(policy, method: Conjur::API::POLICY_METHOD_POST)
-    conjur_api.load_policy(ConjurClient.policy, policy, method: method)
+    conjur_api.load_policy(policy_location, policy, method: method)
+  end
+
+  def policy_location
+    use_space? ? space_policy : ConjurClient.policy
   end
 
   def host_id
-    if ConjurClient.policy != 'root'
-      "#{ConjurClient.policy}/#{@binding_id}"
-    else
-      @binding_id
-    end
+    "#{policy_base}#{org_space}#{@binding_id}"
+  end
+
+  def org_space
+    "#{@org_guid}/#{@space_guid}/" if use_space?
   end
 
   def role_name
@@ -121,5 +138,17 @@ class ServiceBinding
 
   def conjur_api
     ConjurClient.api
+  end
+
+  def use_space?
+    ConjurClient.v5? && @org_guid.present? && @space_guid.present?
+  end
+
+  def policy_base
+    ConjurClient.policy != 'root' ? ConjurClient.policy + '/' : ''
+  end
+
+  def space_policy
+    "#{policy_base}#{@org_guid}/#{@space_guid}"
   end
 end

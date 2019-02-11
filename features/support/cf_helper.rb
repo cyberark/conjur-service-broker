@@ -22,7 +22,7 @@ module CfHelper
     output << `cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN "host/pcf/service-broker"`
     output << `cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "#{api_key}"`
     output << `cf set-env conjur-service-broker CONJUR_VERSION "5"`
-    output << `cf set-env conjur-service-broker CONJUR_POLICY pcf`
+    output << `cf set-env conjur-service-broker CONJUR_POLICY pcf/ci`
     output << `cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE "#{ENV['PCF_CONJUR_SSL_CERT']}"`
     
     # Start the service broker and make it available
@@ -32,6 +32,15 @@ module CfHelper
   rescue => ex
     puts output.join("\n")
     raise
+  end
+
+  def org_guid(org_name)
+    `cf org --guid "#{org_name}"`.chomp
+  end
+
+  def space_guid(org_name, space_name)
+    `cf target -o "#{org_name}"`
+    `cf space --guid "#{space_name}"`.chomp
   end
 
   def app_bind_id

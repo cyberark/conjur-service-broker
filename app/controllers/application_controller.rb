@@ -1,7 +1,6 @@
-class UnknownConjurHostError < RuntimeError
-end
+require 'conjur_client'
 
-class ConjurAuthenticationError < RuntimeError
+class UnknownConjurHostError < RuntimeError
 end
 
 class ValidationError < RuntimeError
@@ -11,7 +10,7 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
 
   rescue_from UnknownConjurHostError, with: :server_error
-  rescue_from ConjurAuthenticationError, with: :invalid_configuration
+  rescue_from ConjurClient::ConjurAuthenticationError, with: :invalid_configuration
 
   rescue_from ServiceBinding::HostNotFound, with: :host_not_found
   rescue_from ServiceBinding::RoleAlreadyCreated, with: :conflict_error
@@ -40,7 +39,7 @@ class ApplicationController < ActionController::API
     rescue SocketError
       raise UnknownConjurHostError.new "Invalid Conjur host (#{ConjurClient.appliance_url.to_s})"
     rescue RestClient::Unauthorized => e
-      raise ConjurAuthenticationError.new "Conjur authentication failed: #{e.message}"
+      raise ConjurClient::ConjurAuthenticationError.new "Conjur authentication failed: #{e.message}"
     end
   end
 
