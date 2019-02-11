@@ -41,7 +41,7 @@ Feature: Binding
     }
     """
     Then the HTTP response status code is "201"
-    And the JSON at "credentials/appliance_url" should be "http://conjur_5-follower"
+    And the JSON at "credentials/appliance_url" should be the follower address
 
   Scenario: Bind resource with cf policy configured
     Given I use a service broker with a non-root policy
