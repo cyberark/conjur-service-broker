@@ -56,6 +56,7 @@ function runTests5() {
 
   export CONJUR_VERSION=5
   export CONJUR_APPLIANCE_URL=http://conjur_5
+  export CONJUR_FOLLOWER_URL="http://conjur_5-follower"
   export CONJUR_SSL_CERTIFICATE=""
 
   api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
@@ -82,6 +83,7 @@ function runTests4() {
 
   export CONJUR_VERSION=4
   export CONJUR_APPLIANCE_URL=https://conjur_4/api
+  export CONJUR_FOLLOWER_URL="https://conjur_4-follower/api"
   export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"
 
   api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['admin'].api_key\" 2>/dev/null")
