@@ -130,22 +130,7 @@ deployed to your Cloud Foundry installation.
 
 ### Installing the Conjur Buildpack
 
-The Conjur Buildpack uses [Summon](https://cyberark.github.io/summon/) to load secrets into the environment of CF-deployed applications based on the app's `secrets.yml` file. The Conjur Buildpack is a decorator buildpack, and requires the meta-buildpack to work properly.
-
-Install the [meta-buildpack](https://github.com/cf-platform-eng/meta-buildpack):
-```
-git clone git@github.com:cf-platform-eng/meta-buildpack
-cd meta-buildpack
-./build
-./upload
-```
-
-Install the [Conjur buildpack](https://github.com/conjurinc/cloudfoundry-conjur-buildpack):
-```
-git clone git@github.com:conjurinc/cloudfoundry-conjur-buildpack
-cd cloudfoundry-conjur-buildpack
-./upload.sh
-```
+The Conjur Buildpack uses [Summon](https://cyberark.github.io/summon/) to load secrets into the environment of CF-deployed applications based on the app's `secrets.yml` file. For instructions on installing and using the Conjur Buildpack, please [see the Conjur Buildpack documentation](https://github.com/cyberark/cloudfoundry-conjur-buildpack).
 
 ## Service Broker Usage
 
