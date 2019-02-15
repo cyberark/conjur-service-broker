@@ -91,9 +91,11 @@ To configure the Service Broker to communicate with your external Conjur instanc
 
   > **NOTE:** The `CONJUR_AUTHN_LOGIN` value for the Host created in policy above is `host/cf-service-broker`.
 
-- `CONJUR_AUTHN_API_KEY`: the API Key of the Conjur Host whose identity you have provided in `CONJUR_AUTHN_LOGIN`
+- `CONJUR_AUTHN_API_KEY`: the API Key of the Conjur Host whose identity you have provided in `CONJUR_AUTHN_LOGIN`.
 
-- `CONJUR_SSL_CERTIFICATE`: the x509 certificate that was created when Conjur was initiated; this is required for v4 Conjur, but is optional otherwise. If the certificate is stored in a PEM file, you can load it into a local environment variable by calling `export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"`
+- `CONJUR_SSL_CERTIFICATE`: the x509 certificate that was created when Conjur was initiated; this is required for v4 Conjur, but is optional otherwise. If the certificate is stored in a PEM file, you can load it into a local environment variable by calling `export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"`.
+
+- `CONJUR_PRESERVE_POLICY`: By default, when the service broker is removed from a Space, it will clean up and remove the policy branches for the org and space from `CONJUR_POLICY`. Setting this environment variable to `true` will cause the  org and space policy to remain in Conjur when removing the service broker.
 
 
 To load these environment variables into the Service Broker's environment, run:
@@ -167,6 +169,41 @@ deploying your application:
 cf create-service cyberark-conjur community conjur
 ```
 
+For PCF 2.0+, when the service broker is provisioned in a space, it will automatically create
+a policy branch for the org and space if it doesn't already exist. The policy will look similar to
+this:
+
+```yaml
+---
+# Policy for the Organization
+- !policy
+  # Organization GUID from PCF.
+  # This may be obtained by running `cf org --guid {org name}
+  id: cbd7a05a-b304-42a9-8f66-6827ae6f78a1
+  body:
+    # Layer to allow privileging an entire organzation to a resource
+    - !layer
+
+    # Policy for the Space
+    - !policy
+      # Space GUID from PCF.
+      # This may be obtained by running `cf space --guid {space name}
+      id: 8bf39f4a-ebde-437b-9c38-3d234b80631a
+      body:
+        # Layer to allow privileging an entire space to a resource
+        # The service broker will add applications to this layer automatically.
+        - !layer
+
+    # Grant to add the Space layer to the Org Layer
+    - !grant
+      role: !layer
+      member: !layer 8bf39f4a-ebde-437b-9c38-3d234b80631a
+```
+
+> **NOTE:** By default when a service instance is removed from a space, it will clean up
+> and remove the corresponding policy for that space. To have the policy remain after the
+> service instance is removed, set the `CONJUR_PRESERVE_POLICY` environment variable to `true`
+
 ### Create a `secrets.yml` File
 
 To leverage the Conjur Buildpack so that secret values will automatically be
@@ -197,43 +234,6 @@ in Conjur, it will automatically add it to a Conjur Layer representing the `Orga
 and `Space` the application is deployed into on PCF. This allows `Spaces` to be privileged
 and any apps deployed into that space to inherit those privileges.
 
-To accomplish this the service broker requires that the Org and Space policy exist prior
-to binding applications with Conjur. The policy to define an organizaiton and space is:
-```yaml
----
-# Policy for the Organization
-- !policy
-  # Organization GUID from PCF.
-  # This may be obtained by running `cf org --guid {org name}
-  id: cbd7a05a-b304-42a9-8f66-6827ae6f78a1
-  body:
-    # Layer to allow privileging an entire organzation to a resource
-    - !layer
-
-    # Policy for the Space
-    - !policy
-      # Space GUID from PCF.
-      # This may be obtained by running `cf space --guid {space name}
-      id: 8bf39f4a-ebde-437b-9c38-3d234b80631a
-      body:
-        # Layer to allow privileging an entire space to a resource
-        # The service broker will add applications to this layer automatically.
-        - !layer
-
-    # Grant to add the Space layer to the Org Layer
-    - !grant
-      role: !layer
-      member: !layer 8bf39f4a-ebde-437b-9c38-3d234b80631a
-```
-
-> **NOTE:** If you modify the recommended policy structure, it is important to ensure
-> that the service broker is granted `read`, `create`, and `update` permissions for the
-> org and space policy resources and `update` and `read` permissions on the space layer.
->
-> By default the service broker receives these permissions through ownership of the base
-> `cf/prod` policy.
-
-This policy should be loaded to the location specified by `CONJUR_POLICY`.
 
 ### Update Conjur Policy to Privilege Your Application
 

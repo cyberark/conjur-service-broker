@@ -1,6 +1,7 @@
 require 'conjur_client'
 
 class ServiceBinding
+  include ConjurApiModel
 
   class RoleAlreadyCreated < RuntimeError
   end
@@ -136,16 +137,8 @@ class ServiceBinding
     "#{ConjurClient.account}:host:#{host_id}"
   end
 
-  def conjur_api
-    ConjurClient.api
-  end
-
   def use_space?
     ConjurClient.v5? && @org_guid.present? && @space_guid.present?
-  end
-
-  def policy_base
-    ConjurClient.policy != 'root' ? ConjurClient.policy + '/' : ''
   end
 
   def space_policy
