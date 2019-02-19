@@ -2,6 +2,34 @@ require 'spec_helper'
 require 'conjur_client'
 
 describe ConjurClient do
+  describe "login_host_id" do
+    context "login is a host" do
+      before do
+        allow(ENV).
+          to receive(:[]).
+          with('CONJUR_AUTHN_LOGIN').
+          and_return('host/some_host')
+      end
+      
+      it "returns login without 'host/' prefix" do
+        expect(ConjurClient.login_host_id).to eq('some_host')
+      end
+    end
+
+    context "login is not a host" do
+      before do
+        allow(ENV).
+          to receive(:[]).
+          with('CONJUR_AUTHN_LOGIN').
+          and_return('some_user')
+      end
+      
+      it "returns nil if login is not a host" do
+        expect(ConjurClient.login_host_id).to be_nil
+      end
+    end
+  end
+  
   describe 'application_conjur_url' do
     let(:appliance_url) { 'http://conjur-master' }
 

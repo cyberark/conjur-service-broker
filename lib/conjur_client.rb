@@ -8,7 +8,7 @@ class ConjurClient
 
   class << self
     def api
-      ConjurClient.new.api
+      ConjurClient.new.api(appliance_url)
     end
 
     def v4_host_factory_id
@@ -40,7 +40,11 @@ class ConjurClient
     end
 
     def login_host_id
-      authn_login.sub /^host\//, "" unless authn_login.index(/^host\//).nil?
+      authn_login.sub /^host\//, "" if login_is_host?
+    end
+
+    def login_is_host?
+      authn_login.include?("host\/")
     end
 
     def appliance_url
@@ -72,10 +76,10 @@ class ConjurClient
     end
   end
 
-  def api
+  def api(appliance_url)
     Conjur.configure do |config|
       config.account = ConjurClient.account
-      config.appliance_url = ConjurClient.appliance_url
+      config.appliance_url = appliance_url
       config.ssl_certificate = ConjurClient.ssl_cert
       config.version = ConjurClient.version
     end
