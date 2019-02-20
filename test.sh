@@ -27,6 +27,7 @@ function runTests() {
   docker-compose up -d $SERVICE_BROKERS
 
   export CONJUR_POLICY=cf
+
   if [[ $1 -eq 4 ]]
   then
     export CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/cf-service-broker'].api_key\" 2>/dev/null")"
@@ -38,16 +39,20 @@ function runTests() {
 
   if [[ $1 -eq 4 ]]
   then
-    export CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/bad-service-broker'].api_key\" 2>/dev/null")"
+    bad_host_api_key="$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/bad-service-broker'].api_key\" 2>/dev/null")"
   else
-    export CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:bad-service-broker}].api_key" 2>/dev/null')"
+    bad_host_api_key="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:bad-service-broker}].api_key" 2>/dev/null')"
   fi
+
+  export CONJUR_AUTHN_API_KEY=$bad_host_api_key
 
   docker-compose up -d service-broker-bad-host
 
   echo "Running tests"
   echo "---"
-  docker-compose run -e CONJUR_AUTHN_API_KEY=$api_key tests ci/test.sh
+
+  # Set BAD_HOST_API_KEY to test an error case in bin/health-check.rb
+  docker-compose run -e CONJUR_AUTHN_API_KEY=$admin_api_key -e BAD_HOST_API_KEY=$bad_host_api_key tests ci/test.sh
 }
 
 function runTests5() {
@@ -56,12 +61,11 @@ function runTests5() {
 
   export CONJUR_VERSION=5
   export CONJUR_APPLIANCE_URL=http://conjur_5
-  export CONJUR_FOLLOWER_URL="http://conjur_5-follower"
+  export CONJUR_FOLLOWER_URL=http://conjur_5-follower
   export CONJUR_SSL_CERTIFICATE=""
 
-  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
-  export CONJUR_AUTHN_API_KEY="$api_key"
-
+  admin_api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
+  export CONJUR_AUTHN_API_KEY="$admin_api_key"
 
   remote_appliance_host=$(echo $PCF_CONJUR_APPLIANCE_URL | sed 's~http[s]*://~~g')
   
@@ -83,11 +87,11 @@ function runTests4() {
 
   export CONJUR_VERSION=4
   export CONJUR_APPLIANCE_URL=https://conjur_4/api
-  export CONJUR_FOLLOWER_URL="https://conjur_4-follower/api"
+  export CONJUR_FOLLOWER_URL=https://conjur_4-follower/api
   export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"
 
-  api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['admin'].api_key\" 2>/dev/null")
-  export CONJUR_AUTHN_API_KEY="$api_key"
+  admin_api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['admin'].api_key\" 2>/dev/null")
+  export CONJUR_AUTHN_API_KEY="$admin_api_key"
 
   runTests 4
 }

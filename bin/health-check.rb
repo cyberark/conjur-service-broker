@@ -21,10 +21,12 @@ end
 
 master_api = ConjurClient.api
 
-login_resource = login_resource(master_api)
 login_resource_exists = false
 
 begin
+  # This will throw an exception if Conjur URL is unreachable.
+  login_resource = login_resource(master_api)
+
   # This will throw an exception if Conjur credentials are invalid.
   login_resource_exists = login_resource.exists?
 rescue
@@ -61,8 +63,8 @@ unless follower_url.nil?
   begin
     follower_api = ConjurClient.new.api(follower_url)
     
-    # This will throw an exception if the follower URL is invalid.
-    login_resource(follower_api).exists?
+    # This will throw an exception if the follower URL is unreachable.
+    login_resource = login_resource(follower_api)
   rescue
     error(
       "Error: There is an issue with your CONJUR_FOLLOWER_URL value. Please" \
