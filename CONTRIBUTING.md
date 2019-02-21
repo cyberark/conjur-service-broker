@@ -46,6 +46,17 @@ $ summon ./test.sh
 
 ## Releases
 
+1. Based on the unreleased content, determine the new version number and update 
+   the [VERSION](VERSION) file. This project uses [semantic versioning](https://semver.org/).
+2. Ensure the [changelog](CHANGELOG.md) is up to date with the changes included in the release.
+3. Commit these changes - `Bump version to x.y.z` is an acceptable commit message.
+4. Once your changes have been reviewed and merged into master, tag the version
+   using `git tag -s v0.1.1`. Note this requires you to be  able to sign releases.
+   Consult the [github documentation on signing commits](https://help.github.com/articles/signing-commits-with-gpg/)
+   on how to set this up. `vx.y.z` is an acceptable tag message.
+5. Push the tag: `git push vx.y.z` (or `git push origin vx.y.z` if you are working
+   from your local machine).
+
 When releasing a new version of the Service Broker, you will need to include a
 ZIP file with the release of the repository with all dependencies. Running the
 `./build.sh` script will run `bundle pack --all`, which creates a
