@@ -6,14 +6,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.0] - 2019-02-21
+
 ### Added
 - The service broker will now automatically generate the org and space policy when 
   the service is provisioned into a CF space.
+- By default the service broker will remove the space and org policy when the service
+  is deprovisioned from a space. This behavior may be bypassed using a new environment
+  parameter, `CONJUR_PRESERVE_POLICY`. See the [README](README.md#installing-the-conjur-service-broker)
+  for more information.
+- Added service broker environment parameter for `CONJUR_FOLLOWER_URL`. When set, the
+  service broker will provide the URL of a follower to an application for retrieving secret
+  values.
 
 ### Changed
 - Updated dependencies and Ruby version of Docker image
 - The service broker now adds application Hosts to a Conjur Layer for a Space when the
-  bind context contains `context.organization_guid` and `context.space_guid` (PCF 2.0+)
+  bind context contains `context.organization_guid` and `context.space_guid` (CAPI 1.30.0+)
 
 ## [0.3.2] - 2018-06-26
 
@@ -49,7 +58,8 @@ Added support for v4 Conjur, including health check that verifies HF existence
 
 The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/cyberark/conjur-service-broker/compare/v0.1.0...v0.2.0
-[0.3.0]: https://github.com/cyberark/conjur-service-broker/compare/v0.2.0...v0.3.0
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/cyberark/conjur-service-broker/compare/v0.3.1...v1.0.0
 [0.3.1]: https://github.com/cyberark/conjur-service-broker/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/cyberark/conjur-service-broker/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/cyberark/conjur-service-broker/compare/v0.1.0...v0.2.0
