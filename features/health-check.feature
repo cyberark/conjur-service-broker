@@ -1,7 +1,7 @@
 Feature: Health Check
   Scenario: Healthy
     # Use working appliance URL as follower URL to make health check pass.
-    When I run the health check script with env CONJUR_FOLLOWER_URL=http://conjur_5
+    When I run the health check script with env CONJUR_FOLLOWER_URL=$CONJUR_APPLIANCE_URL
     Then the exit status should be 0
 
   Scenario: Invalid Conjur appliance URL
@@ -14,6 +14,7 @@ Feature: Health Check
     Then the output includes 'There is an issue with your Conjur configuration.'
     And the exit status should be 1
 
+  @conjur-version-5
   Scenario: Login host can not access own resource
     When I run the health check script with env CONJUR_AUTHN_LOGIN=host/bad-service-broker CONJUR_AUTHN_API_KEY=$BAD_HOST_API_KEY
     Then the output includes 'Host identity not privileged to read itself.'

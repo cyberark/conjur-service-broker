@@ -26,7 +26,7 @@ login_resource_exists = false
 begin
   # This will throw an exception if Conjur URL is unreachable.
   login_resource = login_resource(master_api)
-
+  
   # This will throw an exception if Conjur credentials are invalid.
   login_resource_exists = login_resource.exists?
 rescue
@@ -37,8 +37,11 @@ rescue
 end
 
 # When authenticating as a host, ensure that credentials can access host resource.
-if !login_resource_exists && ConjurClient.login_is_host?
-  error("Host identity not privileged to read itself.")
+# Conjur v4 grant this privilege automatically, so we only check for v5.
+if ConjurClient.version == 5
+  if !login_resource_exists && ConjurClient.login_is_host?
+    error("Host identity not privileged to read itself.")
+  end
 end
 
 puts "Successfully validated Conjur credentials."
