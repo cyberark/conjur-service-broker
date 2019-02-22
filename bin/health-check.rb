@@ -62,7 +62,7 @@ end
 # If a follower URL is provided, test it using the Conjur API.
 follower_url = ENV['CONJUR_FOLLOWER_URL']
 
-unless follower_url.nil?
+if follower_url.present?
   begin
     follower_api = ConjurClient.new.api(follower_url)
     

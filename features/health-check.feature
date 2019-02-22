@@ -20,6 +20,11 @@ Feature: Health Check
     Then the output includes 'Host identity not privileged to read itself.'
     And the exit status should be 1
 
+Scenario: Empty Conjur Follower URL
+    When I run the health check script with env CONJUR_FOLLOWER_URL=
+    Then the output includes 'Successfully validated Conjur credentials'
+    And the exit status should be 0
+
   Scenario: Invalid Conjur Follower URL
     When I run the health check script with env CONJUR_FOLLOWER_URL=not-a-follower-url
     Then the output includes 'There is an issue with your CONJUR_FOLLOWER_URL value.'
