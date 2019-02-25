@@ -52,11 +52,11 @@ class ConjurClient
     end
 
     def application_conjur_url
-      ENV['CONJUR_FOLLOWER_URL'] || appliance_url
+      ENV['CONJUR_FOLLOWER_URL'].presence || appliance_url
     end
 
     def policy
-      ENV['CONJUR_POLICY'] || 'root'
+      ENV['CONJUR_POLICY'].presence || 'root'
     end
 
     def ssl_cert
