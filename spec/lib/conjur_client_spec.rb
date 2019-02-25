@@ -64,6 +64,14 @@ describe ConjurClient do
       it "returns follower url" do
         expect(ConjurClient.application_conjur_url).to eq(follower_url)
       end
+
+      context "follower url is empty string" do
+       let(:follower_url) { '' }
+
+        it "returns follower url" do
+          expect(ConjurClient.application_conjur_url).to eq(appliance_url)
+        end
+      end
     end
   end
 end
