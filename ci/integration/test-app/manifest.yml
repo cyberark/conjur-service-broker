@@ -3,3 +3,7 @@ applications:
 - name: hello-world
   services:
   - conjur
+  buildpacks:
+  - conjur_buildpack
+  - ruby_buildpack
+
