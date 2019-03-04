@@ -96,10 +96,6 @@ module ServiceBrokerWorld
     "#{ENV['PCF_CONJUR_ACCOUNT']}:policy:pcf/ci/#{ci_org_guid}/#{ci_space_guid}"
   end
 
-  def instance_resource_id
-    "#{ENV['PCF_CONJUR_ACCOUNT']}:cf-service-instance:pcf/ci/#{cf_service_instance_id}"
-  end
-
 end
 
 World(ServiceBrokerWorld)

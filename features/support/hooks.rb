@@ -10,8 +10,7 @@ Before("@service-broker") do |scenario|
   login_to_pcf
   cf_target(cf_ci_org, cf_ci_space)
 
-  preserve = scenario.source_tag_names.include?('@preserve-policy')
-  install_service_broker(preserve)
+  install_service_broker
 end
 
 After("@service-broker") do
