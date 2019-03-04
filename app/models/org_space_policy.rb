@@ -20,10 +20,6 @@ class OrgSpacePolicy
     def create(org_id, space_id)
       OrgSpacePolicy.new(org_id, space_id).create
     end
-
-    def delete(org_id, space_id)
-      OrgSpacePolicy.new(org_id, space_id).delete
-    end
   end
 
   def initialize(org_id, space_id)
@@ -41,23 +37,7 @@ class OrgSpacePolicy
     load_policy(template_create_org_space)
   end
 
-  def delete
-    load_policy(template_delete_space, 
-      method: Conjur::API::POLICY_METHOD_PATCH)
-
-    load_policy(template_delete_org, 
-      method: Conjur::API::POLICY_METHOD_PATCH) if org_empty?
-  end
-
   private
-
-  def org_empty?
-    ConjurClient.api.resources(
-      kind: 'policy',
-      account: ConjurClient.account, 
-      search: "#{policy_base}#{@org_id}"
-      ).count == 1
-  end
 
   def ensure_org_policy
     raise OrgPolicyNotFound unless org_policy.exists?
@@ -111,22 +91,6 @@ class OrgSpacePolicy
         - !grant
           role: !layer
           member: !layer #{@space_id}
-    YAML
-  end
-
-  def template_delete_org
-    <<~YAML
-    ---
-    - !delete
-      record: !policy #{@org_id}
-    YAML
-  end
-
-  def template_delete_space
-    <<~YAML
-    ---
-    - !delete
-      record: !policy #{@org_id}/#{@space_id}
     YAML
   end
 end

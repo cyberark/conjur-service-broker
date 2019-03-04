@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Removed
+
+- Removed `CONJUR_PRESERVE_POLICY` option. Policy objects created by the service broker are
+  always preserved and no longer deleted by the service broker on deprovision.
+
 ## [1.0.0] - 2019-02-21
 
 ### Added

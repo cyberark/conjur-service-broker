@@ -95,9 +95,6 @@ To configure the Service Broker to communicate with your external Conjur instanc
 
 - `CONJUR_SSL_CERTIFICATE`: the x509 certificate that was created when Conjur was initiated; this is required for v4 Conjur, but is optional otherwise. If the certificate is stored in a PEM file, you can load it into a local environment variable by calling `export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"`.
 
-- `CONJUR_PRESERVE_POLICY`: By default, when the service broker is removed from a Space, it will clean up and remove the policy branches for the org and space from `CONJUR_POLICY`. Setting this environment variable to `true` will cause the  org and space policy to remain in Conjur when removing the service broker.
-
-
 To load these environment variables into the Service Broker's environment, run:
 ```
 cf set-env conjur-service-broker CONJUR_VERSION [value]
@@ -184,10 +181,6 @@ this:
       role: !layer
       member: !layer 8bf39f4a-ebde-437b-9c38-3d234b80631a
 ```
-
-> **NOTE:** By default when a service instance is removed from a space, it will clean up
-> and remove the corresponding policy for that space. To have the policy remain after the
-> service instance is removed, set the `CONJUR_PRESERVE_POLICY` environment variable to `true`
 
 ### Create a `secrets.yml` File
 

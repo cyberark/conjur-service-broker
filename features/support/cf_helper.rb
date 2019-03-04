@@ -1,5 +1,5 @@
 module CfHelper
-  def install_service_broker(preserve)
+  def install_service_broker
     output = []
 
     # Push this version of the service broker
@@ -18,8 +18,6 @@ module CfHelper
     output << `cf set-env conjur-service-broker CONJUR_VERSION "5"`
     output << `cf set-env conjur-service-broker CONJUR_POLICY "pcf/ci"`
     output << `cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE "#{ENV['PCF_CONJUR_SSL_CERT']}"`
-    output << `cf set-env conjur-service-broker CONJUR_PRESERVE_POLICY "#{preserve.to_s}"`
-
     
     # Start the service broker and make it available
     output << `cf start conjur-service-broker`
