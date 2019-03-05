@@ -97,6 +97,9 @@ class ApplicationController < ActionController::API
     params.dig(:context, :organization_guid)
   end
 
+  # We use context.space_guid (the space of the service instance) instead of
+  # binding_resource.space_guid (the space of the app). They will be the same
+  # because we do not support service sharing.
   def space_guid
     params.dig(:context, :space_guid)
   end
