@@ -38,10 +38,6 @@ Then(/^the policy for the org and space( doesn't)? exist(?:s)?$/) do |negative|
   expect(remote_conjur_resource_exists?(space_policy_id)).to eq(negative.blank?)
 end
 
-Then(/^the instance resource( doesn't)? exist(?:s)?$/) do |negative|
-  expect(remote_conjur_resource_exists?(instance_resource_id)).to eq(negative.blank?)
-end
-
 When(/^I privilege the org layer to access a secret in Conjur$/) do
   role = "!layer pcf/ci/#{org_guid(cf_ci_org)}"
   secret = "!variable app/secrets/org"

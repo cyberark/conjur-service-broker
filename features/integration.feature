@@ -8,8 +8,7 @@ Feature: Integration Tests for PCF 2.4
 
   Scenario: Service broker functions correctly with PCF 2.4 
     When I create a service instance for Conjur
-    Then the instance resource exists
-    And the policy for the org and space exists
+    Then the policy for the org and space exists
 
     When I load a secret into Conjur
     And I privilege the org layer to access a secret in Conjur
@@ -21,24 +20,11 @@ Feature: Integration Tests for PCF 2.4
     Then I can retrieve the secret values from the app
 
     When I remove the service instance
-    Then the policy for the org and space doesn't exist
-    And the instance resource doesn't exist
-
-  @preserve-policy
-  Scenario: Service broker functions preserves the policy if configured
-    When I create a service instance for Conjur
-    Then the instance resource exists
-    And the policy for the org and space exists
-
-    When I remove the service instance
     Then the policy for the org and space exists
-    And the instance resource doesn't exist
 
-  @preserve-policy
   Scenario: Redeploying service broker
     When I create a service instance for Conjur
-    Then the instance resource exists
-    And the policy for the org and space exists
+    Then the policy for the org and space exists
 
     When I load a secret into Conjur
     And I privilege the org layer to access a secret in Conjur
@@ -51,10 +37,10 @@ Feature: Integration Tests for PCF 2.4
 
     When I remove the service instance
     Then the policy for the org and space exists
-    And the instance resource doesn't exist
 
     # Redeploy and run app, maintaining existing policy
     When I create a service instance for Conjur
+    Then the policy for the org and space exists
 
     When I push the sample app to PCF
     # The app host will have a new binding ID, so we need to grant
