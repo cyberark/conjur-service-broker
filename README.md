@@ -151,6 +151,10 @@ deploying your application:
 cf create-service cyberark-conjur community conjur
 ```
 
+Note that service instances can not currently be shared between spaces so a
+Conjur service instance must be created in each space with apps that retrieve
+secrets from Conjur.
+
 For PCF 2.0+, when the service broker is provisioned in a space, it will automatically create
 a policy branch for the org and space if it doesn't already exist. The policy will look similar to
 this:
