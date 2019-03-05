@@ -9,6 +9,7 @@ services:
       providerDisplayName: CyberArk
       documentationUrl: https://www.conjur.org/api.html
       supportUrl: https://www.conjur.org/support.html
+      shareable: false
     plans:
       - name: community
         id: 3a116ac2-fc8b-496f-a715-e9a1b205d05c.community
