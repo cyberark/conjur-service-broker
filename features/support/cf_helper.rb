@@ -40,7 +40,7 @@ module CfHelper
   end
 
   def space_guid(org_name, space_name)
-    `cf target -o "#{org_name}"`
+    cf_target(org_name, space_name)
     `cf space --guid "#{space_name}"`.chomp
   end
 
