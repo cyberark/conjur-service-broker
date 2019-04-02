@@ -6,8 +6,8 @@ git_source(:github) do |repo_name|
 end
 
 gem 'conjur-api', '~> 5.3.1'
-gem 'activesupport', '~> 5.2.1'
-gem 'railties', '~> 5.2.1'
+gem 'activesupport', '~> 5.2.2.1'
+gem 'railties', '~> 5.2.2.1'
 gem 'rack', '~> 2.0.6'
 gem 'json-schema', '~> 2.8'
 
