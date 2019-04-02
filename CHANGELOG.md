@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Updated actionview (CVE-2019-5418) and railties (CVE-2019-5420) dependency versions
+
 ## [1.0.0] - 2019-03-05
 
 ### Added
