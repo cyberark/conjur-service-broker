@@ -10,10 +10,13 @@ Given(/^I load a secret into Conjur$/) do
 end
 
 Given(/^I create a service instance for Conjur$/) do
+  cf_target(cf_ci_org, cf_ci_space)
   `cf create-service cyberark-conjur community conjur`
 end
 
 When(/^I push the sample app to PCF$/) do
+  cf_target(cf_ci_org, cf_ci_space)
+
   `cf delete hello-world -f`
   Dir.chdir(integration_test_app_dir) do
     `cf push --no-start --random-route`
@@ -21,6 +24,8 @@ When(/^I push the sample app to PCF$/) do
 end
 
 When(/^I start the app$/) do
+  cf_target(cf_ci_org, cf_ci_space)
+
   Dir.chdir(integration_test_app_dir) do
     `cf start hello-world`
   end
@@ -57,6 +62,8 @@ When(/^I privilege the app host to access a secret in Conjur$/) do
 end
 
 When(/^I remove the service instance$/) do
+  cf_target(cf_ci_org, cf_ci_space)
+
   `cf unbind-service hello-world conjur`
   `cf delete-service conjur -f`
 end
