@@ -1,0 +1,8 @@
+version: '2.1'
+services:
+  buildpack-health-check-builder:
+    build: .
+    volumes:
+      - .:/buildpack-health-check
+      - ../bin:/pkg
+    command: go build -o /pkg/buildpack-health-check -a -ldflags '-extldflags "-static"' .
