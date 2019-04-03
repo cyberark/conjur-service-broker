@@ -27,3 +27,4 @@ logfile
 # Ignore build relics
 /vendor/cache/
 .DS_Store
+bin/buildpack-health-check

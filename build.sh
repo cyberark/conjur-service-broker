@@ -5,6 +5,12 @@ TAG="$(< VERSION)-$(git rev-parse --short HEAD)"
 echo "Getting updated images"
 docker-compose pull conjur_4 conjur_5
 
+echo "Building Buildpack Health Check executable"
+rm -rf bin/buildpack-health-check
+docker-compose -f buildpack-health-check/docker-compose.yml build
+docker-compose -f buildpack-health-check/docker-compose.yml \
+  run --rm buildpack-health-check-builder
+
 echo "Building conjur-service-broker Docker image"
 docker-compose build conjur-service-broker
 docker-compose build tests

@@ -1,14 +1,29 @@
-When(/^I run the health check script$/) do
-  @output = `./bin/health-check.rb`
+# frozen_string_literal: true
+
+When(/^I run the( buildpack)? health check script$/) do |buildpack|
+  @output = if buildpack.present?
+              `./bin/buildpack-health-check`
+            else
+              `./bin/health-check.rb`
+            end
+
   @result = $?
 end
 
-When(/^I run the health check script with env ([^"]*)$/) do |vars|
+When(/^I run the( buildpack)? health check script with env ([^"]*)$/) do |buildpack, vars|
   f = Tempfile.open('command.sh')
-  file_contents = <<EOS
-#!/bin/bash -e
-#{vars} ./bin/health-check.rb 2>&1
-EOS
+
+  command = if buildpack.present?
+              './bin/buildpack-health-check'
+            else
+              './bin/health-check.rb'
+            end
+
+  file_contents = <<~SCRIPT
+    #!/bin/bash -e
+    #{vars} #{command} 2>&1
+  SCRIPT
+
   f.write(file_contents)
   f.close
 
