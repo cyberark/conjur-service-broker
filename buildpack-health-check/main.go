@@ -9,6 +9,10 @@ import (
 )
 
 func main() {
+	// This health check should connect to Conjur as the
+	// buildpack is going to, so if the follower URL
+	// is configured, use that instead of the appliance
+	// URL for the service broker.
 	followerURL := os.Getenv("CONJUR_FOLLOWER_URL")
 	if len(followerURL) > 0 {
 		os.Setenv("CONJUR_APPLIANCE_URL", followerURL)
@@ -42,7 +46,7 @@ func printAndExitIfError(err error) {
 	if err == nil {
 		return
 	}
-	os.Stderr.Write([]byte("There is an issue with your Conjur configuration.\n"))
-	os.Stderr.Write([]byte(err.Error()))
+	os.Stderr.WriteString("There is an issue with your Conjur configuration.\n")
+	os.Stderr.WriteString(err.Error())
 	os.Exit(1)
 }
