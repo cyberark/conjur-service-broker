@@ -41,6 +41,8 @@ end
 Then(/^the policy for the org and space( doesn't)? exist(?:s)?$/) do |negative|
   expect(remote_conjur_resource_exists?(org_policy_id)).to eq(negative.blank?)
   expect(remote_conjur_resource_exists?(space_policy_id)).to eq(negative.blank?)
+  expect(remote_conjur_resource_exists?(space_host_id)).to eq(negative.blank?)
+  expect(remote_conjur_resource_exists?(space_host_api_key_variable_id)).to eq(negative.blank?)
 end
 
 When(/^I privilege the org layer to access a secret in Conjur$/) do

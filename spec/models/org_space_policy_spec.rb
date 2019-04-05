@@ -49,7 +49,6 @@ describe OrgSpacePolicy do
     let(:nonexistent_resource) { double("non-existent", exists?: false) }
   
     before do
-
       # By default, assume all resources exist
       allow_any_instance_of(Conjur::API)
         .to receive(:resource)
@@ -59,7 +58,7 @@ describe OrgSpacePolicy do
 
     context "when resources already exist" do
       it "does not raise an error" do
-        expect { subject.ensure_exists}.not_to raise_error
+        expect { subject.ensure_exists }.not_to raise_error
       end
     end
 
