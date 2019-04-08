@@ -41,8 +41,17 @@ end
 Then(/^the policy for the org and space( doesn't)? exist(?:s)?$/) do |negative|
   expect(remote_conjur_resource_exists?(org_policy_id)).to eq(negative.blank?)
   expect(remote_conjur_resource_exists?(space_policy_id)).to eq(negative.blank?)
+end
+
+Then(/^the space host and api key variable ( don't)? exist$/) do |negative|
   expect(remote_conjur_resource_exists?(space_host_id)).to eq(negative.blank?)
   expect(remote_conjur_resource_exists?(space_host_api_key_variable_id)).to eq(negative.blank?)
+end
+
+Then(/^the space host api key is stored in a variable$/) do
+  var_id = "pcf/ci/#{org_guid(cf_ci_org)}/#{space_guid(cf_ci_org, cf_ci_space)}/space_host_api_key"
+  api_key = remote_conjur_secret("#{ENV['PCF_CONJUR_ACCOUNT']}:variable:#{var_id}")
+  expect(api_key).to be_a(String)
 end
 
 When(/^I privilege the org layer to access a secret in Conjur$/) do

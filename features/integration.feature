@@ -9,6 +9,7 @@ Feature: Integration Tests for PCF 2.4
   Scenario: Service broker functions correctly with PCF 2.4 
     When I create a service instance for Conjur
     Then the policy for the org and space exists
+    And the space host and api key variable exist
 
     When I load a secret into Conjur
     And I privilege the org layer to access a secret in Conjur
@@ -21,10 +22,12 @@ Feature: Integration Tests for PCF 2.4
 
     When I remove the service instance
     Then the policy for the org and space exists
+    And the space host api key is stored in a variable
 
   Scenario: Redeploying service broker
     When I create a service instance for Conjur
     Then the policy for the org and space exists
+    And the space host and api key variable exist
 
     When I load a secret into Conjur
     And I privilege the org layer to access a secret in Conjur
@@ -52,3 +55,4 @@ Feature: Integration Tests for PCF 2.4
 
     When I remove the service instance
     Then the policy for the org and space exists
+    And the space host api key is stored in a variable

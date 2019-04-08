@@ -99,13 +99,13 @@ module ServiceBrokerWorld
   def space_host_id
     ci_org_guid = org_guid(cf_ci_org)
     ci_space_guid = space_guid(cf_ci_org, cf_ci_space)
-    "#{ENV['PCF_CONJUR_ACCOUNT']}:host:pcf/ci/#{ci_org_guid}/#{ci_space_guid}/space_host"
+    "#{ENV['PCF_CONJUR_ACCOUNT']}:host:pcf/ci/#{ci_org_guid}/#{ci_space_guid}"
   end
 
   def space_host_api_key_variable_id
     ci_org_guid = org_guid(cf_ci_org)
     ci_space_guid = space_guid(cf_ci_org, cf_ci_space)
-    "#{ENV['PCF_CONJUR_ACCOUNT']}:variable:pcf/ci/#{ci_org_guid}/#{ci_space_guid}/space_host_api_key"
+    "#{ENV['PCF_CONJUR_ACCOUNT']}:variable:pcf/ci/#{ci_org_guid}/#{ci_space_guid}/space-host-api-key"
   end
 end
 

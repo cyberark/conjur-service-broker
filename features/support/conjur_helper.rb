@@ -36,6 +36,12 @@ module ConjurHelper
     end
   end
 
+  def remote_conjur_secret(var_id)
+    remote_conjur do |api|
+      api.resource(var_id).value
+    end
+  end
+
   def remote_conjur
     Conjur.with_configuration Conjur::Configuration.new(
       account: ENV['PCF_CONJUR_ACCOUNT'],

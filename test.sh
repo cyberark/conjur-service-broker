@@ -8,7 +8,7 @@ function finish {
 }
 trap finish EXIT
 
-SERVICE_BROKERS='conjur-service-broker service-broker-bad-url service-broker-bad-key service-broker-follower-url'
+SERVICE_BROKERS='service-broker-bad-url service-broker-bad-key service-broker-follower-url'
 
 function main() {
   startConjur
@@ -35,7 +35,7 @@ function runTests() {
     export CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:cf-service-broker}].api_key" 2>/dev/null')"
   fi
 
-  docker-compose up -d service-broker-alt-policy
+  docker-compose up -d conjur-service-broker service-broker-alt-policy
 
   if [[ $1 -eq 4 ]]
   then
