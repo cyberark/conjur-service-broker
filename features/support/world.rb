@@ -74,12 +74,16 @@ module ServiceBrokerWorld
     '/app/ci/integration/test-app'
   end
 
+  def ci_user
+    @ci_user ||= create_ci_user
+  end
+
   def cf_ci_org
-    'ci'
+    @cf_ci_org ||= create_org
   end
 
   def cf_ci_space
-    'conjur-service-broker'
+    @cf_ci_space ||= create_space(cf_ci_org)
   end
 
   def cf_ci_service_broker_name
