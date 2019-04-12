@@ -9,15 +9,22 @@ module CfHelper
 
     # Configure the service broker
     api_key = rotate_api_key("#{ENV['PCF_CONJUR_ACCOUNT']}:host:pcf/service-broker")
-    cf.execute(%(cf set-env conjur-service-broker SECURITY_USER_NAME "#{service_broker_user}"))
-      .execute(%(cf set-env conjur-service-broker SECURITY_USER_PASSWORD "#{service_broker_pass}"))
-      .execute(%(cf set-env conjur-service-broker CONJUR_ACCOUNT "#{ENV['PCF_CONJUR_ACCOUNT']}"))
-      .execute(%(cf set-env conjur-service-broker CONJUR_APPLIANCE_URL "#{ENV['PCF_CONJUR_APPLIANCE_URL']}"))
-      .execute(%(cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN "host/pcf/service-broker"))
-      .execute(%(cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "#{api_key}"))
-      .execute(%(cf set-env conjur-service-broker CONJUR_VERSION "5"))
-      .execute(%(cf set-env conjur-service-broker CONJUR_POLICY "pcf/ci"))
-      .execute(%(cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE "#{ENV['PCF_CONJUR_SSL_CERT']}"))
+
+    broker_environment = {
+      'SECURITY_USER_NAME' => service_broker_user,
+      'SECURITY_USER_PASSWORD' => service_broker_pass,
+      'CONJUR_ACCOUNT' => ENV['PCF_CONJUR_ACCOUNT'],
+      'CONJUR_APPLIANCE_URL' => ENV['PCF_CONJUR_APPLIANCE_URL'],
+      'CONJUR_AUTHN_LOGIN' => 'host/pcf/service-broker',
+      'CONJUR_AUTHN_API_KEY' => api_key,
+      'CONJUR_VERSION' => '5',
+      'CONJUR_POLICY' => 'pcf/ci',
+      'CONJUR_SSL_CERTIFICATE' => ENV['PCF_CONJUR_SSL_CERT']
+    }
+
+    broker_environment.each do |key, value|
+      cf.execute(%(cf set-env conjur-service-broker #{key} "#{value}"))
+    end
     
     # Start the service broker and make it available
     cf.execute("cf start conjur-service-broker")
