@@ -43,9 +43,12 @@ Then(/^the policy for the org and space( doesn't)? exist(?:s)?$/) do |negative|
   expect(remote_conjur_resource_exists?(space_policy_id)).to eq(negative.blank?)
 end
 
-Then(/^the space host and api key variable ( don't)? exist$/) do |negative|
-  expect(remote_conjur_resource_exists?(space_host_id)).to eq(negative.blank?)
-  expect(remote_conjur_resource_exists?(space_host_api_key_variable_id)).to eq(negative.blank?)
+Then(/^the space host exists$/) do
+  expect(remote_conjur_resource_exists?(space_host_id)).to eq(true)
+end
+
+Then(/^the space host api key variable exists$/) do
+  expect(remote_conjur_resource_exists?(space_host_api_key_variable_id)).to eq(true)
 end
 
 Then(/^the space host api key is stored in a variable$/) do
