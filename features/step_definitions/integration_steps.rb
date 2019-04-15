@@ -17,7 +17,7 @@ end
 When(/^I push the sample app to PCF$/) do
   cf_target(cf_ci_org, cf_ci_space)
 
-  `cf delete hello-world -f`
+  `cf delete hello-world -f -r`
   Dir.chdir(integration_test_app_dir) do
     `cf push --no-start --random-route`
   end

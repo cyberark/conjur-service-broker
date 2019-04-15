@@ -32,7 +32,7 @@ module CfHelper
     output = []
     output << `cf purge-service-instance conjur -f`
     output << `cf delete-service-broker "#{cf_ci_service_broker_name}" -f`
-    output << `cf delete conjur-service-broker -f`
+    output << `cf delete conjur-service-broker -f -r`
   end
 
   def org_guid(org_name)
