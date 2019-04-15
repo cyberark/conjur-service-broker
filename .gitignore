@@ -28,3 +28,4 @@ logfile
 /vendor/cache/
 .DS_Store
 bin/buildpack-health-check
+ci/integration/test-app/secrets.yml

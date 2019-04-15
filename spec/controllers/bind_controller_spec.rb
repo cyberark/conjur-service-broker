@@ -43,10 +43,10 @@ RSpec.describe BindController, type: :request do
     context 'when the app cf context is not present' do
       it "does not ensure the policy structure exists" do
         expect_any_instance_of(OrgSpacePolicy).to_not receive(:ensure_exists)
-        expect_any_instance_of(ServiceBinding).to receive(:create).and_return('test_creds')
+        expect_any_instance_of(::ServiceBinding::ConjurV5AppBinding).to receive(:create).and_return('test_creds')
         
         put('/v2/service_instances/test_instance/service_bindings/test_binding', 
-          params: legacy_params, headers: headers)
+            params: legacy_params, headers: headers)
 
         expect(response.content_type).to eq("application/json")
         expect(response).to have_http_status(:created)
@@ -55,10 +55,27 @@ RSpec.describe BindController, type: :request do
       end
     end
 
+    context 'when the space identity is enabled' do
+      before do
+        allow(ENV).to receive(:[]).with('ENABLE_SPACE_IDENTITY').and_return('true')
+      end
+
+      it "returns the space host instead of creating a binding host" do
+        expect_any_instance_of(OrgSpacePolicy).to receive(:ensure_exists)
+        expect_any_instance_of(::ServiceBinding::ConjurV5SpaceBinding).to receive(:create).and_return('test_creds')
+
+        put('/v2/service_instances/test_instance/service_bindings/test_binding', 
+          params: params, headers: headers)
+
+        expect(response.content_type).to eq("application/json")
+        expect(response).to have_http_status(:created)
+      end
+    end
+
     context 'when the app cf context is present' do
       it "ensures the policy structure exists" do
         expect_any_instance_of(OrgSpacePolicy).to receive(:ensure_exists)
-        expect_any_instance_of(ServiceBinding).to receive(:create)
+        expect_any_instance_of(::ServiceBinding::ConjurV5AppBinding).to receive(:create)
 
         put('/v2/service_instances/test_instance/service_bindings/test_binding', 
           params: params, headers: headers)
@@ -75,7 +92,7 @@ RSpec.describe BindController, type: :request do
 
         it "does not ensure the policy structure exists" do
           expect_any_instance_of(OrgSpacePolicy).to_not receive(:ensure_exists)
-          expect_any_instance_of(ServiceBinding).to receive(:create)
+          expect_any_instance_of(::ServiceBinding::ConjurV4AppBinding).to receive(:create)
   
           put('/v2/service_instances/test_instance/service_bindings/test_binding', 
             params: params, headers: headers)

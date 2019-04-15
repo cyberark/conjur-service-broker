@@ -27,7 +27,9 @@ When(/^I push the sample app to PCF$/) do
 
   session = ShellSession.execute('cf delete hello-world -f -r')
   Dir.chdir(integration_test_app_dir) do
-    session.execute('cf push --no-start --random-route')
+    secrets_source = @space_host_enabled ? 'secrets.space.yml' : 'secrets.app.yml'
+    session.execute("cp #{secrets_source} secrets.yml")
+           .execute('cf push --no-start --random-route')
   end
 end
 
@@ -43,7 +45,7 @@ Then(/^I can retrieve the secret values from the app$/) do
   page_content = ci_app_content
   expect(page_content).to match(/Org Secret: #{ci_secret_org}/)
   expect(page_content).to match(/Space Secret: #{ci_secret_space}/)
-  expect(page_content).to match(/App Secret: #{ci_secret_app}/)
+  expect(page_content).to match(/App Secret: #{ci_secret_app}/) unless @space_host_enabled
 end
 
 Then(/^the policy for the org and space( doesn't)? exist(?:s)?$/) do |negative|
