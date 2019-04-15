@@ -9,6 +9,10 @@ class SpaceHostPolicy
     def create(org_id, space_id)
       SpaceHostPolicy.new(org_id, space_id).create
     end
+
+    def enabled?
+      ENV['ENABLE_SPACE_IDENTITY'] == 'true'
+    end
   end
 
   def initialize(org_id, space_id)
