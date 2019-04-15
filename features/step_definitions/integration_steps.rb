@@ -60,8 +60,7 @@ Then(/^the space host api key variable exists$/) do
 end
 
 Then(/^the space host api key is stored in a variable$/) do
-  var_id = "pcf/ci/#{org_guid(cf_ci_org)}/#{space_guid(cf_ci_org, cf_ci_space)}/space_host_api_key"
-  api_key = remote_conjur_secret("#{ENV['PCF_CONJUR_ACCOUNT']}:variable:#{var_id}")
+  api_key = remote_conjur_secret(space_host_api_key_variable_id)
   expect(api_key).to be_a(String)
 end
 
