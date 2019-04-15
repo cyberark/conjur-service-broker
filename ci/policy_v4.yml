@@ -1,0 +1,40 @@
+- !host
+  id: cf-service-broker
+  annotations:
+    platform: cloudfoundry
+
+- !host
+  id: bad-service-broker
+  annotations:
+    platform: cloudfoundry
+
+- !group
+  id: cf-admin-group
+
+- !grant
+  role: !group cf-admin-group
+  members:
+    - !host cf-service-broker
+    - !host bad-service-broker
+
+# add read permissions to the cf host but not the bad host
+- !permit
+  role: !host cf-service-broker
+  privilege: read
+  resource: !host cf-service-broker
+
+- !layer apps
+
+- !host-factory
+  id: apps
+  layers: [ !layer apps ]
+  
+- !policy
+  id: cf
+  owner: !group cf-admin-group
+  body:
+  - !layer cf-apps
+    
+  - !host-factory
+    id: cf-apps
+    layers: [ !layer cf-apps ]

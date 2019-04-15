@@ -5,6 +5,8 @@ class ProvisionController < ApplicationController
     if use_context?
       with_conjur_exceptions do
         OrgSpacePolicy.create(org_guid, space_guid)
+        OrgSpacePolicy.ensure_exists(org_guid, space_guid)
+        SpaceHostPolicy.create(org_guid, space_guid)
       end
 
       render json: {}, status: :created
@@ -21,6 +23,7 @@ class ProvisionController < ApplicationController
 
   def delete
     Validator.validate('deprovision', params.to_unsafe_h)
+
     render json: {}
   end
 end

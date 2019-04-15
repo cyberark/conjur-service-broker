@@ -7,3 +7,7 @@ export CONJUR_AUTHN_API_KEY="$api_key"
 
 # load the pcf policy for the non-empty CONJUR_POLICY test
 docker-compose run --rm --entrypoint bash client -c "conjur policy load root /app/ci/policy.yml"
+docker-compose run --rm --entrypoint bash client -c "conjur policy load root /app/ci/cf.yml"
+docker-compose run --rm --entrypoint bash client -c "conjur policy load cf /app/ci/org.yml"
+docker-compose run --rm --entrypoint bash client -c "conjur policy load cf /app/ci/space.yml"
+docker-compose run --rm --entrypoint bash client -c "conjur policy load cf /app/ci/app.yml"

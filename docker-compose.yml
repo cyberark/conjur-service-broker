@@ -23,7 +23,7 @@ services:
       CONJUR_AUTHN_LOGIN: admin
       CONJUR_AUTHN_API_KEY: secret
     volumes:
-      - ./ci/policy.yml:/etc/policy.yml:ro
+      - ./ci/policy_v4.yml:/etc/policy.yml:ro
     ports:
       - 8443:443
 
@@ -43,7 +43,8 @@ services:
     build: ./
     environment:
       CONJUR_ACCOUNT: cucumber
-      CONJUR_AUTHN_LOGIN: admin
+      CONJUR_AUTHN_LOGIN: host/cf-service-broker
+      CONJUR_POLICY: cf
       CONJUR_APPLIANCE_URL:
       CONJUR_FOLLOWER_URL: ""
       SECURITY_USER_NAME: TEST_USER_NAME

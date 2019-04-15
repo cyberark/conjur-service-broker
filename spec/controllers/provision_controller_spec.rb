@@ -43,6 +43,8 @@ RSpec.describe ProvisionController, type: :request do
     context 'when context is present' do
       it 'creates the org and space policy' do
         expect_any_instance_of(OrgSpacePolicy).to receive(:create)
+        expect_any_instance_of(OrgSpacePolicy).to receive(:ensure_exists)
+        expect_any_instance_of(SpaceHostPolicy).to receive(:create)
 
         put('/v2/service_instances/test_instance', params: params, headers: headers)
 
@@ -58,6 +60,7 @@ RSpec.describe ProvisionController, type: :request do
 
         it 'does not create the org and space policy' do
           expect_any_instance_of(OrgSpacePolicy).not_to receive(:create)
+          
           put('/v2/service_instances/test_instance', params: params, headers: headers)
           expect(response.content_type).to eq("application/json")
           expect(response).to have_http_status(:ok)

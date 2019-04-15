@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Added a health check to verify that the Conjur connection settings will work as
   expected with the Conjur buildpack.
+- Provisioning creates a space-level host when loading the org and space policies.
 
 ### Changed
 - Updated actionview (CVE-2019-5418) and railties (CVE-2019-5420) dependency versions
@@ -16,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.0] - 2019-03-05
 
 ### Added
-- The service broker will now automatically generate the org and space policy when 
+- The service broker will now automatically generate the org and space policy when
   the service is provisioned into a CF space.
 - Added service broker environment parameter for `CONJUR_FOLLOWER_URL`. When set, the
   service broker will provide the URL of a follower to an application for retrieving secret
