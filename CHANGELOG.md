@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added a health check to verify that the Conjur connection settings will work as
   expected with the Conjur buildpack.
 - Provisioning creates a space-level host when loading the org and space policies.
+- Added a new bind configuration option `ENABLE_SPACE_IDENTITY` to the service
+  broker. When this service broker environment value is set to `true`, then the broker
+  will return a space host identity on application bind, rather than create a host
+  identity for the app.
 
 ### Changed
 - Updated actionview (CVE-2019-5418) and railties (CVE-2019-5420) dependency versions
