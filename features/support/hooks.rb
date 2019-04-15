@@ -12,3 +12,11 @@ After("@integration") do |scenario|
     cf_delete_org(cf_ci_org)
   end
 end
+
+Before("@enable-space-host") do
+  @space_host_enabled = true
+end
+
+Before("~@enable-space-host") do
+  @space_host_enabled = false
+end

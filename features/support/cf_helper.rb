@@ -22,10 +22,14 @@ module CfHelper
       'CONJUR_SSL_CERTIFICATE' => ENV['PCF_CONJUR_SSL_CERT']
     }
 
+    if @space_host_enabled
+      broker_environment['ENABLE_SPACE_IDENTITY'] = 'true'
+    end
+
     broker_environment.each do |key, value|
       cf.execute(%(cf set-env conjur-service-broker #{key} "#{value}"))
     end
-    
+
     # Start the service broker and make it available
     cf.execute("cf start conjur-service-broker")
     sb_url="https://#{`cf app conjur-service-broker | grep -E -w 'urls:|routes:' | awk '{print $2}'`}"
