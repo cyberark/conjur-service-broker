@@ -95,6 +95,8 @@ To configure the Service Broker to communicate with your external Conjur instanc
 
 - `CONJUR_SSL_CERTIFICATE`: the x509 certificate that was created when Conjur was initiated; this is required for v4 Conjur, but is optional otherwise. If the certificate is stored in a PEM file, you can load it into a local environment variable by calling `export CONJUR_SSL_CERTIFICATE="$(cat tmp/conjur.pem)"`.
 
+- `ENABLE_SPACE_IDENTITY`: When set to the value `true`, the service broker will provide applications with a Space-level `host` identity, rather than create a new `host` identity for the application in Conjur at bind time. This allows the broker to use a Conjur follower for application binding, rather than the Conjur master.
+
 To load these environment variables into the Service Broker's environment, run:
 ```
 cf set-env conjur-service-broker CONJUR_VERSION [value]
