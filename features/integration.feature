@@ -3,8 +3,11 @@
 # external server is Conjur V5 Enterprise)
 @conjur-version-5
 @integration
-@service-broker
 Feature: Integration Tests for PCF 2.4
+
+  Background: 
+    Given I create an org and space
+    And I install the Conjur service broker
 
   Scenario: Service broker functions correctly with PCF 2.4 
     When I create a service instance for Conjur

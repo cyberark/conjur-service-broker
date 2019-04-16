@@ -1,6 +1,14 @@
-Given(/^I login to PCF and target my organization and space$/) do
+Given(/^I create an org and space$/) do
+  login_to_pcf
+  cf_ci_org
+  cf_ci_space
+end
+
+Given(/^I install the Conjur service broker$/) do
   login_to_pcf
   cf_target(cf_ci_org, cf_ci_space)
+
+  install_service_broker
 end
 
 Given(/^I load a secret into Conjur$/) do
@@ -11,15 +19,15 @@ end
 
 Given(/^I create a service instance for Conjur$/) do
   cf_target(cf_ci_org, cf_ci_space)
-  `cf create-service cyberark-conjur community conjur`
+  ShellSession.execute('cf create-service cyberark-conjur community conjur')
 end
 
 When(/^I push the sample app to PCF$/) do
   cf_target(cf_ci_org, cf_ci_space)
 
-  `cf delete hello-world -f -r`
+  session = ShellSession.execute('cf delete hello-world -f -r')
   Dir.chdir(integration_test_app_dir) do
-    `cf push --no-start --random-route`
+    session.execute('cf push --no-start --random-route')
   end
 end
 
@@ -27,7 +35,7 @@ When(/^I start the app$/) do
   cf_target(cf_ci_org, cf_ci_space)
 
   Dir.chdir(integration_test_app_dir) do
-    `cf start hello-world`
+    ShellSession.execute('cf start hello-world')
   end
 end
 
@@ -52,8 +60,7 @@ Then(/^the space host api key variable exists$/) do
 end
 
 Then(/^the space host api key is stored in a variable$/) do
-  var_id = "pcf/ci/#{org_guid(cf_ci_org)}/#{space_guid(cf_ci_org, cf_ci_space)}/space_host_api_key"
-  api_key = remote_conjur_secret("#{ENV['PCF_CONJUR_ACCOUNT']}:variable:#{var_id}")
+  api_key = remote_conjur_secret(space_host_api_key_variable_id)
   expect(api_key).to be_a(String)
 end
 
@@ -78,6 +85,6 @@ end
 When(/^I remove the service instance$/) do
   cf_target(cf_ci_org, cf_ci_space)
 
-  `cf unbind-service hello-world conjur`
-  `cf delete-service conjur -f`
+  ShellSession.execute('cf unbind-service hello-world conjur')
+              .execute('cf delete-service conjur -f')
 end
