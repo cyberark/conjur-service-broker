@@ -4,7 +4,13 @@ You will need to have an existing Conjur installation in order to use the Conjur
 
 The Conjur Service Broker is an implementation of the [Open Service Broker API](https://www.openservicebrokerapi.org/) (version 2.13).
 
-## Installation Instructions
+#### Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## <a name="installation"> Installation Instructions
 
 The instructions that follow will guide you through installing the Conjur Service Broker
 and the Conjur Buildpack. The [Conjur Buildpack](https://github.com/cyberark/cloudfoundry-conjur-buildpack)
@@ -131,7 +137,8 @@ deployed to your Cloud Foundry installation.
 
 The Conjur Buildpack uses [Summon](https://cyberark.github.io/summon/) to load secrets into the environment of CF-deployed applications based on the app's `secrets.yml` file. For instructions on installing and using the Conjur Buildpack, please [see the Conjur Buildpack documentation](https://github.com/cyberark/cloudfoundry-conjur-buildpack).
 
-## Service Broker Usage
+
+## <a name="usage"> Service Broker Usage
 
 Once the Service Broker is installed, you should see the service listing from any
 org / space:
@@ -243,12 +250,12 @@ into the running application's environment.
 The secrets are now available to be used by the application, but are not visible
 when you run `cf env my-app` or if you `cf ssh my-app` and run `printenv`.
 
-## Contributing
+## <a name="contributing"> Contributing
 
 Information for developing and testing the service broker can be found in the
 [Contributing Guide](CONTRIBUTING.md).
 
-## License
+## <a name="license"> License
 
 Copyright 2018 CyberArk
 
