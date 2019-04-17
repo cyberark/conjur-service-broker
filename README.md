@@ -112,6 +112,7 @@ cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN [value]
 cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY [value]
 cf set-env conjur-service-broker CONJUR_POLICY [value]
 cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE [value]
+cf set-env conjur-service-broker ENABLE_SPACE_IDENTITY [value]
 ```
 
 Once the Service Broker is configured, start the Service Broker application
@@ -160,8 +161,8 @@ deploying your application:
 cf create-service cyberark-conjur community conjur
 ```
 
-Note that service instances can not be shared between spaces, so a Conjur
-service instance must be created in each space with apps that retrieve secrets
+> **NOTE:** Service instances cannot be shared between spaces. A Conjur
+service instance must be created in each space where apps retrieve secrets
 from Conjur.
 
 For PCF 2.0+, when the service broker is provisioned in a space, it will automatically create
@@ -205,13 +206,15 @@ creating this file, [see the Summon documentation](https://cyberark.github.io/su
 
 ### Bind Your Application to the Conjur Service
 
-Binding your application to the `conjur` service instance automatically gives it
-a unique Host identity in Conjur. To bind your application to the `conjur` service
-instance, you can either run
+Binding your application to the `conjur` service instance provides the application with an
+identity in Conjur, and credentials that it may use to retrieve secrets.
+
+To bind your application to the `conjur` service using the CLI, run the command:
 ```
 cf bind-service my-app conjur
 ```
-or you can update the application's deployment manifest to reference the `conjur` service:
+
+Alternatively you can specify the conjur service in your application manifest:
 ```
 ---
 applications:
@@ -220,26 +223,82 @@ applications:
   - conjur
 ```
 
-In PCF version 2.0+, when the service broker creates the Host identity for your application
+#### Application vs Space Host Identity
+
+The service broker may be configured to either create a single Conjur identity shared by
+all applications in a space, or to create a Conjur identity for each application
+separately.
+
+In PCF version 2.0+, when the service broker creates the identity for your application
 in Conjur, it will automatically add it to a Conjur Layer representing the `Organization`
-and `Space` the application is deployed into on PCF. This allows `Spaces` to be privileged
-and any apps deployed into that space to inherit those privileges.
+and `Space` where the application is deployed. These layers may be used for control secret
+access at the org or space level, rather than the application host itself.
 
+##### Space-scoped Identity
 
-### Update Conjur Policy to Privilege Your Application
+Space-scoped identities are enabled by configuring the service broker with
+`ENABLE_SPACE_IDENTITY` set to `true`. This means that when a service instance is created
+in a space, the service broker will create a Conjur Host for that space. When an application
+is bound to the service, the service broker will give it the credentials of the space identity,
+rather than create a new host identity for the application.
 
-Once your app has a Host identity in Conjur, you can update Conjur policy to add
-entitlements for the app to access secret values in Conjur. The host identity of
-the application is stored in the `authn_login` field in the `cyberark-conjur`
+The advantage to this is the bind operation only requires access to a Conjur follower and
+not the Conjur master. This promotes high-availability and scalability of app binding and secret
+retrieval.
+
+##### Application-scoped Identity
+
+When space identities are not enabled, the service broker will create a new Conjur host identity
+for each application bound to the service. This requires that the service broker is able to
+communicate with the Conjur master for each bind request.
+
+The advantage to this is finer-grained access control and audit logs in Conjur.
+
+### Granting Application Access to Secrets
+
+PCF applications can be granted access to secrets using either the Org and Space layers,
+or with the application host identity.
+
+#### Privilege Org and Space Layers
+
+Applications can be granted access to secrets by privileging the Org or Space layers
+to read secrets using Conjur policy.
+
+The layer Ids use the Org and Space GUID identifiers, which may be obtained
+using the Cloud Foundry CLI:
+```sh-session
+$ cf org --guid <org-name>
+6b40649e-331b-424d-afa0-6d569f016f51
+
+$ cf space --guid <space-name>
+72a928f6-bf7c-4732-a195-896f67bd1133
+```
+
+For example, the policy to privilege a space to access a secret is:
+```yaml
+- !permit
+  resource: my-secret-id
+  role: !layer cf/prod/6b40649e-331b-424d-afa0-6d569f016f51/72a928f6-bf7c-4732-a195-896f67bd1133
+  privileges: [ read, execute ]
+```
+
+#### Privilege Application Host Identity
+
+> **NOTE:** Application Host privileging is not available when using Space Host Identies.
+
+After your application has been pushed to PCF, you can use its host identity in
+Conjur policy to grant it access to secrets.
+
+The host identity of the application is stored in the `authn_login` field in the `cyberark-conjur`
 credentials in the application's environment, and might look something like
-`host/cf/prod/0299a19d-7de4-4e98-89f6-372ac7c0521f` (for example, if your `CONJUR_POLICY`
-was set to `cf/prod`).
+`host/cf/prod/0299a19d-7de4-4e98-89f6-372ac7c0521f`.
 
-In PCF version 2.0+, the host identity will include the Organization and Space GUIDs in
-the Host identity, for example:
-```
-host/cf/prod/cbd7a05a-b304-42a9-8f66-6827ae6f78a1/8bf39f4a-ebde-437b-9c38-3d234b80631a/c363669e-e43b-40b9-b650-493d3bdb4663
-```
+  > **NOTE**: In PCF version 2.0+, the host identity will include the Organization and Space GUIDs in
+  the Host identity, for example:
+
+  ```
+  host/cf/prod/cbd7a05a-b304-42a9-8f66-6827ae6f78a1/8bf39f4a-ebde-437b-9c38-3d234b80631a/c363669e-e43b-40b9-b650-493d3bdb4663
+  ```
 
 ### Run Your Application
 
@@ -249,6 +308,35 @@ into the running application's environment.
 
 The secrets are now available to be used by the application, but are not visible
 when you run `cf env my-app` or if you `cf ssh my-app` and run `printenv`.
+
+### Rotating Host API Keys
+
+When the API key for a PCF application host is rotated, the application will need to be rebound
+to the Conjur service instance to receive the new credentials, and then restaged to fetch secret
+values using the new credentials.
+
+> **NOTE:** When using Space Host Identities, the new API key for the Space Host needs to be updated
+> in a Conjur variable for the Space policy. The command to do this is:
+```
+conjur variable values add "<cf policy root>/<org-guid>/<space-guid>/space-host-api-key" "<api-key-value>"
+
+# For example:
+conjur variable values add "cf/prod/6b40649e-331b-424d-afa0-6d569f016f51/72a928f6-bf7c-4732-a195-896f67bd1133/space-host-api-key" "1p9c5443sy1bg93ek2e062wsnmvy3p9k9j83nq841sj1sp2vasze1r"
+```
+
+To rebind the application to Conjur, run these commands using the Cloud Foundry CLI:
+```sh
+cf unbind-service <app-name> conjur
+cf bind-service <app-name> conjur
+```
+
+To restage the application, run this command:
+```
+cf restage <app-name>
+```
+
+> **NOTE:** If using Space Host Identities, these commands need to be run for each application
+> in the space.
 
 ## <a name="contributing"> Contributing
 
