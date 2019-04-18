@@ -184,9 +184,13 @@ The Conjur Buildpack uses [Summon](https://cyberark.github.io/summon/) to load s
 
 For instructions on installing and using the Conjur Buildpack, please [see the Conjur Buildpack documentation](https://github.com/cyberark/cloudfoundry-conjur-buildpack).
 
-## <a name="usage"> Service Broker Usage
+## <a name="usage"> Using the Conjur Service Broker
 
-### Creating a Conjur Service Instance
+- [Creating a Service Instance](#prepare-space)
+- [Connecting an Application to Conjur](#connect-app)
+- [Rotating App Host Credentials](#rotate-credentials)
+
+### <a name="prepare-space"> Creating a Conjur Service Instance
 
 1. **Confirm Conjur Service is in the Marketplace**
 
@@ -248,7 +252,7 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
           member: !layer 8bf39f4a-ebde-437b-9c38-3d234b80631a
     ```
 
-### Using Conjur with a Cloud Foundry Application
+### <a name="connect-app"> Using Conjur with a Cloud Foundry Application
 
 1. **Create a `secrets.yml` File**
 
@@ -378,7 +382,7 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
 The secrets are now available to be used by the application, but are not visible
 when you run `cf env my-app` or if you `cf ssh my-app` and run `printenv`.
 
-### Rotating Host API Keys
+### <a name="rotate-credentials"> Rotating Host API Keys
 
 When the API key for a PCF application host is rotated, the application needs to be re-bound
 to the Conjur service instance to receive the new credentials, and then re-staged to fetch secret
