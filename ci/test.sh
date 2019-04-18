@@ -32,7 +32,7 @@ function install_buildpack() {
     cf api "$CF_API_ENDPOINT" --skip-ssl-validation
     CF_PASSWORD=$CF_ADMIN_PASSWORD cf auth admin
 
-    if ! cf buildpacks | grep "conjur_buildpack"; then
+    if ! cf buildpacks | grep -w "conjur_buildpack"; then
         # get the Conjur buildpack and upload to cf
         mkdir conjur-buildpack
         pushd conjur-buildpack
