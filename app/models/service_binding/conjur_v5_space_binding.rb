@@ -15,7 +15,7 @@ module ServiceBinding
     end
 
     def create
-      host = api.role(role_name)
+      host = ConjurClient.readonly_api.role(role_name)
 
       raise HostNotFound, "No space host identity found." unless host.exists?
 
@@ -35,7 +35,7 @@ module ServiceBinding
     end
 
     def api_key
-      api_key_variable = api.resource(api_key_name)
+      api_key_variable = ConjurClient.readonly_api.resource(api_key_name)
 
       raise ApiKeyNotFound unless api_key_variable.exists?
 
@@ -48,13 +48,6 @@ module ServiceBinding
         'variable',
         "#{policy_base}#{@org_guid}/#{@space_guid}/space-host-api-key"
       ].join(':')
-    end
-
-    # The space host binding uses the application Conjur URl so that
-    # if the follower URL is configured, the bind operation will use
-    # the follower, rather than the master, to perform this operation.
-    def api
-      @api ||= ConjurClient.new.api(ConjurClient.application_conjur_url)
     end
   end
 end
