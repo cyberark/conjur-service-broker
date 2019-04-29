@@ -44,7 +44,7 @@ class OrgSpacePolicy
   end
 
   def org_policy
-    conjur_api.resource(org_policy_id)
+    ConjurClient.readonly_api.resource(org_policy_id)
   end
 
   def org_policy_id
@@ -56,7 +56,7 @@ class OrgSpacePolicy
   end
 
   def space_policy
-    conjur_api.resource(space_policy_id)
+    ConjurClient.readonly_api.resource(space_policy_id)
   end
 
   def space_policy_id
@@ -68,7 +68,7 @@ class OrgSpacePolicy
   end
 
   def space_layer
-    conjur_api.resource(space_layer_id)
+    ConjurClient.readonly_api.resource(space_layer_id)
   end
 
   def space_layer_id

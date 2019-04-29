@@ -11,6 +11,12 @@ class ConjurClient
       ConjurClient.new.api(appliance_url)
     end
 
+    # Returns an API object that may be read-only. It will use
+    # the Conjur Follower URL when available.
+    def readonly_api
+      ConjurClient.new.api(ConjurClient.application_conjur_url)
+    end
+
     def v4_host_factory_id
       if policy == "root"
         "#{account}:host_factory:apps"

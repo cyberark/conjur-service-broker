@@ -2,6 +2,57 @@ require 'spec_helper'
 require 'conjur_client'
 
 describe ConjurClient do
+  describe "#api" do
+    let(:master_url) { "master" }
+    let(:follower_url) { "follower" }
+    
+    before do
+      allow(ENV).to receive(:[]).and_call_original
+
+      allow(ENV).to receive(:[]).with('CONJUR_APPLIANCE_URL').and_return(master_url)
+      allow(ENV).to receive(:[]).with('CONJUR_FOLLOWER_URL').and_return(follower_url)
+    end
+
+    it "returns a Conjur API object" do
+      expect(ConjurClient.api).to be_instance_of(Conjur::API)
+    end
+
+    it "uses the Conjur Master URL" do
+      ConjurClient.api
+      expect(Conjur.configuration.appliance_url).to equal(master_url)
+    end
+  end
+
+  describe "#readonly_api" do
+    let(:master_url) { "master" }
+    let(:follower_url) { nil }
+    
+    before do
+      allow(ENV).to receive(:[]).and_call_original
+
+      allow(ENV).to receive(:[]).with('CONJUR_APPLIANCE_URL').and_return(master_url)
+      allow(ENV).to receive(:[]).with('CONJUR_FOLLOWER_URL').and_return(follower_url)
+    end
+
+    it "returns a Conjur API object" do
+      expect(ConjurClient.readonly_api).to be_instance_of(Conjur::API)
+    end
+
+    it "uses the Conjur Master URL" do
+      ConjurClient.readonly_api
+      expect(Conjur.configuration.appliance_url).to equal(master_url)
+    end
+
+    context "when the follower URL is configured" do
+      let(:follower_url) { "follower" }
+
+      it "uses the Conjur Follower URL" do
+        ConjurClient.readonly_api
+        expect(Conjur.configuration.appliance_url).to equal(follower_url)
+      end
+    end
+  end
+
   describe "login_host_id" do
     context "login is a host" do
       before do
