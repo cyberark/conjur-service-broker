@@ -39,13 +39,27 @@ to use the Conjur Service Broker when deploying applications, see the
     cf target -o cyberark-conjur -s conjur-service-broker
     ```
 
-2. **Clone and push the Service Broker application**
+2. **Download and push the Service Broker application**
 
     ```sh
-    git clone git@github.com:conjurinc/conjur-service-broker.git
-    cd conjur-service-broker
+    # Get the latest version tag
+    latest_version=$(curl -s https://api.github.com/repos/cyberark/conjur-service-broker/releases/latest |
+                     grep tag_name |
+                     awk '{print $NF}' |
+                     sed 's/"v*,*//g')
+    
+    # Download the ZIP from the latest release version and unzip in the current directory
+    zip_file="cyberark-conjur-service-broker_$latest_version.zip"
+    zip_url="https://github.com/cyberark/conjur-service-broker/releases/download/v$latest_version/$zip_file"
+    curl -L $zip_url --output conjur-service-broker.zip
+    unzip conjur-service-broker.zip
+
+    # Push the Service Broker app
     cf push --no-start --random-route
     ```
+    
+    > **NOTE:** For Service Broker versions pre-1.1.0, the release will not include a ZIP file. Instead of downloading
+    > the release ZIP you can clone the repository itself.
 
 3. **Configure the Service Broker application**
 
