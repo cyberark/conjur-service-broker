@@ -473,6 +473,54 @@ requires coordinating the host credential update with all apps in a space.
     cf restage <app-name>
     ``` 
 
+#### <a name="examples"> Examples
+##### Using the Conjur Service Broker and Java API
+The Conjur Service Broker is most frequently used with the [Conjur Buildpack](https://github.com/cyberark/cloudfoundry-conjur-buildpack), but you can also use the identity and authentication credentials provided by the service broker to authenticate with Conjur using different tools. In this example we retrieve a secret value using the [Conjur API for Java](https://github.com/cyberark/conjur-api-java).
+Credentials are provided to the API via JSON stored in the `VCAP_SERVICES`
+environment variable.
+```java
+package net.conjur.sample;
+
+import java.io.StringReader;
+import javax.json.Json;
+import javax.json.JsonReader;
+import javax.json.JsonObject;
+import net.conjur.api.Endpoints;
+import net.conjur.api.clients.ResourceClient;
+
+public class App {
+    public static void main(String[] args) {
+        String vcapServices = System.getenv("VCAP_SERVICES");
+
+        JsonReader jsonReader = Json.createReader(new StringReader(vcapServices));
+        JsonObject credentials = jsonReader.readObject()
+            .getJsonArray("cyberark-conjur")
+            .getJsonObject(0)
+            .getJsonObject("credentials");
+
+        String account = credentials.getString("account");
+        String apiKey = credentials.getString("authn_api_key");
+        String applianceUrl = credentials.getString("appliance_url");
+        String hostId = credentials.getString("authn_login");
+
+        String authnUrl = String.format("%s/authn/%s", applianceUrl, account);
+        String variableUrl = String.format("%s/secrets/%s/variable", applianceUrl, account);
+
+        Endpoints conjurEndpoints = new Endpoints(authnUrl, variableUrl);
+        ResourceClient conjurApi = new ResourceClient(hostId, apiKey, conjurEndpoints);
+
+        String mySecretValue = conjurApi.retrieveSecret("dev/test-app/secret-key");
+
+        System.out.println(mySecretValue);
+    }
+}
+```
+> **NOTE:** The  [`conjur-api-java`](https://github.com/cyberark/conjur-api-java) does not manage certificate trust. It is up
+> to you to import the Conjur CA certificate via `keytool` or otherwise.
+
+> **NOTE:** `ResourceClient` should be used as the API client instead of `Conjur` (this differs from what's
+> documented in the [`cyberark/conjur-api-java`](https://github.com/cyberark/conjur-api-java) repository).
+
 ## <a name="contributing"> Contributing
 
 Information for developing and testing the service broker can be found in the
