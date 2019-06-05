@@ -475,7 +475,7 @@ requires coordinating the host credential update with all apps in a space.
 
 #### <a name="examples"> Examples
 ##### Using the Conjur Service Broker and Java API
-In this example we retrieve a secret value using the [Conjur API for Java](https://github.com/cyberark/conjur-api-java).
+The Conjur Service Broker is most frequently used with the [Conjur Buildpack](https://github.com/cyberark/cloudfoundry-conjur-buildpack), but you can also use the identity and authentication credentials provided by the service broker to authenticate with Conjur using different tools. In this example we retrieve a secret value using the [Conjur API for Java](https://github.com/cyberark/conjur-api-java).
 Credentials are provided to the API via JSON stored in the `VCAP_SERVICES`
 environment variable.
 ```java
@@ -515,10 +515,11 @@ public class App {
     }
 }
 ```
-Please note that [`conjur-api-java`](https://github.com/cyberark/conjur-api-java) does not manage certificate trust. It is up
-to you to import the Conjur CA certificate via `keytool` or otherwise. Secondly,
-`ResourceClient` should be used as the API client instead of `Conjur` (this differs from what's
-documented in the [`cyberark/conjur-api-java`](https://github.com/cyberark/conjur-api-java) repository).
+> **NOTE:** The  [`conjur-api-java`](https://github.com/cyberark/conjur-api-java) does not manage certificate trust. It is up
+> to you to import the Conjur CA certificate via `keytool` or otherwise.
+
+> **NOTE:** `ResourceClient` should be used as the API client instead of `Conjur` (this differs from what's
+> documented in the [`cyberark/conjur-api-java`](https://github.com/cyberark/conjur-api-java) repository).
 
 ## <a name="contributing"> Contributing
 
