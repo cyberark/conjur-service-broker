@@ -518,8 +518,10 @@ public class App {
 > **NOTE:** The  [`conjur-api-java`](https://github.com/cyberark/conjur-api-java) does not manage certificate trust. It is up
 > to you to import the Conjur CA certificate via `keytool` or otherwise.
 
-> **NOTE:** `ResourceClient` should be used as the API client instead of `Conjur` (this differs from what's
-> documented in the [`cyberark/conjur-api-java`](https://github.com/cyberark/conjur-api-java) repository).
+> **NOTE:** `ResourceClient` should be used as the API client instead of `Conjur` (as in the example above). This differs slightly from what's
+> documented in the [`cyberark/conjur-api-java`](https://github.com/cyberark/conjur-api-java) repository. The recommendation
+> given here is different from the Java client library documentation because the Conjur configuration is not stored in the
+> standard `CONJUR_X` environment variables in this case.
 
 ## <a name="contributing"> Contributing
 
