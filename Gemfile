@@ -13,7 +13,7 @@ gem 'rack', '~> 2.0.6'
 gem 'json-schema', '~> 2.8'
 
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 3.12'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
