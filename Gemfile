@@ -9,7 +9,7 @@ gem 'conjur-api', '~> 5.3.1'
 gem 'activesupport', '~> 5.2.1'
 gem 'railties', '~> 5.2.2.1'
 gem 'actionview', '~> 5.2.2.1'
-gem 'rack', '~> 2.0.6'
+gem 'rack', '~> 2.0.8'
 gem 'json-schema', '~> 2.8'
 
 # Use Puma as the app server
