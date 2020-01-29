@@ -46,15 +46,19 @@ $ summon ./test.sh
 
 ## Releases
 
-1. Based on the unreleased content, determine the new version number and update 
+1. Based on the unreleased content, determine the new version number and update
    the [VERSION](VERSION) file. This project uses [semantic versioning](https://semver.org/).
-2. Ensure the [changelog](CHANGELOG.md) is up to date with the changes included in the release.
-3. Commit these changes - `Bump version to x.y.z` is an acceptable commit message.
-4. Once your changes have been reviewed and merged into master, tag the version
+1. Ensure the [changelog](CHANGELOG.md) is up to date with the changes included in the release.
+1. Ensure the [open source acknowledgements](NOTICES.txt) are up to date with the dependencies,
+   and update the file if there have been any new or changed dependencies since the last release.
+   See [Tracking Dependencies](#tracking-dependencies) for more info on how to check for dependency
+   changes and update the acknowledgements file.
+1. Commit these changes - `Bump version to x.y.z` is an acceptable commit message.
+1. Once your changes have been reviewed and merged into master, tag the version
    using `git tag -s v0.1.1`. Note this requires you to be  able to sign releases.
    Consult the [github documentation on signing commits](https://help.github.com/articles/signing-commits-with-gpg/)
    on how to set this up. `vx.y.z` is an acceptable tag message.
-5. Push the tag: `git push vx.y.z` (or `git push origin vx.y.z` if you are working
+1. Push the tag: `git push vx.y.z` (or `git push origin vx.y.z` if you are working
    from your local machine).
 
 When releasing a new version of the Service Broker, you will need to include a
@@ -63,6 +67,31 @@ ZIP file with the release of the repository with all dependencies. Running the
 `vendor/cache/` directory with the project dependencies. It will also produce a ZIP
 file of the project which includes this directory. The ZIP file should be uploaded
 to the release in GitHub; it will be used to build the PCF tile.
+
+### Tracking Dependencies
+
+You can use the `license_finder` gem to keep track of dependency changes. The current
+state is stored in the [dependency decisions file][./doc/dependency_decisions.yml].
+
+Before tagging a new version, run the `license_finder` tool with no arguments to
+see all the updated dependencies:
+```
+bundle exec license_finder
+```
+
+For each unapproved dependency, update the [acknowledgements file](./NOTICES.txt)
+with the updated version and copyright information, then approve it:
+```
+bundle exec license_finder approval add [dependency] --version=[dependency_version]
+```
+
+Notes:
+* The tool does no validation on approvals, so be sure you're entering the right
+  name and version. Check the action items again after you've added an approval
+  to ensure it's now gone.
+* The tool allows you to omit a version number, and that will approve all versions
+  of that dependency. In that case, the tool will no longer track version changes
+  and the acknowledgements will become out of date on the next update. **Do not do this**.
 
 ## Contributing
 
