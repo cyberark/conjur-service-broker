@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.1] - 2020-01-29
+
+### Added
+- Added open source acknowledgements file (NOTICES.txt)
+- Added daily build trigger to Jenkinsfile
+
+### Changed
+- Bumped dependency versions (rack, puma, loofah, nokogiri, crass, rubyzip)
+- Updated license to standard format
+- Updated README instructions, including adding Java example
+- Updated CI tests to pull cluster info from Conjur using Summon
+
 ## [1.1.0] - 2019-05-01
 
 ### Added
@@ -69,7 +81,8 @@ Added support for v4 Conjur, including health check that verifies HF existence
 
 The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/cyberark/conjur-service-broker/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/cyberark/conjur-service-broker/compare/v0.3.1...v1.0.0
 [0.3.1]: https://github.com/cyberark/conjur-service-broker/compare/v0.3.0...v0.3.1
