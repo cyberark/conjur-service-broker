@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ## [1.1.1] - 2020-01-29
-
 ### Added
 - Added open source acknowledgements file (NOTICES.txt)
 - Added daily build trigger to Jenkinsfile
@@ -19,7 +18,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated CI tests to pull cluster info from Conjur using Summon
 
 ## [1.1.0] - 2019-05-01
-
 ### Added
 - Added a health check to verify that the Conjur connection settings will work as
   expected with the Conjur buildpack.
@@ -33,7 +31,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated actionview (CVE-2019-5418) and railties (CVE-2019-5420) dependency versions
 
 ## [1.0.0] - 2019-03-05
-
 ### Added
 - The service broker will now automatically generate the org and space policy when
   the service is provisioned into a CF space.
@@ -60,26 +57,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Tests now run against Conjur 0.7.0
 
 ## [0.3.1] - 2018-06-15
-
 ### Added
-The build is updated to run in deployment mode and produce a ZIP file of the project with all dependencies included.
+- The build is updated to run in deployment mode and produce a ZIP file of the project with all dependencies included.
 
 ## [0.3.0] - 2018-04-27
-
 ### Security
-Updated dependencies to address potential vulnerability in `rails-html-sanitizer` ([more info](https://nvd.nist.gov/vuln/detail/CVE-2018-3741)) and `loofah` ([more info](https://github.com/flavorjones/loofah/issues/144))
+- Updated dependencies to address potential vulnerability in `rails-html-sanitizer` ([more info](https://nvd.nist.gov/vuln/detail/CVE-2018-3741)) and `loofah` ([more info](https://github.com/flavorjones/loofah/issues/144))
 
 ### Added
-If the service broker host identity has a `platform` annotation in Conjur, hosts added to policy by the service broker will also include an annotation for the platform.
+- If the service broker host identity has a `platform` annotation in Conjur, hosts added to policy by the service broker will also include an annotation for the platform.
 
 ## [0.2.0] - 2018-02-12
-
 ### Added
-Added support for v4 Conjur, including health check that verifies HF existence
+- Added support for v4 Conjur, including health check that verifies HF existence
 
 ## [0.1.0] - 2018-01-24
-
-The first tagged version.
+### Added
+- The first tagged version.
 
 [Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.1...HEAD
 [1.1.1]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.0...v1.1.1
