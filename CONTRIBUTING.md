@@ -1,5 +1,7 @@
 # Contributing
 
+For general contribution and community guidelines, please see the [community repo](https://github.com/cyberark/community).
+
 ## Development
 
 Before getting started, you should install some developer tools. These are not required to deploy the Conjur Service Broker but they will let you develop using a standardized,
