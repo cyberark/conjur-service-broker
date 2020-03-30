@@ -20,10 +20,16 @@ pipeline {
         }
       }
     }
-    
+
     stage('Build Docker image') {
       steps {
         sh './build.sh'
+      }
+    }
+
+    stage('Scan Docker image') {
+      steps {
+        scanAndReport("conjur-service-broker", "NONE")
       }
     }
 
