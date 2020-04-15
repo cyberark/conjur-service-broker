@@ -31,7 +31,7 @@ pipeline {
       parallel {
         stage('Scan Docker image for fixable issues') {
           steps {
-            scanAndReport("conjur-service-broker", "NONE", false)
+            scanAndReport("conjur-service-broker", "HIGH", false)
           }
         }
         stage('Scan Docker image for all issues') {
