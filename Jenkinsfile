@@ -28,8 +28,17 @@ pipeline {
     }
 
     stage('Scan Docker image') {
-      steps {
-        scanAndReport("conjur-service-broker", "NONE")
+      parallel {
+        stage('Scan Docker image for fixable issues') {
+          steps {
+            scanAndReport("conjur-service-broker", "NONE", false)
+          }
+        }
+        stage('Scan Docker image for all issues') {
+          steps {
+            scanAndReport("conjur-service-broker", "NONE", true)
+          }
+        }
       }
     }
 
