@@ -11,6 +11,7 @@ gem 'railties', '~> 5.2.4.2'
 gem 'actionview', '~> 5.2.4.2'
 gem 'rack', '~> 2.0.8'
 gem 'json-schema', '~> 2.8'
+gem 'listen', '>= 3.0.5', '< 3.2'
 
 # Use Puma as the app server
 gem 'puma', '~> 3.12'
@@ -34,7 +35,6 @@ end
 
 group :development do
   gem 'license_finder'
-  gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'

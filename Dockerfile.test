@@ -1,5 +1,8 @@
 FROM conjur-service-broker
 
+# Install all the dependencies (including test/dev ones)
+RUN bundle install --with development test
+
 RUN apt-get install -y apt-transport-https ca-certificates openssl
 
 # Install the Cloud Foundry CLI
