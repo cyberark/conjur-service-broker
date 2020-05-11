@@ -578,3 +578,23 @@
     :versions:
     - 12.3.2
     :when: 2020-01-29 17:48:03.510288000 Z
+- - :permit
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2020-05-11 21:35:07.235634400 Z
+- - :approve
+  - puma
+  - :who: 
+    :why: 
+    :versions:
+    - 3.12.4
+    :when: 2020-05-11 21:36:06.681326700 Z
+- - :approve
+  - ffi
+  - :who: 
+    :why: 
+    :versions:
+    - 1.9.25
+    :when: 2020-05-12 14:06:37.860627700 Z
