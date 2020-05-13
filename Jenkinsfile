@@ -58,6 +58,14 @@ pipeline {
   }
 
   post {
+    success {
+      script {
+        if (env.BRANCH_NAME == 'master') {
+          archiveArtifacts artifacts: '*.zip', fingerprint: true
+        }
+      }
+    }
+
     always {
       cleanupAndNotify(currentBuild.currentResult)
     }
