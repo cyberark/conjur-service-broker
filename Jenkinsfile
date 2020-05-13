@@ -13,61 +13,50 @@ pipeline {
   }
 
   stages {
-    stage('Validate') {
+    stage('Build') {
+      steps { sh './build.sh' }
+    }
+
+    stage('Test And Check') {
       parallel {
         stage('Changelog') {
           steps { sh './bin/parse-changelog.sh' }
         }
-      }
-    }
 
-    stage('Build Docker image') {
-      steps {
-        sh './build.sh'
-      }
-    }
+        stage('Fixable Docker Image Issues') {
+          steps { scanAndReport("conjur-service-broker", "HIGH", false) }
+        }
 
-    stage('Scan Docker image') {
-      parallel {
-        stage('Scan Docker image for fixable issues') {
+        stage('All Docker Image Issues') {
+          steps { scanAndReport("conjur-service-broker", "NONE", true) }
+        }
+
+        stage('Tests') {
           steps {
-            scanAndReport("conjur-service-broker", "HIGH", false)
+            sh 'summon ./test.sh'
+
+            junit 'features/reports/**/*.xml, spec/reports/*.xml'
+          }
+
+          post {
+            success {
+              script {
+                if (env.BRANCH_NAME == 'master') {
+                  archiveArtifacts artifacts: '*.zip', fingerprint: true
+                }
+              }
+            }
           }
         }
-        stage('Scan Docker image for all issues') {
-          steps {
-            scanAndReport("conjur-service-broker", "NONE", true)
-          }
-        }
       }
     }
 
-    stage('Run tests') {
-      steps {
-        sh 'summon ./test.sh'
-
-        junit 'features/reports/**/*.xml, spec/reports/*.xml'
-      }
-    }
-
-    stage('Push Docker image') {
-      steps {
-        sh './push-image.sh'
-      }
+    stage('Push Docker Image') {
+      steps { sh './push-image.sh' }
     }
   }
 
   post {
-    success {
-      script {
-        if (env.BRANCH_NAME == 'master') {
-          archiveArtifacts artifacts: '*.zip', fingerprint: true
-        }
-      }
-    }
-
-    always {
-      cleanupAndNotify(currentBuild.currentResult)
-    }
+    always { cleanupAndNotify(currentBuild.currentResult) }
   }
 }
