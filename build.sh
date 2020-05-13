@@ -2,8 +2,8 @@
 
 TAG="$(< VERSION)-$(git rev-parse --short HEAD)"
 
-echo "Getting updated images"
-docker-compose pull conjur_4 conjur_5
+echo "Getting updated images (this may take a few minutes)..."
+docker-compose pull -q conjur_4 conjur_5
 
 echo "Building Buildpack Health Check executable"
 rm -rf bin/buildpack-health-check
@@ -20,10 +20,18 @@ docker tag conjur-service-broker "conjur-service-broker:$TAG"
 
 echo "Running deployment build to install dependencies locally"
 echo "Creating project ZIP file"
-docker-compose run \
-  --rm \
+docker run --rm \
+  -v "$(pwd):/output" \
   conjur-service-broker \
-  bash -c "
-    bundle pack --all
-    zip -r cyberark-conjur-service-broker_$(cat VERSION).zip ./*
+  bash -ec "
+    echo 'Bundling dependencies...'
+    bundle package --all --no-install
+
+    echo 'Removing the old zip...'
+    rm -rf /output/cyberark-conjur-service-broker_$(cat VERSION).zip
+
+    echo 'Zipping everything up...'
+    zip -r \
+      /output/cyberark-conjur-service-broker_$(cat VERSION).zip ./* \
+      -x vendor/bundle
   "
