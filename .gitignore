@@ -29,3 +29,6 @@ logfile
 .DS_Store
 bin/buildpack-health-check
 ci/integration/test-app/secrets.yml
+
+# Ignore artifacts
+cyberark-conjur-service-broker_*.zip
