@@ -17,7 +17,7 @@ function main() {
         : ${PCF_CONJUR_API_KEY?"Need to set STATE"}
 
         install_buildpack
-    fi  
+    fi
 
     cucumber --format junit \
     --out features/reports \

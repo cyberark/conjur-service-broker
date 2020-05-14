@@ -1,2 +1,20 @@
 # Ignore artifacts
 cyberark-conjur-service-broker_*.zip
+
+# Ignore local libraries
+/vendor/*
+
+# Ignore editor files - these can't be globally ignored like
+# they could for .gitignore. https://github.com/moby/moby/issues/12843
+**/*.sw[po]
+
+# Ignore test output directories
+/features/reports/
+/spec/reports/
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+logfile
