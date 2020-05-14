@@ -1,16 +1,17 @@
 #!/bin/bash -ex
 
-function finish {
+function cleanup {
   echo 'Removing test environment'
   echo '---'
   docker-compose down --rmi 'local' --volumes
   rm -f tmp/pids/server*.pid
 }
-trap finish EXIT
+trap cleanup EXIT
 
 SERVICE_BROKERS='service-broker-bad-url service-broker-bad-key service-broker-follower-url'
 
 function main() {
+  cleanup
   startConjur
   runTests5
   cleanUpServiceBrokers
