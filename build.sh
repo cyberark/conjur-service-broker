@@ -11,12 +11,15 @@ docker-compose -f buildpack-health-check/docker-compose.yml build
 docker-compose -f buildpack-health-check/docker-compose.yml \
   run --rm buildpack-health-check-builder
 
-echo "Building conjur-service-broker Docker image"
-docker-compose build conjur-service-broker
-docker-compose build tests
+echo "Building conjur-service-broker image"
+docker build -t "conjur-service-broker:$TAG" \
+  -t "conjur-service-broker:latest" \
+  .
 
-echo "Tagging conjur-service-broker:$TAG"
-docker tag conjur-service-broker "conjur-service-broker:$TAG"
+echo "Building conjur-service-broker-test image"
+docker build -t "conjur-service-broker-test:latest" \
+  -f Dockerfile.test \
+  .
 
 echo "Running deployment build to install dependencies locally"
 echo "Creating project ZIP file"
