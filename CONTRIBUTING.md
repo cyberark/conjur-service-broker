@@ -26,8 +26,18 @@ To run the test suite, call `./test.sh` from your local machine - the script wil
 
 To run the service broker unit tests run:
 ```sh-session
+$ # Build the base images and artifacts
+$ ./build.sh
+
+$ # Run the tests
 $ ./test.sh
 ```
+
+_Note: Tests rely on having built `conjur-service-broker` and `conjur-service-broker-test`
+images available. If you make changes to your local repository and would like to see those
+changes reflected in the test containers, either re-run `./build.sh` or run
+`docker-compose build <service_name>` to rebuild the source image(s) before running the
+tests._
 
 ### Integration Testing
 
