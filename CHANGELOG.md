@@ -6,10 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.1.2] - 2020-05-11
+## [1.1.2] - 2020-05-15
 
 ### Security
 - Removed unused development and test gems from main image ([#159](https://github.com/cyberark/conjur-service-broker/issues/159))
+- Removed unused development and test gems from ZIP artifact ([#167](https://github.com/cyberark/conjur-service-broker/issues/167))
 
 ## [1.1.1] - 2020-01-29
 ### Added
