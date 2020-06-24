@@ -1,10 +1,14 @@
 #!/bin/bash -ex
 
 function cleanup {
+  if [[ ! $? -eq "0" ]]; then
+    docker-compose logs conjur-service-broker
+  fi
   echo 'Removing test environment'
   echo '---'
   docker-compose down --rmi 'local' --volumes
   rm -f tmp/pids/server*.pid
+  
 }
 trap cleanup EXIT
 
@@ -69,7 +73,7 @@ function runTests5() {
   export CONJUR_AUTHN_API_KEY="$admin_api_key"
 
   remote_appliance_host=$(echo $PCF_CONJUR_APPLIANCE_URL | sed 's~http[s]*://~~g')
-  
+
   export PCF_CONJUR_SSL_CERT=$(openssl s_client -showcerts \
     -connect $remote_appliance_host:443 </dev/null 2>/dev/null \
     | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p')
