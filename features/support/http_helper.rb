@@ -41,6 +41,8 @@ module HttpHelper
 
   def set_result response
     @response = response
+    puts response
+    puts response.body
 
     if response.headers[:content_type] =~ /^application\/json/
       @response_body = JSON.parse(response)
@@ -78,5 +80,5 @@ module HttpHelper
       request.options[:password] = options[:password] || basic_auth_password
     end
   end
-  
+
 end
