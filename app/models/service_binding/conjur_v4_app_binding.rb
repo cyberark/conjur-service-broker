@@ -1,5 +1,5 @@
 module ServiceBinding
-  # Responsible for binding a PCF application to a Conjur V4 cluster
+  # Responsible for binding a CF application to a Conjur V4 cluster
   # using an app-specific host identity.
   class ConjurV4AppBinding
     include ConjurApiModel

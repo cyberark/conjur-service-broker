@@ -32,7 +32,7 @@ ssh -i id_conjur \
     pcf
 SSH
 
-# Load PCF policy
+# Load CF policy
 pushd ..
   docker run --rm -v "$(pwd):/data" --entrypoint /bin/bash cyberark/conjur-cli:5 -c "
   yes yes | conjur init -u https://conjur-pcf.$CONJUR_ROUTE53_ZONE -a pcf --force=true
