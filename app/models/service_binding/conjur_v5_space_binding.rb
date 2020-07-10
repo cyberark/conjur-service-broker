@@ -1,5 +1,5 @@
 module ServiceBinding
-  # Responsible for binding a PCF application to a Conjur V5 cluster
+  # Responsible for binding a CF application to a Conjur V5 cluster
   # using a space-wide host identity.
   class ConjurV5SpaceBinding
     include ConjurApiModel

@@ -120,9 +120,14 @@ to use the Conjur Service Broker when deploying applications, see the
       > 
 
     - `CONJUR_AUTHN_LOGIN`:
-      the identity of a Conjur Host (of the form `host/host-id`) with `create` and `update` privileges on `CONJUR_POLICY`. This account is used to add and remove Hosts from Conjur policy as apps are deployed to or removed from PCF.
+      the identity of a Conjur Host (of the form `host/host-id`) with `create`
+      and `update` privileges on `CONJUR_POLICY`. This account is used to add
+      and remove Hosts from Conjur policy as apps are deployed to or removed
+      from the platform.
 
-      If you are using Enterprise Conjur, you should add an annotation on the Service Broker Host in policy to indicate which platform the Service Broker is used on. The policy you load should similar to:
+      If you are using Enterprise Conjur, you should add an annotation on the
+      Service Broker Host in policy to indicate which platform the Service
+      Broker is used on. The policy you load should similar to:
       ```yaml
       - !host
         id: cf-service-broker
@@ -237,7 +242,8 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
 
     #### Organization and Space Layers
 
-    For PCF 2.0+, when the service broker is provisioned in a space, it automatically
+    For VMWare Tanzu Application Service (TAS) or Pivotal Cloud Foundry (PCF)
+    2.0+, when the service broker is provisioned in a space, it automatically
     creates policy branches and layers for the org and space. [See below](#permit-org-space)
     for more information on using these org and space layers to permit access to
     secrets in Conjur.
@@ -248,7 +254,7 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
     ---
     # Policy for the Organization
     - !policy
-      # Organization GUID from PCF.
+      # Organization GUID from the platform.
       # This may be obtained by running `cf org --guid {org name}
       id: cbd7a05a-b304-42a9-8f66-6827ae6f78a1
       body:
@@ -257,7 +263,7 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
 
         # Policy for the Space
         - !policy
-          # Space GUID from PCF.
+          # Space GUID from the platform.
           # This may be obtained by running `cf space --guid {space name}
           id: 8bf39f4a-ebde-437b-9c38-3d234b80631a
           body:
@@ -280,7 +286,7 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
     all applications in a space, or to create a Conjur identity for each application
     separately.
 
-    In PCF version 2.0+, when the service broker creates the identity for your application
+    In TAS or PCF version 2.0+, when the service broker creates the identity for your application
     in Conjur, it automatically adds it to a Conjur Layer representing the `Organization`
     and `Space` where the application is deployed. These layers may be used to control secret
     access at the org or space level, rather than the application host itself.
@@ -346,7 +352,7 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
 
 3. **Permit the Application to Access Secrets in Conjur**
 
-    PCF applications can be granted access to secrets using either the Org and Space layers,
+    TAS applications can be granted access to secrets using either the Org and Space layers,
     or with the application host identity.
 
     #### <a name="permit-org-space"> Privilege Org and Space Layers
@@ -376,7 +382,7 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
 
     > **NOTE:** Application Host identity permissions are not available when using Space Host Identies.
 
-    After your application has been pushed to PCF, you can use its host identity in
+    After your application has been pushed to the platform, you can use its host identity in
     Conjur policy to grant it access to secrets. The application does not have access to
     secrets and should not be started until this step is completed. To prevent the app from
     starting when it is first pushed, use the `--no-start` flag:
@@ -389,8 +395,8 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
     credentials in the application's environment, and might look something like
     `host/cf/prod/0299a19d-7de4-4e98-89f6-372ac7c0521f`.
 
-      > **NOTE**: In PCF version 2.0+, the host identity includes the Organization and Space GUIDs in
-      the Host identity, for example:
+      > **NOTE**: In TAS or PCF version 2.0+, the host identity includes the
+        Organization and Space GUIDs in the Host identity, for example:
 
       ```
       host/cf/prod/cbd7a05a-b304-42a9-8f66-6827ae6f78a1/8bf39f4a-ebde-437b-9c38-3d234b80631a/c363669e-e43b-40b9-b650-493d3bdb4663

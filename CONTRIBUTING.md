@@ -78,7 +78,7 @@ ZIP file with the release of the repository with all dependencies. Running the
 `./build.sh` script will run `bundle pack --all`, which creates a
 `vendor/cache/` directory with the project dependencies. It will also produce a ZIP
 file of the project which includes this directory. The ZIP file should be uploaded
-to the release in GitHub; it will be used to build the PCF tile.
+to the release in GitHub; it will be used to build the VMWare Tanzu tile.
 
 ### Tracking Dependencies
 
