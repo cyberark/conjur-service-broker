@@ -40,7 +40,7 @@ class OrgSpacePolicy
   private
 
   def ensure_org_policy
-    raise OrgPolicyNotFound unless org_policy.exists?
+    raise OrgPolicyNotFound, "Unable to find #{org_policy} policy branch." unless org_policy.exists?
   end
 
   def org_policy
@@ -52,7 +52,7 @@ class OrgSpacePolicy
   end
 
   def ensure_space_policy
-    raise SpacePolicyNotFound unless space_policy.exists?
+    raise SpacePolicyNotFound, "Unable to find #{space_policy} policy branch." unless space_policy.exists?
   end
 
   def space_policy
@@ -64,7 +64,7 @@ class OrgSpacePolicy
   end
 
   def ensure_space_layer
-    raise SpaceLayerNotFound unless space_layer.exists?
+    raise SpaceLayerNotFound, "Unable to find #{space_layer} layer in policy." unless space_layer.exists?
   end
 
   def space_layer

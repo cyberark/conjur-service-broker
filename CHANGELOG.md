@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- Service broker returns 404 when the org / space policy branches do not exist
+  as expected with a helpful error message, rather than returning 500.
+  [cyberark/conjur-service-broker#192](https://github.com/cyberark/conjur-service-broker/issues/192)
+
 ## [1.1.2] - 2020-05-15
 
 ### Security
