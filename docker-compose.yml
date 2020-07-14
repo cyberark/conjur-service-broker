@@ -28,7 +28,7 @@ services:
       - 8443:443
 
   client:
-    image: conjurinc/cli5
+    image: cyberark/conjur-cli:5
     depends_on: [ conjur_5 ]
     environment:
       CONJUR_APPLIANCE_URL: http://conjur_5
