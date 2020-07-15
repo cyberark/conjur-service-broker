@@ -15,6 +15,10 @@ class ApplicationController < ActionController::API
   rescue_from ServiceBinding::HostNotFound, with: :host_not_found
   rescue_from ServiceBinding::RoleAlreadyCreated, with: :conflict_error
 
+  rescue_from OrgSpacePolicy::OrgPolicyNotFound, with: :policy_not_found
+  rescue_from OrgSpacePolicy::SpacePolicyNotFound, with: :policy_not_found
+  rescue_from OrgSpacePolicy::SpaceLayerNotFound, with: :policy_not_found
+
   rescue_from ValidationError, with: :failed_validation
 
   rescue_from RestClient::Unauthorized, with: :server_error
@@ -61,6 +65,14 @@ class ApplicationController < ActionController::API
   def host_not_found e
     logger.warn(e)
     render json: {}, status: :gone
+  end
+
+  def policy_not_found e
+    logger.warn(e)
+    render json: {
+      error: "PolicyNotFound",
+      description: e
+    }, status: :not_found
   end
 
   def failed_validation e

@@ -1,3 +1,26 @@
 - !policy
   id: cf
   owner: !group cf-admin-group
+
+  body:
+  - !policy
+    id: org-policy-without-space-policy
+    body:
+      - !layer
+
+  - !policy
+    id: org-space-policy
+    body:
+      - !layer
+
+      - !policy
+        id: space-policy-without-layer
+
+      - !policy
+        id: space-policy
+        body:
+          - !layer
+
+      - !grant
+        role: !layer
+        member: !layer space-policy

@@ -1,5 +1,5 @@
 Feature: Binding
-  
+
   Scenario: Bind resource
     When I make a bind request with body:
     """
@@ -237,3 +237,119 @@ Feature: Binding
       "description": "The property '#/plan_id' value \"XXXXXXX-fc8b-496f-a715-e9a1b205d05c.community\" was invalid."
     }
     """
+
+  @conjur-version-5
+  Scenario: Bind resource when org policy branch is missing
+    When I make a bind request with body:
+    """
+    {
+      "context": {
+        "organization_guid": "madeup-org-policy",
+        "space_guid": "space-policy"
+      },
+      "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
+      "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
+      "bind_resource": {
+        "app_guid": "bb841d2b-8287-47a9-ac8f-eef4c16106f8"
+      },
+      "parameters": {
+        "parameter1": 1,
+        "parameter2": "foo"
+      }
+    }
+    """
+    Then the HTTP response status code is "404"
+    And the JSON should be:
+    """
+    {
+      "error": "PolicyNotFound",
+      "description": "Unable to find {\"id\":\"cucumber:policy:cf/madeup-org-policy\"} policy branch."
+    }
+    """
+
+  @conjur-version-5
+  Scenario: Bind resource when space policy branch is missing
+    When I make a bind request with body:
+    """
+    {
+      "context": {
+        "organization_guid": "org-policy-without-space-policy",
+        "space_guid": "missing-space-policy"
+      },
+      "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
+      "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
+      "bind_resource": {
+        "app_guid": "bb841d2b-8287-47a9-ac8f-eef4c16106f8"
+      },
+      "parameters": {
+        "parameter1": 1,
+        "parameter2": "foo"
+      }
+    }
+    """
+    Then the HTTP response status code is "404"
+    And the JSON should be:
+    """
+    {
+      "error": "PolicyNotFound",
+      "description": "Unable to find {\"id\":\"cucumber:policy:cf/org-policy-without-space-policy/missing-space-policy\"} policy branch."
+    }
+    """
+
+  @conjur-version-5
+  Scenario: Bind resource when space layer is missing
+    When I make a bind request with body:
+    """
+    {
+      "context": {
+        "organization_guid": "org-space-policy",
+        "space_guid": "space-policy-without-layer"
+      },
+      "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
+      "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
+      "bind_resource": {
+        "app_guid": "bb841d2b-8287-47a9-ac8f-eef4c16106f8"
+      },
+      "parameters": {
+        "parameter1": 1,
+        "parameter2": "foo"
+      }
+    }
+    """
+    Then the HTTP response status code is "404"
+    And the JSON should be:
+    """
+    {
+      "error": "PolicyNotFound",
+      "description": "Unable to find {\"id\":\"cucumber:layer:cf/org-space-policy/space-policy-without-layer\"} layer in policy."
+    }
+    """
+
+  @conjur-version-5
+  Scenario: Bind resource when valid org / space context is sent
+    When I make a bind request with body:
+    """
+    {
+      "context": {
+        "organization_guid": "org-space-policy",
+        "space_guid": "space-policy"
+      },
+      "service_id": "c024e536-6dc4-45c6-8a53-127e7f8275ab",
+      "plan_id": "3a116ac2-fc8b-496f-a715-e9a1b205d05c.community",
+      "bind_resource": {
+        "app_guid": "bb841d2b-8287-47a9-ac8f-eef4c16106f8"
+      },
+      "parameters": {
+        "parameter1": 1,
+        "parameter2": "foo"
+      }
+    }
+    """
+    Then the HTTP response status code is "201"
+    And the JSON at "credentials/account" should be "cucumber"
+    And the JSON at "credentials/appliance_url" should be the master address
+    And the JSON at "credentials/authn_login" should be a string
+    And the JSON at "credentials/authn_api_key" should be a string
+    And the JSON at "credentials/version" should be a Fixnum
+    And the JSON at "credentials/ssl_certificate" should be a string
+    And the JSON has valid conjur credentials
