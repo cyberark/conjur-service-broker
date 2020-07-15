@@ -15,6 +15,12 @@ def login_resource(conjur_api)
   conjur_api.resource(resource_id)
 end
 
+def policy_resource(conjur_api)
+  policy_id = "#{ConjurClient.account}:policy:#{ConjurClient.policy}"
+
+  conjur_api.resource(policy_id)
+end
+
 def error(message)
   raise StandardError.new(message)
 end
@@ -42,6 +48,18 @@ if ConjurClient.version == 5
   if !login_resource_exists && ConjurClient.login_is_host?
     error("Host identity not privileged to read itself.")
   end
+end
+
+if ConjurClient.policy != 'root'
+    policy_resource = policy_resource(master_api)
+
+    # This will throw an error if the policy isn't found
+    if !policy_resource.exists?
+      error(
+          "Error: The policy branch specified in your configuration does not exist," \
+          " or is incorrect. Please verify that your policy exists and try again."
+      )
+    end
 end
 
 puts "Successfully validated Conjur credentials."
