@@ -30,7 +30,14 @@ class ConjurClient
     end
 
     def version
-      (ENV['CONJUR_VERSION'] || 5).to_i
+      case ENV['CONJUR_VERSION']
+      when "4"
+        4
+      when "5", "", nil
+        5
+      else
+        raise 'Invalid value for CONJUR_VERSION'
+      end
     end
 
     def account

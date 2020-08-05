@@ -125,4 +125,35 @@ describe ConjurClient do
       end
     end
   end
+
+  describe "version" do
+    before do
+      allow(ENV).to receive(:[]).and_call_original
+    end
+
+    it "uses the default version (5) when the input is an empty string" do
+      allow(ENV).to receive(:[]).with('CONJUR_VERSION').and_return("")
+      expect(ConjurClient.version).to eq(5)
+    end
+
+    it "uses the default version (5) when the input is empty" do
+      allow(ENV).to receive(:[]).with('CONJUR_VERSION')
+      expect(ConjurClient.version).to eq(5)
+    end
+
+    it "uses the default version (5) when the input is invalid" do
+      allow(ENV).to receive(:[]).with('CONJUR_VERSION').and_return("foobar")
+      expect { ConjurClient.version }.to raise_error(RuntimeError)
+    end
+
+    it "uses the given version" do
+      allow(ENV).to receive(:[]).with('CONJUR_VERSION').and_return("4")
+      expect(ConjurClient.version).to eq(4)
+    end
+
+    it "uses the given version" do
+      allow(ENV).to receive(:[]).with('CONJUR_VERSION').and_return("5")
+      expect(ConjurClient.version).to eq(5)
+    end
+  end
 end

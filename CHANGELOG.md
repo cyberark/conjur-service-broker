@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- When the value for CONJUR_VERSION is null or empty,
+  we default to `5`. If an invalid value is given,
+  we raise an error immediately.
+  [cyberark/conjur-service-broker#47](https://github.com/cyberark/conjur-service-broker/issues/47)
+
 ## [1.1.3] - 2020-07-17
 
 ### Fixed
