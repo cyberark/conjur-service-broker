@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   we raise an error immediately.
   [cyberark/conjur-service-broker#47](https://github.com/cyberark/conjur-service-broker/issues/47)
 
+### Security
+- Updated rack to v2.2.3 to fix CVE-2020-8184 and CVE-2020-8161
+
 ## [1.1.3] - 2020-07-17
 
 ### Fixed
