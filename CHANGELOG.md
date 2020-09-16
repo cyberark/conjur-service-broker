@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Security
 - Updated rack to v2.2.3 to fix CVE-2020-8184 and CVE-2020-8161
+- Updated actionview to v5.2.4.4 to fix CVE-2020-15169
 
 ## [1.1.3] - 2020-07-17
 
