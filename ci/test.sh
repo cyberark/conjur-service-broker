@@ -19,6 +19,8 @@ function main() {
         install_buildpack
     fi
 
+    export RESTCLIENT_LOG=stderr
+
     cucumber --format junit \
     --out features/reports \
     $INTEGRATION_TAG \
