@@ -14,6 +14,12 @@ pipeline {
   }
 
   stages {
+    stage('Grant IP Access') {
+      steps {
+        // Grant access to this Jenkins agent's IP to AWS security groups
+        grantIPAccess()
+      }
+    }
     stage('Build') {
       steps { sh './build.sh' }
     }
@@ -58,6 +64,10 @@ pipeline {
   }
 
   post {
-    always { cleanupAndNotify(currentBuild.currentResult) }
+    always {
+      cleanupAndNotify(currentBuild.currentResult)
+      // Remove this Jenkins Agent's IP from AWS security groups
+      removeIPAccess()
+    }
   }
 }
