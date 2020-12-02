@@ -23,7 +23,7 @@ services:
       CONJUR_AUTHN_LOGIN: admin
       CONJUR_AUTHN_API_KEY: secret
     volumes:
-      - ./ci/policy_v4.yml:/etc/policy.yml:ro
+      - ./policy/policy_v4.yml:/etc/policy.yml:ro
     ports:
       - 8443:443
 

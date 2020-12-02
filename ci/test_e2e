@@ -1,0 +1,70 @@
+#!/bin/bash
+
+set -eo pipefail
+
+. ../bin/utils.sh
+
+function cleanup {
+  announce "Removing test environment"
+  docker-compose down --rmi 'local' --volumes
+}
+trap cleanup EXIT
+
+function main() {
+  checkRequiredEnv
+  getConjurSSLCert
+  installConjurBuildpack
+  runE2ETests
+}
+
+function checkRequiredEnv() {
+  announce "Checking required environment variables"
+
+  required_env_vars=( \
+    $CF_API_ENDPOINT \
+    $CF_ADMIN_PASSWORD \
+    $PCF_CONJUR_ACCOUNT \
+    $PCF_CONJUR_APPLIANCE_URL \
+    $PCF_CONJUR_USERNAME \
+    $PCF_CONJUR_API_KEY \
+  )
+  for env_var in "${required_env_vars[@]}"; do
+    : "${env_var?"Need to set $env_var"}"
+  done
+  echo "Done"
+}
+
+function getConjurSSLCert() {
+  announce "Retrieving Conjur SSL certificate chain"
+
+  # Trim the hostname from the Conjur appliance URL
+  hostname="${PCF_CONJUR_APPLIANCE_URL//http[s]*:\/\//}"
+  # Get the Conjur SSL CA certificate chain
+  PCF_CONJUR_SSL_CERT="$(openssl s_client -showcerts \
+    -connect "$hostname":443 </dev/null 2>/dev/null \
+    | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p')"
+  export PCF_CONJUR_SSL_CERT
+  echo "Done"
+}
+
+function installConjurBuildpack() {
+  announce "Installing the Conjur Buildpack in Tanzu"
+
+  docker-compose run -e "$CF_API_ENDPOINT" -e "$CF_ADMIN_PASSWORD" tests "ci/install_buildpack"
+}
+
+function runE2ETests() {
+  announce "Running End-to-End tests"
+
+  export CONJUR_VERSION=5
+  docker-compose run tests \
+    cucumber \
+    --format junit \
+    --out features/reports \
+    --tags "@integration" \
+    --format pretty \
+    --backtrace \
+    --verbose
+}
+
+main
