@@ -1,0 +1,195 @@
+#!/bin/bash
+
+set -eo pipefail
+
+# This script tests Conjur Service Broker functionality by running a suite of
+# Cucumber-based tests against local Service Broker and Conjur server
+# container instances.
+#
+# You can use this script to:
+# - Run a pass/fail automated test suite (e.g. as a local integration test), or
+# - Set up a development environment that allows you to run tests
+#   interactively, e.g. for testing code changes.
+#
+# To run this script to set up a development environment, first export
+# the following:
+#        export START_SB_DEV_ENV=true
+# The scripts will set up containerized Service Broker and Conjur service
+# instances, and leave you in an interactive shell that allows you to
+# selectively run Cucumber test cases. In this mode, the Service Broker
+# source code is volume mounted in the Service Broker instances, so that
+# there is no need to rebuild and restart container instances whenever
+# code changes are made.
+
+START_SB_DEV_ENV="${START_SB_DEV_ENV:-false}"
+SKIP_CONJUR_V4_TESTS="${SKIP_CONJUR_V4_TESTS:-false}"
+
+# shellcheck disable=SC1091
+. ./utils.sh
+
+function cleanup {
+  announce 'Cleaning up test environment'
+  docker-compose down --rmi 'local' --volumes
+  rm -f ../tmp/pids/server*.pid
+}
+#trap cleanup EXIT
+
+SERVICE_BROKERS=( "service-broker-bad-url" \
+                  "service-broker-bad-key" \
+                  "service-broker-follower-url" )
+
+function main() {
+  cleanup
+  startConjur
+
+  # Run Conjur V5 Tests
+  loadPolicy5
+  startServiceBrokers5
+  runTests
+  cleanUpServiceBrokers
+
+  if [ "$SKIP_CONJUR_V4_TESTS" = "false" ]; then
+    # Run Conjur V4 Tests
+    loadPolicy4
+    startServiceBrokers4
+    runTests
+    cleanUpServiceBrokers
+  fi
+}
+
+function startConjur() {
+  announce "Starting Conjur environment"
+  docker-compose up -d pg conjur_4 conjur_5
+}
+
+function execConjurCLI() {
+  conjur_cmd=$1
+  docker-compose run --rm --entrypoint bash client -c "$conjur_cmd"
+}
+
+function loadPolicy5() {
+  announce "Waiting for Conjur v5 to come up, and loading policy..."
+
+  docker-compose exec -T conjur_5 conjurctl wait -r 30 -p 80
+
+  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
+  export CONJUR_AUTHN_API_KEY="$api_key"
+
+  # load the pcf policy for the non-empty CONJUR_POLICY test
+  execConjurCLI "conjur policy load root /app/policy/policy.yml"
+  execConjurCLI "conjur policy load root /app/policy/cf.yml"
+  execConjurCLI "conjur policy load cf /app/policy/org.yml"
+  execConjurCLI "conjur policy load cf /app/policy/space.yml"
+  execConjurCLI "conjur policy load cf /app/policy/app.yml"
+}
+
+function composeUp() {
+  services=("$@")
+  if [ "$START_SB_DEV_ENV" = "true" ]; then
+    # Use development environment overrides for Docker Compose
+    docker-compose \
+      -f ../docker-compose.yml \
+      -f ../docker-compose.dev-override.yml \
+      up -d \
+      "${services[@]}"
+  else
+    docker-compose up -d "${services[@]}"
+  fi
+}
+
+function startServiceBrokers5() {
+  announce "Starting Service Brokers for Conjur V5 testing..."
+
+  export CONJUR_VERSION=5
+  export CONJUR_APPLIANCE_URL=http://conjur_5
+  export CONJUR_FOLLOWER_URL=http://conjur_5-follower
+  export CONJUR_SSL_CERTIFICATE=""
+
+  admin_api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
+  export CONJUR_AUTHN_API_KEY="$admin_api_key"
+  composeUp "${SERVICE_BROKERS[@]}"
+
+  export CONJUR_POLICY=cf
+
+  CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:cf-service-broker}].api_key" 2>/dev/null')"
+  export CONJUR_AUTHN_API_KEY
+  services=( "conjur-service-broker" "service-broker-alt-policy" )
+  composeUp "${services[@]}"
+
+  bad_host_api_key="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:bad-service-broker}].api_key" 2>/dev/null')"
+  export CONJUR_AUTHN_API_KEY=$bad_host_api_key
+  services=( "service-broker-bad-host" )
+  composeUp "${services[@]}"
+}
+
+function loadPolicy4() {
+  announce "Waiting for Conjur v4 to come up, and configuring it..."
+
+  cat << "CONFIGURE" | docker exec -i "$(docker-compose ps -q conjur_4)" bash
+set -e
+
+/opt/conjur/evoke/bin/wait_for_conjur
+evoke ca regenerate conjur_4
+/opt/conjur/evoke/bin/wait_for_conjur
+
+env CONJUR_AUTHN_LOGIN=admin CONJUR_AUTHN_API_KEY=secret conjur policy load --as-group security_admin /etc/policy.yml
+CONFIGURE
+
+  docker cp "$(docker-compose ps -q conjur_4):/opt/conjur/etc/ssl/ca.pem" ../tmp/conjur.pem
+}
+
+function startServiceBrokers4() {
+  announce "Starting Service Brokers for Conjur V4 testing..."
+
+  export CONJUR_VERSION=4
+  export CONJUR_APPLIANCE_URL=https://conjur_4/api
+  export CONJUR_FOLLOWER_URL=https://conjur_4-follower/api
+  CONJUR_SSL_CERTIFICATE="$(cat ../tmp/conjur.pem)"
+  export CONJUR_SSL_CERTIFICATE
+
+  admin_api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['admin'].api_key\" 2>/dev/null")
+  export CONJUR_AUTHN_API_KEY="$admin_api_key"
+  composeUp "${SERVICE_BROKERS[@]}"
+
+  export CONJUR_POLICY=cf
+
+  CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/cf-service-broker'].api_key\" 2>/dev/null")"
+  export CONJUR_AUTHN_API_KEY
+  services=( "conjur-service-broker" "service-broker-alt-policy" )
+  composeUp "${services[@]}"
+
+  bad_host_api_key="$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/bad-service-broker'].api_key\" 2>/dev/null")"
+  export CONJUR_AUTHN_API_KEY=$bad_host_api_key
+  services=( "service-broker-bad-host" )
+  composeUp "${services[@]}"
+}
+
+function runTests() {
+  announce "Running tests"
+
+  if [ "$START_SB_DEV_ENV" = "true" ]; then
+    docker-compose run \
+      -e CONJUR_AUTHN_API_KEY="$admin_api_key" \
+      -e BAD_HOST_API_KEY="$bad_host_api_key" \
+      tests bash -c "./bin/dev_env_menu"
+  else
+    # Run all cucumber tests except those that require access to PCF/Tanzu.
+    # Set BAD_HOST_API_KEY to test an error case in bin/health-check.rb
+    docker-compose run -e CONJUR_AUTHN_API_KEY="$admin_api_key" -e BAD_HOST_API_KEY="$bad_host_api_key" tests \
+      cucumber \
+      --format junit \
+      --out features/reports \
+      --tags "~@integration" \
+      --format pretty \
+      --backtrace \
+      --verbose
+  fi
+}
+
+function cleanUpServiceBrokers() {
+  announce "Cleaning up running service brokers..."
+
+  docker-compose rm -f -s -v "${SERVICE_BROKERS[@]}" service-broker-alt-policy
+}
+
+main

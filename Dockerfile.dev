@@ -1,0 +1,16 @@
+FROM ruby:2.5
+MAINTAINER CyberArk Software Ltd.
+
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    apt-get install -y build-essential \
+                       libpq-dev \
+                       zip
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY Gemfile \
+     Gemfile.lock /app/
+
+RUN bundle install --no-deployment --frozen --system

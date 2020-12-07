@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -eo pipefail
+
+# This script sets up a development environment that allows you
+# to selectively run unit and integration tests interactively against local,
+# containerized instances of the Conjur Service Broker and Conjur.
+#
+# In this development environment, the Service Broker source code is
+# volume mounted in the Service Broker instances, so that any changes that
+# you make to Service Broker code is immediately reflected in the
+# Service Broker instances. In other words, there is no need to rebuild
+# and restart containers when code changes are made.
+#
+# After starting up Service Broker and Conjur instances, the scripts 
+# leave you in an interactive shell that prompts you to select one of the
+# following:
+#
+#    1) Run rspec unit tests
+#    2) Run integration (non-E2E) Cucumber tests
+#    3) Select from a list of Cucumber features to test
+#    4) Select from a list of Cucumber scenarios to test
+#    5) Run a bash shell in test container
+#    6) Exit and clean up development environment
+#
+# When you choose options 3) or 4), you will be prompted to select from
+# a list of Cucumber features or scenarios, respectively. This allows you
+# to run focused tests as you are iterating through code changes.
+#
+# Option 6) will let you exit the test container, and all Service Broker
+# and Conjur container instances will be cleaned up.
+
+export START_SB_DEV_ENV=true
+export SKIP_CONJUR_V4_TESTS=true
+
+cd bin
+./run_tests

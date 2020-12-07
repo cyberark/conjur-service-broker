@@ -18,9 +18,49 @@ expertly configured environment.
 To test the usage of the Conjur Service Broker within a CF deployment, you can
 follow the demo scripts in the [Cloud Foundry demo repo](https://github.com/conjurinc/cloudfoundry-conjur-demo).
 
-To run the test suite, call `./test.sh` from your local machine - the script will stand up the needed containers and run the full suite of rspec and cucumber tests.
+## Development Environment
 
-## Testing
+The `bin/dev` script sets up a development environment that allows you
+to selectively run unit and integration tests interactively against local,
+containerized instances of the Conjur Service Broker and Conjur.
+
+In this development environment, the Service Broker source code is
+volume mounted in the Service Broker instances, so that any changes that
+you make to Service Broker code is immediately reflected in the
+Service Broker instances. In other words, there is no need to rebuild
+and restart containers when code changes are made.
+
+To start the Service Broker development environment, first build the base
+and development images, and then run the `bin/dev` script to set up
+the development environment:
+
+```sh-session
+./bin/build
+./bin/build_dev
+./bin/dev
+```
+
+After starting up Service Broker and Conjur container instances, the scripts 
+leave you in an interactive shell that prompts you to select one of the
+following:
+
+```
+   1) Run rspec unit tests
+   2) Run integration (non-E2E) Cucumber tests
+   3) Select from a list of Cucumber features to test
+   4) Select from a list of Cucumber scenarios to test
+   5) Run a bash shell in test container
+   6) Exit and clean up development environment
+```
+
+When you choose options 3) or 4), you will be prompted to select from
+a list of Cucumber features or scenarios, respectively. This allows you
+to run focused tests as you are iterating through code changes.
+
+Option 6) will let you exit the test container, and all Service Broker
+and Conjur container instances will be cleaned up.
+
+## Non-Interactive Testing
 
 ### Running Unit Tests
 
@@ -28,7 +68,7 @@ To run the Conjur Service Broker unit tests, first build the base image
 and artifacts::
 
 ```sh-session
-./build.sh
+./bin/build
 ```
 
 Then, run the tests with the following command:
@@ -47,7 +87,7 @@ To run the Service Broker local integration tests, first build the base image
 and artifacts:
 
 ```sh-session
-./build.sh
+./bin/build
 ```
 
 Then, run the tests with the following command:
@@ -59,7 +99,7 @@ Then, run the tests with the following command:
 _Note: The integration tests rely on having built `conjur-service-broker`
 and `conjur-service-broker-test`. If you make changes to your local repository
 and would like to see those changes reflected in the test containers, either
-re-run `./build.sh` or run `docker-compose build <service_name>` to rebuild
+re-run `./bin/build` or run `docker-compose build <service_name>` to rebuild
 the source image(s) before running the tests._
 
 ### End-to-End (E2E) Integration Testing
@@ -78,7 +118,7 @@ Once Summon is configured with the connection information, the end-to-end
 tests may be executed by first building the base images and artifacts:
 
 ```sh-session
-./build.sh
+./bin/build
 ```
 
 And then running the following:
@@ -107,7 +147,7 @@ summon ./test_e2e
 
 When releasing a new version of the Service Broker, you will need to include a
 ZIP file with the release of the repository with all dependencies. Running the
-`./build.sh` script will run `bundle pack --all`, which creates a
+`./bin/build` script will run `bundle pack --all`, which creates a
 `vendor/cache/` directory with the project dependencies. It will also produce a ZIP
 file of the project which includes this directory. The ZIP file should be uploaded
 to the release in GitHub; it will be used to build the VMWare Tanzu tile.
