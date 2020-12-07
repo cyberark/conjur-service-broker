@@ -24,24 +24,32 @@ pipeline {
       steps { sh './build.sh' }
     }
 
-    stage('Test And Check') {
+    stage('Vulnerability Scans') {
+      parallel {
+        stage('Fixable Docker Image Issues') {
+          steps { scanAndReport("conjur-service-broker", "HIGH", false) }
+        }
+        stage('All Docker Image Issues') {
+          steps { scanAndReport("conjur-service-broker", "NONE", true) }
+        }
+      }
+    }
+
+    stage('Unit and Integration Testing') {
       parallel {
         stage('Changelog') {
           steps { sh './bin/parse-changelog.sh' }
         }
 
-        stage('Fixable Docker Image Issues') {
-          steps { scanAndReport("conjur-service-broker", "HIGH", false) }
-        }
-
-        stage('All Docker Image Issues') {
-          steps { scanAndReport("conjur-service-broker", "NONE", true) }
-        }
-
-        stage('Tests') {
+        stage('Unit Tests') {
           steps {
-            sh 'summon ./test.sh'
+            sh './bin/test_unit'
+          }
+        }
 
+        stage('Integration Tests') {
+          steps {
+            sh './bin/test_integration'
             junit 'features/reports/**/*.xml, spec/reports/*.xml'
           }
 
@@ -52,6 +60,27 @@ pipeline {
                   archiveArtifacts artifacts: '*.zip', fingerprint: true
                 }
               }
+            }
+          }
+        }
+      }
+    }
+
+    // The End-to-End test needs to be run separately from the integration
+    // tests because both use the default docker-compose network, and
+    // both cause this network to be deleted when they clean up with
+    // 'docker-compose down ...'.
+    stage('End-to-End Testing') {
+      steps {
+        sh 'cd ci && summon ./test_e2e'
+        junit 'features/reports/**/*.xml, spec/reports/*.xml'
+      }
+
+      post {
+        success {
+          script {
+            if (env.BRANCH_NAME == 'master') {
+              archiveArtifacts artifacts: '*.zip', fingerprint: true
             }
           }
         }

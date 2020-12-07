@@ -22,26 +22,49 @@ To run the test suite, call `./test.sh` from your local machine - the script wil
 
 ## Testing
 
-### Running Tests
+### Running Unit Tests
 
-To run the service broker unit tests run:
+To run the Conjur Service Broker unit tests, first build the base image
+and artifacts::
+
 ```sh-session
-$ # Build the base images and artifacts
-$ ./build.sh
-
-$ # Run the tests
-$ ./test.sh
+./build.sh
 ```
 
-_Note: Tests rely on having built `conjur-service-broker` and `conjur-service-broker-test`
-images available. If you make changes to your local repository and would like to see those
-changes reflected in the test containers, either re-run `./build.sh` or run
-`docker-compose build <service_name>` to rebuild the source image(s) before running the
-tests._
+Then, run the tests with the following command:
+```sh-session
+./bin/test_unit
+```
 
-### Integration Testing
+### Running Local Integration Tests
 
-The Conjur Service Broker integration tests have external dependencies to run successfully:
+The [bin/test_integration](./bin/test_integration) script provides a full suite of integration tests
+for testing Service Broker functionality against Conjur. The tests use Docker
+Compose to spin up local instances of Conjur and Service Brokers, so the
+tests can be run locally.
+
+To run the Service Broker local integration tests, first build the base image
+and artifacts:
+
+```sh-session
+./build.sh
+```
+
+Then, run the tests with the following command:
+
+```sh-session
+./bin/test_integration
+```
+
+_Note: The integration tests rely on having built `conjur-service-broker`
+and `conjur-service-broker-test`. If you make changes to your local repository
+and would like to see those changes reflected in the test containers, either
+re-run `./build.sh` or run `docker-compose build <service_name>` to rebuild
+the source image(s) before running the tests._
+
+### End-to-End (E2E) Integration Testing
+
+The Conjur Service Broker End-to-End integration tests have external dependencies to run successfully:
 
 * A Cloud Foundry foundation (version 2.4)
 * A Conjur instance accessible by the test runner and by the Cloud Foundry instance above
@@ -49,11 +72,20 @@ The Conjur Service Broker integration tests have external dependencies to run su
 
 The connection information and credentials for these service are provided by Summon to the test runner.
 
-See [secrets.yml](./secrets.yml) for the variables required to run the tests.
+See [ci/secrets.yml](./ci/secrets.yml) for the variables required to run the tests.
 
-Once Summon is configured when the connection information, the integration tests may be executed byt running:
+Once Summon is configured with the connection information, the end-to-end
+tests may be executed by first building the base images and artifacts:
+
 ```sh-session
-$ summon ./test.sh
+./build.sh
+```
+
+And then running the following:
+
+```sh-session
+cd ci
+summon ./test_e2e
 ```
 
 ## Releases

@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -eo pipefail
+
+# Install a Conjur buildpack into a Tanzu foundation using the 'cf' client.
+
+function main() {
+  checkRequiredEnv
+  loginToCF
+  installBuildpack
+}
+
+function checkRequiredEnv() {
+  echo "Checking required environment variables"
+  required_env_vars=( \
+    $CF_API_ENDPOINT \
+    $CF_ADMIN_PASSWORD \
+  )
+  for env_var in "${required_env_vars[@]}"; do
+    : "${env_var?"Need to set $env_var"}"
+  done
+}
+
+function loginToCF() {
+  echo "Logging into Cloud Foundry"
+  cf api "$CF_API_ENDPOINT" --skip-ssl-validation
+  CF_PASSWORD=$CF_ADMIN_PASSWORD cf auth admin
+}
+
+function installBuildpack() {
+  echo "Installing Conjur Buildpack if necessary"
+  if ! cf buildpacks | grep -w "conjur_buildpack"; then
+    # get the Conjur buildpack and upload to cf
+    mkdir conjur-buildpack
+    pushd conjur-buildpack
+    curl -L "$(curl -s https://api.github.com/repos/cyberark/cloudfoundry-conjur-buildpack/releases/latest | \
+      grep browser_download_url | \
+      grep zip | \
+      awk '{print $NF}' | \
+      sed 's/",*//g')" > conjur-buildpack.zip
+    unzip conjur-buildpack.zip
+    ./upload.sh
+    popd
+    rm -rf conjur-buildpack
+  else
+    echo "Buildpack is already present."
+  fi
+}
+
+main
