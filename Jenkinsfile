@@ -21,7 +21,7 @@ pipeline {
       }
     }
     stage('Build') {
-      steps { sh './build.sh' }
+      steps { sh './bin/build' }
     }
 
     stage('Vulnerability Scans') {

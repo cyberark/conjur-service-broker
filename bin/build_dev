@@ -1,0 +1,14 @@
+#!/bin/bash -ex
+
+TAG="$(< VERSION)-$(git rev-parse --short HEAD)"
+
+echo "Building conjur-service-broker-dev image"
+docker build -t "conjur-service-broker-dev:$TAG" \
+  -t "conjur-service-broker-dev:latest" \
+  -f Dockerfile.dev \
+  .
+
+echo "Building conjur-service-broker-test-dev image"
+docker build -t "conjur-service-broker-test-dev:latest" \
+  -f Dockerfile.test.dev \
+  .

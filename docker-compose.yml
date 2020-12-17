@@ -139,7 +139,7 @@ services:
       - "3005"
 
   tests:
-    image: conjur-service-broker-tests
+    image: conjur-service-broker-test
     build:
       context: ./
       dockerfile: Dockerfile.test

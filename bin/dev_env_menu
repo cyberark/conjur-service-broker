@@ -1,0 +1,111 @@
+#!/bin/bash
+
+# This script provides a menu of Service Broker tests to be run.
+# These tests are intended to be run within the Service Broker test
+# container that is created as part of the development environment
+# (via the 'start' script).
+
+# Run this from the root project directory so that rspec and Cucumber
+# tests can be discovered.
+cd "$(dirname "$0")/.." || (echo "Could not cd to parent dir"; exit 1)
+
+function main_menu() {
+
+  local options=( \
+           "Run rspec unit tests" \
+           "Run integration (non-E2E) Cucumber tests" \
+           "Select from a list of Cucumber features to test" \
+           "Select from a list of Cucumber scenarios to test" \
+           "Run a bash shell in test container" \
+           "Exit and clean up development environment" )
+
+  while true; do
+    PS3=$'\nPlease select tests to run: '
+    echo
+    select option in "${options[@]}"; do
+      case $REPLY in
+          1) unit_test; break ;;
+          2) integration_test; break ;;
+          3) feature_menu; break ;;
+          4) scenario_menu; break ;;
+          5) echo "Escaping to a bash shell. Type 'exit' to return to main menu."
+             bash
+	     break ;;
+          6) exit 0 ;;
+          *) echo "Invalid entry '$REPLY'"
+      esac
+    done
+  done
+}
+
+function feature_menu() {
+  PS3=$'\nPlease select a feature to test: '
+  sub_menu "Feature: "
+}
+
+function scenario_menu() {
+  PS3=$'\nPlease select a scenario to test: '
+  sub_menu "Scenario: "
+}
+  
+function sub_menu() {
+  # Start out with an option to return to main menu.
+  local options=("Return to main menu")
+
+  # Search for instances of the specified pattern in Cucumber dry run output
+  pattern="$1"
+  IFS=$'\n'
+  options+=( $(dry_run | grep "$pattern" | sed "s/[ ]*$pattern[ ]*//") )
+  unset IFS
+  num_opts="${#options[@]}"
+  
+  while true; do
+    echo
+    select option in "${options[@]}"; do
+      if [ "$REPLY" -eq 1 ]; then
+        break 2;
+      elif [ "$REPLY" -ge 2 ] && [ "$REPLY" -le "$num_opts" ]; then
+        test_by_name "$option"
+      else
+        echo "Invalid entry '$REPLY'"
+      fi
+      break;
+    done
+  done
+}
+
+function dry_run() {
+  cucumber --dry-run --tags "~@integration" --format pretty --quiet
+}
+
+function unit_test() {
+  bundle exec rspec --format RspecJunitFormatter --out spec/reports/test.xml
+}
+
+function integration_test() {
+  # Run all cucumber tests except those that require access to PCF/Tanzu.
+  # Set BAD_HOST_API_KEY to test an error case in bin/health-check.rb
+  echo "Running all tests"
+  cucumber \
+    --format junit \
+    --out features/reports \
+    --tags "~@integration" \
+    --format pretty \
+    --backtrace \
+    --verbose
+}
+   
+function test_by_name() {
+  # Search for name on a line by itself
+  name="^$1$"
+  cucumber \
+    --format junit \
+    --out features/reports \
+    --tags "~@integration" \
+    --format pretty \
+    --backtrace \
+    --verbose \
+    --name "$name"
+}
+
+main_menu

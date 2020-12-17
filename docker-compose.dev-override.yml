@@ -1,0 +1,42 @@
+version: "2"
+
+services:
+
+  conjur-service-broker:
+    image: conjur-service-broker-dev
+    command: rails s -p 3000 -b 0.0.0.0 -e development
+    volumes:
+      - "./:/app"
+
+  service-broker-bad-url:
+    image: conjur-service-broker-dev
+    command: rails s -p 3001 -b 0.0.0.0 -P tmp/pids/server1.pid -e development
+    volumes:
+      - "./:/app"
+
+  service-broker-bad-key:
+    image: conjur-service-broker-dev
+    command: rails s -p 3002 -b 0.0.0.0 -P tmp/pids/server2.pid -e development
+    volumes:
+      - "./:/app"
+
+  service-broker-alt-policy:
+    image: conjur-service-broker-dev
+    command: rails s -p 3003 -b 0.0.0.0 -P tmp/pids/server3.pid -e development
+    volumes:
+      - "./:/app"
+
+  service-broker-bad-host:
+    image: conjur-service-broker-dev
+    command: rails s -p 3004 -b 0.0.0.0 -P tmp/pids/server4.pid -e development
+    volumes:
+      - "./:/app"
+
+  service-broker-follower-url:
+    image: conjur-service-broker-dev
+    command: rails s -p 3005 -b 0.0.0.0 -P tmp/pids/server5.pid -e development
+    volumes:
+      - "./:/app"
+
+  tests:
+    image: conjur-service-broker-tests-dev
