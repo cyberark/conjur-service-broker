@@ -171,7 +171,7 @@ function runTests() {
     docker-compose run \
       -e CONJUR_AUTHN_API_KEY="$admin_api_key" \
       -e BAD_HOST_API_KEY="$bad_host_api_key" \
-      tests bash -c "./bin/dev_env_menu"
+      tests bash -c "./dev/dev_env_menu"
   else
     # Run all cucumber tests except those that require access to PCF/Tanzu.
     # Set BAD_HOST_API_KEY to test an error case in bin/health-check.rb

@@ -20,7 +20,7 @@ follow the demo scripts in the [Cloud Foundry demo repo](https://github.com/conj
 
 ## Development Environment
 
-The `bin/dev` script sets up a development environment that allows you
+The `dev/start` script sets up a development environment that allows you
 to selectively run unit and integration tests interactively against local,
 containerized instances of the Conjur Service Broker and Conjur.
 
@@ -31,13 +31,13 @@ Service Broker instances. In other words, there is no need to rebuild
 and restart containers when code changes are made.
 
 To start the Service Broker development environment, first build the base
-and development images, and then run the `bin/dev` script to set up
+and development images, and then run the `dev/start` script to set up
 the development environment:
 
 ```sh-session
-./bin/build
-./bin/build_dev
-./bin/dev
+./dev/build
+./dev/build_dev
+./dev/start
 ```
 
 After starting up Service Broker and Conjur container instances, the scripts 
@@ -68,17 +68,17 @@ To run the Conjur Service Broker unit tests, first build the base image
 and artifacts::
 
 ```sh-session
-./bin/build
+./dev/build
 ```
 
 Then, run the tests with the following command:
 ```sh-session
-./bin/test_unit
+./dev/test_unit
 ```
 
 ### Running Local Integration Tests
 
-The [bin/test_integration](./bin/test_integration) script provides a full suite of integration tests
+The [dev/test_integration](./dev/test_integration) script provides a full suite of integration tests
 for testing Service Broker functionality against Conjur. The tests use Docker
 Compose to spin up local instances of Conjur and Service Brokers, so the
 tests can be run locally.
@@ -87,19 +87,19 @@ To run the Service Broker local integration tests, first build the base image
 and artifacts:
 
 ```sh-session
-./bin/build
+./dev/build
 ```
 
 Then, run the tests with the following command:
 
 ```sh-session
-./bin/test_integration
+./dev/test_integration
 ```
 
 _Note: The integration tests rely on having built `conjur-service-broker`
 and `conjur-service-broker-test`. If you make changes to your local repository
 and would like to see those changes reflected in the test containers, either
-re-run `./bin/build` or run `docker-compose build <service_name>` to rebuild
+re-run `./dev/build` or run `docker-compose build <service_name>` to rebuild
 the source image(s) before running the tests._
 
 ### End-to-End (E2E) Integration Testing
@@ -108,23 +108,23 @@ The Conjur Service Broker End-to-End integration tests have external dependencie
 
 * A Cloud Foundry foundation (version 2.4)
 * A Conjur instance accessible by the test runner and by the Cloud Foundry instance above
-    > The configuration and policy for this conjur instance are defined in `./ci/integration/conjur`
+    > The configuration and policy for this conjur instance are defined in `./tests/integration/conjur`
 
 The connection information and credentials for these service are provided by Summon to the test runner.
 
-See [ci/secrets.yml](./ci/secrets.yml) for the variables required to run the tests.
+See [dev/secrets.yml](./dev/secrets.yml) for the variables required to run the tests.
 
 Once Summon is configured with the connection information, the end-to-end
 tests may be executed by first building the base images and artifacts:
 
 ```sh-session
-./bin/build
+./dev/build
 ```
 
 And then running the following:
 
 ```sh-session
-cd ci
+cd dev
 summon ./test_e2e
 ```
 
@@ -147,7 +147,7 @@ summon ./test_e2e
 
 When releasing a new version of the Service Broker, you will need to include a
 ZIP file with the release of the repository with all dependencies. Running the
-`./bin/build` script will run `bundle pack --all`, which creates a
+`./dev/build` script will run `bundle pack --all`, which creates a
 `vendor/cache/` directory with the project dependencies. It will also produce a ZIP
 file of the project which includes this directory. The ZIP file should be uploaded
 to the release in GitHub; it will be used to build the VMWare Tanzu tile.

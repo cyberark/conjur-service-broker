@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-. ../bin/utils.sh
+. ./utils.sh
 
 function cleanup {
   announce "Removing test environment"
@@ -50,7 +50,7 @@ function getConjurSSLCert() {
 function installConjurBuildpack() {
   announce "Installing the Conjur Buildpack in Tanzu"
 
-  docker-compose run -e "$CF_API_ENDPOINT" -e "$CF_ADMIN_PASSWORD" tests "ci/install_buildpack"
+  docker-compose run -e "$CF_API_ENDPOINT" -e "$CF_ADMIN_PASSWORD" tests "dev/install_buildpack"
 }
 
 function runE2ETests() {
