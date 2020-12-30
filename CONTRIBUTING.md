@@ -146,11 +146,15 @@ summon ./test_e2e
    from your local machine).
 
 When releasing a new version of the Service Broker, you will need to include a
-ZIP file with the release of the repository with all dependencies. Running the
-`./dev/build` script will run `bundle pack --all`, which creates a
-`vendor/cache/` directory with the project dependencies. It will also produce a ZIP
-file of the project which includes this directory. The ZIP file should be uploaded
-to the release in GitHub; it will be used to build the VMWare Tanzu tile.
+ZIP file with the release of the repository with all dependencies. 
+
+1. Verify that `dev/manifest.txt` includes all relevant top-level directories and files.
+   These will be copied into a temporary `pkg` directory used when zipping, to avoid
+   including unnecessary files in our ZIP.
+1. Run the `./dev/build` script, which will run `bundle pack --all`, which creates a
+   `vendor/cache/` directory with the project dependencies. It will also produce a ZIP
+   file of the project which includes this directory. 
+1. Attach the ZIP file to the release draft; it will be used to build the VMWare Tanzu tile.
 
 ### Tracking Dependencies
 

@@ -1,40 +1,39 @@
-#!/bin/bash -ex
+#!/bin/bash -e
+
+# Always run from top-level dir
+cd "$(dirname "$0")/.."
+. ./dev/utils.sh
 
 TAG="$(< VERSION)-$(git rev-parse --short HEAD)"
 
-echo "Getting updated images (this may take a few minutes)..."
+announce "Getting updated images (this may take a few minutes)..."
 docker-compose pull -q conjur_4 conjur_5
+echo "Done!"
 
-echo "Building Buildpack Health Check executable"
+announce "Building Buildpack Health Check executable"
 rm -rf bin/buildpack-health-check
 docker-compose -f buildpack-health-check/docker-compose.yml build
 docker-compose -f buildpack-health-check/docker-compose.yml \
   run --rm buildpack-health-check-builder
+echo "Done!"
 
-echo "Building conjur-service-broker image"
+announce "Building conjur-service-broker image"
 docker build -t "conjur-service-broker:$TAG" \
   -t "conjur-service-broker:latest" \
   .
+echo "Done!"
 
-echo "Building conjur-service-broker-test image"
+announce "Building conjur-service-broker-test image"
 docker build -t "conjur-service-broker-test:latest" \
   -f Dockerfile.test \
   .
+echo "Done!"
 
-echo "Running deployment build to install dependencies locally"
-echo "Creating project ZIP file"
+announce "Running deployment build to install dependencies locally"
 docker run --rm \
-  -v "$(pwd):/output" \
+  -v "$(pwd):$(pwd)" \
+  -w "$(pwd)" \
   conjur-service-broker \
-  bash -ec "
-    echo 'Bundling dependencies...'
-    bundle package --all --no-install
+  bash -c "./dev/package"
 
-    echo 'Removing the old zip...'
-    rm -rf /output/cyberark-conjur-service-broker_$(cat VERSION).zip
-
-    echo 'Zipping everything up...'
-    zip -r \
-      /output/cyberark-conjur-service-broker_$(cat VERSION).zip ./* \
-      -x vendor/bundle
-  "
+echo "Done!"

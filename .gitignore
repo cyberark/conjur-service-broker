@@ -31,6 +31,7 @@ logfile
 bin/buildpack-health-check
 tests/integration/test-app/secrets.yml
 dev/policy
+pkg
 
 # Ignore artifacts
 cyberark-conjur-service-broker_*.zip
