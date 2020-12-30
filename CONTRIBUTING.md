@@ -4,8 +4,10 @@ For general contribution and community guidelines, please see the [community rep
 
 ## Development
 
-Before getting started, you should install some developer tools. These are not required to deploy the Conjur Service Broker but they will let you develop using a standardized,
-expertly configured environment.
+Before getting started, you should install some developer tools.
+These are not required to deploy the Conjur Service Broker but
+they will let you develop using a standardized, expertly configured
+environment.
 
 1. [git][get-git] to manage source code
 2. [Docker][get-docker] to manage dependencies and runtime environments
@@ -78,10 +80,10 @@ Then, run the tests with the following command:
 
 ### Running Local Integration Tests
 
-The [dev/test_integration](./dev/test_integration) script provides a full suite of integration tests
-for testing Service Broker functionality against Conjur. The tests use Docker
-Compose to spin up local instances of Conjur and Service Brokers, so the
-tests can be run locally.
+The [dev/test_integration](./dev/test_integration) script provides a full
+suite of integration tests for testing Service Broker functionality
+against Conjur. The tests use Docker Compose to spin up local instances
+of Conjur and Service Brokers, so the tests can be run locally.
 
 To run the Service Broker local integration tests, first build the base image
 and artifacts:
@@ -146,15 +148,16 @@ summon ./test_e2e
    from your local machine).
 
 When releasing a new version of the Service Broker, you will need to include a
-ZIP file with the release of the repository with all dependencies. 
+ZIP file with the release of the repository with all dependencies.
 
-1. Verify that `dev/manifest.txt` includes all relevant top-level directories and files.
-   These will be copied into a temporary `pkg` directory used when zipping, to avoid
-   including unnecessary files in our ZIP.
-1. Run the `./dev/build` script, which will run `bundle pack --all`, which creates a
-   `vendor/cache/` directory with the project dependencies. It will also produce a ZIP
-   file of the project which includes this directory. 
-1. Attach the ZIP file to the release draft; it will be used to build the VMWare Tanzu tile.
+1. Verify that `dev/manifest.txt` includes all relevant top-level directories
+   and files.These will be copied into a temporary `pkg` directory used when
+   zipping, to avoid including unnecessary files in our ZIP.
+1. Run the `./dev/build` script, which will run `bundle pack --all`, which
+   creates a `vendor/cache/` directory with the project dependencies. It
+   will also produce a ZIP file of the project which includes this directory.
+1. Attach the ZIP file to the release draft; it will be used to build the
+   VMWare Tanzu tile.
 
 ### Tracking Dependencies
 

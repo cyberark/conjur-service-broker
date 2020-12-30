@@ -2,6 +2,7 @@
 
 set -eo pipefail
 
+# shellcheck disable=SC1091
 . ./utils.sh
 
 function cleanup {

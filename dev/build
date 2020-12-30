@@ -2,6 +2,7 @@
 
 # Always run from top-level dir
 cd "$(dirname "$0")/.."
+# shellcheck disable=SC1091
 . ./dev/utils.sh
 
 TAG="$(< VERSION)-$(git rev-parse --short HEAD)"

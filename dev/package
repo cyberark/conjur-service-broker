@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
 # Run from top-level dir
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || (echo "Could not cd to parent dir"; exit 1)
+# shellcheck disable=SC1091
 . ./dev/utils.sh
 
 announce "Removing old zip..."
 tmpDir="pkg"
-rm -rf cyberark-conjur-service-broker_$(cat VERSION).zip
+rm -rf "cyberark-conjur-service-broker_$(cat VERSION).zip"
 rm -rf "$tmpDir"
 echo "Done!"
 
