@@ -88,7 +88,7 @@ pipeline {
     }
 
     stage('Push Docker Image') {
-      steps { sh './push-image.sh' }
+      steps { sh './dev/push-image' }
     }
   }
 

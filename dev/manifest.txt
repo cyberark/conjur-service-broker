@@ -1,11 +1,6 @@
 app
 bin
-config
-conjur
-db
-doc
 lib
-policy
 public
 vendor
 CHANGELOG.md
@@ -15,7 +10,6 @@ Gemfile.lock
 LICENSE
 manifest.yml
 NOTICES.txt
-push-image.sh
 Rakefile
 README.md
 SECURITY.md
