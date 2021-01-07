@@ -1,11 +1,19 @@
 module CfHelper
+  def unpack_and_push_service_broker(cf)
+    Dir.chdir('/app') do
+      cf.execute('mkdir -p pkg')
+      cf.execute('unzip -n cyberark-conjur-service-broker_$(cat VERSION).zip -d ./pkg')
+      Dir.chdir('./pkg') do
+        cf.execute('cf push --no-start --random-route')
+      end
+    end
+  end
+
   def install_service_broker
     cf = ShellSession.new
     
     # Push this version of the service broker
-    Dir.chdir('/app') do
-      cf.execute('cf push --no-start --random-route')
-    end
+    unpack_and_push_service_broker(cf)
 
     # Configure the service broker
     api_key = rotate_api_key("#{ENV['PCF_CONJUR_ACCOUNT']}:host:pcf/service-broker")

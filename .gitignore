@@ -34,3 +34,4 @@ pkg
 
 # Ignore artifacts
 cyberark-conjur-service-broker_*.zip
+tests/integration/test-app/secrets.yml
