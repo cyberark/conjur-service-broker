@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'conjur-api', '~> 5.3.1'
+gem 'conjur-api', '~> 5.3.4'
 gem 'activesupport', '~> 5.2.4.3'
 gem 'railties', '~> 5.2.4.3'
 gem 'actionview', '~> 5.2.4.2'
@@ -14,7 +14,7 @@ gem 'json-schema', '~> 2.8'
 gem 'listen', '>= 3.0.5', '< 3.2'
 
 # Use Puma as the app server
-gem 'puma', '~> 3.12'
+gem 'puma', '3.12.5'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
@@ -41,6 +41,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'bundler-audit'
   gem 'license_finder'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'

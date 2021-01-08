@@ -42,7 +42,7 @@ the development environment:
 ./dev/start
 ```
 
-After starting up Service Broker and Conjur container instances, the scripts 
+After starting up Service Broker and Conjur container instances, the scripts
 leave you in an interactive shell that prompts you to select one of the
 following:
 
@@ -129,6 +129,129 @@ And then running the following:
 cd dev
 summon ./test_e2e
 ```
+
+## Updating Dependencies
+
+### Finding and Fixing Security Vulnerabilities
+
+To detect if there are any known security vulnerabilities in gem
+dependencies, run the following:
+
+   ```
+   docker-compose run tests bundle audit
+   ```
+
+If any known security vulnerabilities are discovered, you will see
+the following in the command output:
+
+   ```
+   Vulnerabilities found!
+   ```
+
+If there are known upgrade solutions for eliminating the vulnerability,
+then the command output will also include ranges of versions to which
+the gem can be updated to resolve the vulnerability.
+
+Knowing the acceptable range of gem versions, you will first want to
+check the `Gemfile` for possible constraints on the version of the
+vulnerable gem, and make modifications if necessary to allow the gem
+to be updated to a version within this range.
+
+You have several choices for how to update the gem, depending upon
+how conservative or aggressive you want to be with the dependency
+update (in terms of the size of version bumps and the number of
+gems affected). Being too aggressive with the update carries the risk
+of introducing changes that break Service Broker functionality.
+Some examples, ranging from least conservative to most conservative:
+
+1. To update the vulnerable gem and all of its dependencies.
+
+   ```
+   docker-compose run tests bundle update <vulnerable-gem>
+   ```
+
+1. To update only the vulnerable gem (i.e. not its dependencies):
+
+   ```
+   docker-compose run tests bundle update --conservative <vulnerable-gem>
+   ```
+
+1. To update only the vulnerable gem's patch version:
+
+   ```
+   docker-compose run tests bundle update --patch --conservative <vulnerable-gem>
+   ```
+
+After running any of the above commands, you will want to test
+Service Broker functionality as described in the
+[Testing Functionality After Dependency Version Changes](#testing-functionality-after-dependency-version-changes)
+section below.
+
+### Updating One Dependency at a Time
+
+If you are feeling especially lucky, you might be tempted to update
+all dependencies (direct and indirect), and then build and test to
+verify that Service Broker functionality has not been broken.
+This would be done as follows:
+
+   ```
+   docker-compose run tests bundle update
+   ```
+
+However, the chances that such a sweeping change will not break
+functionality is rather slim. The recommended approach is to update gem
+dependencies either singularly, or by dependency group, and test
+Service Broker functionality for each version change. This process is
+a bit tedious, but the chances of success are much better.
+
+The choices of how to update each gem are the same as those listed
+in the
+[Finding and Fixing Security Vulnerabilities](#finding-and-fixing-security-vulnerabilities)
+section above.
+
+After any gem versions have been updated, you will want to test
+Service Broker functionality as described in the
+[Testing Functionality After Dependency Version Changes](#testing-functionality-after-dependency-version-changes)
+section below.
+
+### Updating by Dependency Group
+
+It is possible to perform gem updates on a per-dependency-group basis.
+However, it should be noted that because updating dependencies by
+group represents a rather broad change, the chances of breaking
+Service Broker functionality using this method may be high.
+
+For example, to update `development` dependencies for the Service Broker:
+
+   ```
+   docker-compose run tests bundle update --group development
+   ```
+
+Or, to update `test` and `development` dependencies:
+
+   ```
+   docker-compose run tests bundle update --group test development
+   ```
+
+After any gem versions have been updated, you will want to test
+Service Broker functionality as described in the
+[Testing Functionality After Dependency Version Changes](#testing-functionality-after-dependency-version-changes)
+section below.
+
+### Testing Functionality After Dependency Version Changes
+
+After any gem versions are updated, you will want to test Service
+Broker functionality by running the unit tests and local integration
+tests:
+
+   ```
+   ./dev/build
+   ./dev/test_unit
+   ./dev/test_integration
+   ```
+
+Complete end-to-end Service Broker testing should also be performed
+by commiting and pushing changes to a branch of this repo.
 
 ## Releases
 
