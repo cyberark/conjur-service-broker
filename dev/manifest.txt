@@ -1,5 +1,6 @@
 app
 bin
+config
 lib
 public
 vendor

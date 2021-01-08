@@ -1,10 +1,10 @@
 module CfHelper
-  def unpack_and_push_service_broker(cf)
+  def unpack_and_push_service_broker(cli)
     Dir.chdir('/app') do
-      cf.execute('mkdir -p pkg')
-      cf.execute('unzip -n cyberark-conjur-service-broker_$(cat VERSION).zip -d ./pkg')
+      cli.execute('mkdir -p ./pkg')
+      cli.execute('unzip -n cyberark-conjur-service-broker_$(cat VERSION).zip -d ./pkg')
       Dir.chdir('./pkg') do
-        cf.execute('cf push --no-start --random-route')
+        cli.execute('cf push --no-start --random-route')
       end
     end
   end
