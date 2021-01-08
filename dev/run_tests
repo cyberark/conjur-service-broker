@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+cd "$(dirname "$0")"
+
 # This script tests Conjur Service Broker functionality by running a suite of
 # Cucumber-based tests against local Service Broker and Conjur server
 # container instances.
@@ -76,11 +78,11 @@ function loadPolicy5() {
   export CONJUR_AUTHN_API_KEY="$api_key"
 
   # load the pcf policy for the non-empty CONJUR_POLICY test
-  execConjurCLI "conjur policy load root /app/policy/policy.yml"
-  execConjurCLI "conjur policy load root /app/policy/cf.yml"
-  execConjurCLI "conjur policy load cf /app/policy/org.yml"
-  execConjurCLI "conjur policy load cf /app/policy/space.yml"
-  execConjurCLI "conjur policy load cf /app/policy/app.yml"
+  execConjurCLI "conjur policy load root /app/dev/policy/policy.yml"
+  execConjurCLI "conjur policy load root /app/dev/policy/cf.yml"
+  execConjurCLI "conjur policy load cf /app/dev/policy/org.yml"
+  execConjurCLI "conjur policy load cf /app/dev/policy/space.yml"
+  execConjurCLI "conjur policy load cf /app/dev/policy/app.yml"
 }
 
 function composeUp() {
@@ -171,7 +173,7 @@ function runTests() {
     docker-compose run \
       -e CONJUR_AUTHN_API_KEY="$admin_api_key" \
       -e BAD_HOST_API_KEY="$bad_host_api_key" \
-      tests bash -c "./bin/dev_env_menu"
+      tests bash -c "./dev/dev_env_menu"
   else
     # Run all cucumber tests except those that require access to PCF/Tanzu.
     # Set BAD_HOST_API_KEY to test an error case in bin/health-check.rb

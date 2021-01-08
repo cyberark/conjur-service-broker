@@ -1,8 +1,9 @@
 #!/bin/bash
 
-set -eo pipefail
+set -e
 
-. ../bin/utils.sh
+# shellcheck disable=SC1091
+. ./utils.sh
 
 function cleanup {
   announce "Removing test environment"
@@ -50,7 +51,7 @@ function getConjurSSLCert() {
 function installConjurBuildpack() {
   announce "Installing the Conjur Buildpack in Tanzu"
 
-  docker-compose run -e "$CF_API_ENDPOINT" -e "$CF_ADMIN_PASSWORD" tests "ci/install_buildpack"
+  docker-compose run -e "$CF_API_ENDPOINT" -e "$CF_ADMIN_PASSWORD" tests "dev/install_buildpack"
 }
 
 function runE2ETests() {

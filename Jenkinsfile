@@ -21,7 +21,7 @@ pipeline {
       }
     }
     stage('Build') {
-      steps { sh './bin/build' }
+      steps { sh './dev/build' }
     }
 
     stage('Vulnerability Scans') {
@@ -38,18 +38,18 @@ pipeline {
     stage('Unit and Integration Testing') {
       parallel {
         stage('Changelog') {
-          steps { sh './bin/parse-changelog.sh' }
+          steps { sh './dev/parse-changelog.sh' }
         }
 
         stage('Unit Tests') {
           steps {
-            sh './bin/test_unit'
+            sh './dev/test_unit'
           }
         }
 
         stage('Integration Tests') {
           steps {
-            sh './bin/test_integration'
+            sh './dev/test_integration'
             junit 'features/reports/**/*.xml, spec/reports/*.xml'
           }
 
@@ -72,7 +72,7 @@ pipeline {
     // 'docker-compose down ...'.
     stage('End-to-End Testing') {
       steps {
-        sh 'cd ci && summon ./test_e2e'
+        sh 'cd dev && summon ./test_e2e'
         junit 'features/reports/**/*.xml, spec/reports/*.xml'
       }
 
@@ -88,7 +88,7 @@ pipeline {
     }
 
     stage('Push Docker Image') {
-      steps { sh './push-image.sh' }
+      steps { sh './dev/push-image' }
     }
   }
 

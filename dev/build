@@ -1,0 +1,40 @@
+#!/bin/bash -e
+
+# Run from top-level dir
+cd "$(dirname "$0")/.." || (echo "Could not cd to parent dir"; exit 1)
+# shellcheck disable=SC1091
+. ./dev/utils.sh
+
+TAG="$(< VERSION)-$(git rev-parse --short HEAD)"
+
+announce "Getting updated images (this may take a few minutes)..."
+docker-compose pull -q conjur_4 conjur_5
+echo "Done!"
+
+announce "Building Buildpack Health Check executable"
+rm -rf bin/buildpack-health-check
+docker-compose -f buildpack-health-check/docker-compose.yml build
+docker-compose -f buildpack-health-check/docker-compose.yml \
+  run --rm buildpack-health-check-builder
+echo "Done!"
+
+announce "Building conjur-service-broker image"
+docker build -t "conjur-service-broker:$TAG" \
+  -t "conjur-service-broker:latest" \
+  .
+echo "Done!"
+
+announce "Building conjur-service-broker-test image"
+docker build -t "conjur-service-broker-test:latest" \
+  -f Dockerfile.test \
+  .
+echo "Done!"
+
+announce "Running deployment build to install dependencies locally"
+docker run --rm \
+  -v "$(pwd):$(pwd)" \
+  -w "$(pwd)" \
+  conjur-service-broker \
+  bash -c "./dev/package"
+
+echo "Done!"

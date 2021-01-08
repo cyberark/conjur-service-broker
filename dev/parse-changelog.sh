@@ -1,5 +1,6 @@
 #!/bin/bash -ex
 
+# shellcheck disable=SC1091
 cd "$(dirname "$0")"
 
 docker run --rm \

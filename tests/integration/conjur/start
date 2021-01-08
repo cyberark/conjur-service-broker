@@ -1,10 +1,12 @@
 #!/bin/bash -eux
+# shellcheck disable=SC2087
+# ^ Disable shellcheck for quoting SSH below
 
-: ${AWS_ACCESS_KEY_ID?"Need to set AWS_ACCESS_KEY_ID"}
-: ${AWS_SECRET_ACCESS_KEY?"Need to set AWS_SECRET_ACCESS_KEY"}
-: ${AWS_SESSION_TOKEN?"Need to set AWS_SESSION_TOKEN"}
-: ${CONJUR_AMI_ID?"Need to set CONJUR_AMI_ID"}
-: ${CONJUR_ROUTE53_ZONE?"Need to set CONJUR_ROUTE53_ZONE"}
+: "${AWS_ACCESS_KEY_ID?"Need to set AWS_ACCESS_KEY_ID"}"
+: "${AWS_SECRET_ACCESS_KEY?"Need to set AWS_SECRET_ACCESS_KEY"}"
+: "${AWS_SESSION_TOKEN?"Need to set AWS_SESSION_TOKEN"}"
+: "${CONJUR_AMI_ID?"Need to set CONJUR_AMI_ID"}"
+: "${CONJUR_ROUTE53_ZONE?"Need to set CONJUR_ROUTE53_ZONE"}"
 
 # Create AWS resources
 export TF_VAR_conjur_ami_id=$CONJUR_AMI_ID
@@ -25,7 +27,7 @@ ssh -i id_conjur \
   -o IdentitiesOnly=yes \
   -o IdentityFile=id1.key \
   -o "StrictHostKeyChecking no" \
-  core@$(terraform output address) /bin/bash << SSH
+  core@"$(terraform output address)" /bin/bash << SSH
   docker exec conjur-appliance evoke configure master \
     -h conjur-pcf.$CONJUR_ROUTE53_ZONE \
     -p $(<./admin_password) \

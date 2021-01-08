@@ -1,0 +1,17 @@
+app
+bin
+config
+lib
+public
+vendor
+CHANGELOG.md
+config.ru
+Gemfile
+Gemfile.lock
+LICENSE
+manifest.yml
+NOTICES.txt
+Rakefile
+README.md
+SECURITY.md
+VERSION

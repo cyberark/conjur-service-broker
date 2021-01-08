@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# Run from top-level dir
+cd "$(dirname "$0")/.." || (echo "Could not cd to parent dir"; exit 1)
+# shellcheck disable=SC1091
+. ./dev/utils.sh
+
+announce "Removing old zip..."
+tmpDir="./pkg"
+version=$(cat VERSION)
+rm -rf "cyberark-conjur-service-broker_$version.zip"
+rm -rf "$tmpDir"
+echo "Done!"
+
+announce "Bundling dependencies..."
+bundle package --all --no-install
+echo "Done!"
+
+CONTENTS=($(cat dev/manifest.txt))
+mkdir "$tmpDir"
+
+announce "Moving package contents to a temporary directory..."
+for item in "${CONTENTS[@]}"; do
+  if [[ -d "$item" ]]; then
+    # Item is a directory; recursively copy
+    cp -R "$item" "$tmpDir"
+  elif [[ -f "$item" ]]; then
+    # Item is a file; copy once
+    cp "$item" "$tmpDir"
+  else
+    echo "'$item' is not a file or directory"
+    exit 1
+  fi
+done
+echo "Done!"
+
+announce "Zipping package contents..."
+pushd "$tmpDir"
+  zip -r "cyberark-conjur-service-broker_$version.zip" ./*
+  cp "cyberark-conjur-service-broker_$version.zip" ./..
+popd
+echo "Done!"

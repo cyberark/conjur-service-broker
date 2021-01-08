@@ -71,7 +71,7 @@ module ServiceBrokerWorld
   end
 
   def integration_test_app_dir
-    '/app/ci/integration/test-app'
+    '/app/tests/integration/test-app'
   end
 
   def ci_user

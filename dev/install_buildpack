@@ -29,7 +29,7 @@ function loginToCF() {
 
 function installBuildpack() {
   echo "Installing Conjur Buildpack if necessary"
-  if ! cf buildpacks | grep -w "conjur_buildpack"; then
+  if ! cf buildpacks | grep -w " conjur_buildpack "; then
     # get the Conjur buildpack and upload to cf
     mkdir conjur-buildpack
     pushd conjur-buildpack

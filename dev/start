@@ -33,5 +33,5 @@ set -eo pipefail
 export START_SB_DEV_ENV=true
 export SKIP_CONJUR_V4_TESTS=true
 
-cd bin
+cd dev
 ./run_tests
