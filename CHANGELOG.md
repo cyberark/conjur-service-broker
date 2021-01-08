@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Previously, our ZIP included our test directories, which increased the size of the service broker. 
+  We've introduced a [manifest.txt](./dev/manifest.txt) within the `dev` directory which
+  dictates what will be included in the final ZIP used in our releases and during installation, and allows
+  us to exclude the test directories and developer scripts.
+  [cyberark/conjur-service-broker#142](https://github.com/cyberark/conjur-service-broker/issues/142)
+
 ### Fixed
 - When the value for CONJUR_VERSION is null or empty, we default to `5`. If an invalid
   value is given, we raise an error immediately.
