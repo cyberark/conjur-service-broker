@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.4] - 2021-01-11
+
 ### Changed
 - Previously, our ZIP included our test directories, which increased the size of the service broker. 
   We've introduced a [manifest.txt](./dev/manifest.txt) within the `dev` directory which
@@ -24,8 +26,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   [cyberark/conjur-service-broker#191](https://github.com/cyberark/conjur-service-broker/issues/191)
 
 ### Security
-- Updated rack to v2.2.3 to fix CVE-2020-8184 and CVE-2020-8161
-- Updated actionview to v5.2.4.4 to fix CVE-2020-15169
+- Updated `rack` to `v2.2.3` to fix CVE-2020-8184 and CVE-2020-8161.
+  [PR cyberark/conjur-service-broker#197](https://github.com/cyberark/conjur-service-broker/pull/197)
+- Updated `actionview` to `v5.2.4.4` to fix CVE-2020-15169.
+  [cyberark/conjur-service-broker#199](https://github.com/cyberark/conjur-service-broker/pull/199)
 
 ## [1.1.3] - 2020-07-17
 
@@ -111,7 +115,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.4...HEAD
+[1.1.4]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.3...v1.1.4
+[1.1.3]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/cyberark/conjur-service-broker/compare/v1.0.0...v1.1.0
