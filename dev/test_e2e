@@ -14,7 +14,6 @@ trap cleanup EXIT
 function main() {
   checkRequiredEnv
   getConjurSSLCert
-  installConjurBuildpack
   runE2ETests
 }
 
@@ -46,12 +45,6 @@ function getConjurSSLCert() {
     | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p')"
   export PCF_CONJUR_SSL_CERT
   echo "Done"
-}
-
-function installConjurBuildpack() {
-  announce "Installing the Conjur Buildpack in Tanzu"
-
-  docker-compose run -e "$CF_API_ENDPOINT" -e "$CF_ADMIN_PASSWORD" tests "dev/install_buildpack"
 }
 
 function runE2ETests() {
