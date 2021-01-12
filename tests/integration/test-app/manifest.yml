@@ -4,6 +4,6 @@ applications:
   services:
   - conjur
   buildpacks:
-  - conjur_buildpack
+  - https://github.com/cyberark/cloudfoundry-conjur-buildpack
   - ruby_buildpack
 
