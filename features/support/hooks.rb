@@ -7,10 +7,8 @@ Before("@conjur-version-4") do
 end
 
 After("@integration") do |scenario|
-  if scenario.status == :passed
-    cleanup_service_broker
-    cf_delete_org(cf_ci_org)
-  end
+  cleanup_service_broker
+  cf_delete_org(cf_ci_org)
 end
 
 Before("@enable-space-host") do
