@@ -17,18 +17,6 @@ services:
     depends_on:
       - pg
 
-  conjur_4:
-    image: registry2.itci.conjur.net/conjur-appliance-cuke-master:4.9-stable
-    security_opt:
-      - seccomp:unconfined
-    environment:
-      CONJUR_AUTHN_LOGIN: admin
-      CONJUR_AUTHN_API_KEY: secret
-    volumes:
-      - ./dev/policy/policy_v4.yml:/etc/policy.yml:ro
-    ports:
-      - 8443:443
-
   client:
     image: cyberark/conjur-cli:5
     depends_on: [ conjur_5 ]

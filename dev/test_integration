@@ -6,6 +6,5 @@ set -eo pipefail
 # integration with PCF/Tanzu).
 
 export START_SB_DEV_ENV=false
-export SKIP_CONJUR_V4_TESTS=false
 cd "$(dirname "$0")"
 ./run_tests

@@ -31,7 +31,6 @@ set -eo pipefail
 # and Conjur container instances will be cleaned up.
 
 export START_SB_DEV_ENV=true
-export SKIP_CONJUR_V4_TESTS=true
 
 cd dev
 ./run_tests

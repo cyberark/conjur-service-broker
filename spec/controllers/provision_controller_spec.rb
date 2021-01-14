@@ -52,21 +52,6 @@ RSpec.describe ProvisionController, type: :request do
         expect(response.content_type).to eq("application/json")
         expect(response.body).to eq("{}")
       end
-
-      context 'when using Conjur V4' do
-        before do
-          allow(ENV).to receive(:[]).with('CONJUR_VERSION').and_return('4')
-        end
-
-        it 'does not create the org and space policy' do
-          expect_any_instance_of(OrgSpacePolicy).not_to receive(:create)
-          
-          put('/v2/service_instances/test_instance', params: params, headers: headers)
-          expect(response.content_type).to eq("application/json")
-          expect(response).to have_http_status(:ok)
-          expect(response.body).to eq("{}")
-        end
-      end
     end
 
     context 'when context is not present' do

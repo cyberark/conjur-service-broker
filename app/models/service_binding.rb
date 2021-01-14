@@ -13,10 +13,6 @@ module ServiceBinding
   # Look up table for available service bindings by
   # Conjur version and whether space identities are enabled
   SERVICE_BINDING_CLASSES = {
-    # Conjur version
-    4 => {
-      false => ::ServiceBinding::ConjurV4AppBinding
-    },
     5 => {
       true => ::ServiceBinding::ConjurV5SpaceBinding,
       false => ::ServiceBinding::ConjurV5AppBinding

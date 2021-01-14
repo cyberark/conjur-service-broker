@@ -83,24 +83,6 @@ RSpec.describe BindController, type: :request do
         expect(response.content_type).to eq("application/json")
         expect(response).to have_http_status(:created)
       end
-
-      context 'when using Conjur V4' do
-        before do
-          allow(ENV).to receive(:[]).and_call_original
-          allow(ENV).to receive(:[]).with('CONJUR_VERSION').and_return('4')
-        end
-
-        it "does not ensure the policy structure exists" do
-          expect_any_instance_of(OrgSpacePolicy).to_not receive(:ensure_exists)
-          expect_any_instance_of(::ServiceBinding::ConjurV4AppBinding).to receive(:create)
-  
-          put('/v2/service_instances/test_instance/service_bindings/test_binding', 
-            params: params, headers: headers)
-  
-          expect(response.content_type).to eq("application/json")
-          expect(response).to have_http_status(:created)
-        end
-      end
     end
   end
 end

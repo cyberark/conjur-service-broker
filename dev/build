@@ -8,7 +8,7 @@ cd "$(dirname "$0")/.." || (echo "Could not cd to parent dir"; exit 1)
 TAG="$(< VERSION)-$(git rev-parse --short HEAD)"
 
 announce "Getting updated images (this may take a few minutes)..."
-docker-compose pull -q conjur_4 conjur_5
+docker-compose pull -q conjur_5
 echo "Done!"
 
 announce "Building Buildpack Health Check executable"
