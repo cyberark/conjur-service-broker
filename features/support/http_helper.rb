@@ -5,7 +5,7 @@ module HttpHelper
   end
 
   def headers
-    @headers ||= { 'Content_Type' => 'application/json',
+    @headers ||= { 'Content-Type' => 'application/json',
                    'X-Broker-API-Version'  => '2.13'}
   end
 
