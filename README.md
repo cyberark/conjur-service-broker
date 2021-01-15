@@ -75,9 +75,6 @@ to use the Conjur Service Broker when deploying applications, see the
 
     To configure the Service Broker to communicate with your external Conjur instance, the Service Broker app requires the following environment variables:
 
-    - `CONJUR_VERSION`:
-      the version of your Conjur instance (`4` or `5`); defaults to 5.
-
     - `CONJUR_ACCOUNT`:
       the account name for the Conjur instance you are connecting to.
 
@@ -93,31 +90,6 @@ to use the Conjur Service Broker when deploying applications, see the
       > **NOTE:** The `CONJUR_POLICY` is optional, but is *strongly* recommended. If this value is not specified, the Service Broker uses the `root` Conjur policy.
 
       > **NOTE:** If you use multiple CloudFoundry foundations, this policy branch should include an identifier for the foundation to distinguish applications deployed in each foundation. For example, if you have both a `production` and `development` foundation, then your policy branches for each Conjur Service Broker might be `cf/prod` and `cf/dev`.
-
-      > **NOTE:** If you are using v4 Conjur, the Service Broker requires your `CONJUR_POLICY` to have a Host Factory called `CONJUR_POLICY-apps`. For example, if your `CONJUR_POLICY` is `cf/prod`, you can add a Host Factory by updating your  policy file to include the following:
-      > ```yaml
-      > - !policy
-      >   id: cf
-      >   body:
-      >     - !policy prod
-      >       owner: !group cf-admin-group
-      >       body:
-      >       - !layer cf/prod-apps
-      > 
-      >       - !host-factory
-      >         id: cf/prod-apps
-      >         layers: [ !layer cf/prod-apps ]
-      > ```
-      > 
-      > If you do not specify a `CONJUR_POLICY` (this is not recommended) in your Service Broker configuration and you are using > `CONJUR_VERSION` 4, then you need to add a Host Factory to the `root` Conjur policy by including:
-      > ```yaml
-      > - !layer apps
-      > 
-      > - !host-factory
-      >   id: apps
-      >   layers: [ !layer apps ]
-      > ```
-      > 
 
     - `CONJUR_AUTHN_LOGIN`:
       the identity of a Conjur Host (of the form `host/host-id`) with `create`
@@ -177,8 +149,7 @@ to use the Conjur Service Broker when deploying applications, see the
     ```
 
     > **NOTE:** When the Service Broker application is started, it runs a health
-    > check that validates its connection to your Conjur instance, including
-    > checking that the Host Factory exists if you are using Conjur version 4.
+    > check that validates its connection to your Conjur instance.
 
 5. **Register the Service Broker in Cloud Foundry**
 

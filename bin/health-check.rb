@@ -43,11 +43,8 @@ rescue
 end
 
 # When authenticating as a host, ensure that credentials can access host resource.
-# Conjur v4 grant this privilege automatically, so we only check for v5.
-if ConjurClient.version == 5
-  if !login_resource_exists && ConjurClient.login_is_host?
-    error("Host identity not privileged to read itself.")
-  end
+if !login_resource_exists && ConjurClient.login_is_host?
+  error("Host identity not privileged to read itself.")
 end
 
 if ConjurClient.policy != 'root'
@@ -63,19 +60,6 @@ if ConjurClient.policy != 'root'
 end
 
 puts "Successfully validated Conjur credentials."
-
-# For Conjur v4, confirm that a host factory has been defined in policy.
-if ConjurClient.version == 4
-  hf_id = ConjurClient.v4_host_factory_id
-  
-  if !master_api.resource(URI::encode(hf_id, "/")).exists?
-    error(
-      "Error: There is an issue with your Conjur configuration. Please" \
-      " verify that your Conjur policy contains a host factory named " \
-      "'#{hf_id.split(/[:\/]/)[-1]}' under the '#{ConjurClient.policy}' policy."
-    )
-  end
-end
 
 # If a follower URL is provided, test it using the Conjur API.
 follower_url = ENV['CONJUR_FOLLOWER_URL']

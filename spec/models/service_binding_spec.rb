@@ -27,26 +27,16 @@ describe ServiceBinding do
       end
     end
 
-    context "when using Conjur V4" do
-      let(:conjur_version) { 4 }
-
-      context "when space host is enabled" do
-        let(:enable_space_identity) { true }
-        it "raises an error" do
-          expect { service_binding_class }.to raise_error(::ServiceBinding::NonExistentServiceBindingClass)
-        end
-      end
-
-      context "when space host is disabled" do
-        let(:enable_space_identity) { false }
-        it "returns the correct class" do
-          expect(service_binding_class).to be(::ServiceBinding::ConjurV4AppBinding)
-        end
+    context "when given an invalid version" do
+      let(:conjur_version) { 1 }
+      let(:enable_space_identity) { false }
+      it "raises an error" do
+        expect { service_binding_class }.to raise_error(::ServiceBinding::NonExistentServiceBindingClass)
       end
     end
 
-    context "when given an invalid version" do
-      let(:conjur_version) { 1 }
+    context "when given a deprecated version" do
+      let(:conjur_version) { 4 }
       let(:enable_space_identity) { false }
       it "raises an error" do
         expect { service_binding_class }.to raise_error(::ServiceBinding::NonExistentServiceBindingClass)

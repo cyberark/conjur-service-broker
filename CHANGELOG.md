@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Removed
+- Support for Conjur Enterprise v4 has been removed. We recommend users migrate to
+  Dynamic Access Provider v11+ or Conjur OSS v1+.
+  [cyberark/conjur-service-broker#203](https://github.com/cyberark/conjur-service-broker/issues/203)
+
 ## [1.1.4] - 2021-01-11
 
 ### Changed

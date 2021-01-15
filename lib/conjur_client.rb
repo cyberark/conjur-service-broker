@@ -17,14 +17,6 @@ class ConjurClient
       ConjurClient.new.api(ConjurClient.application_conjur_url)
     end
 
-    def v4_host_factory_id
-      if policy == "root"
-        "#{account}:host_factory:apps"
-      else
-        "#{account}:host_factory:#{policy}/#{policy}-apps"
-      end
-    end
-
     def v5?
       version == 5
     end
@@ -32,7 +24,7 @@ class ConjurClient
     def version
       case ENV['CONJUR_VERSION']
       when "4"
-        4
+        raise 'Conjur Enterprise v4 is no longer supported. Please use Conjur Service Broker v1.1.4 or earlier.'
       when "5", "", nil
         5
       else
