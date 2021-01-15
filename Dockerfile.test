@@ -2,7 +2,8 @@ FROM conjur-service-broker
 
 RUN apt-get install -y apt-transport-https \
                        ca-certificates \
-                       openssl
+                       openssl \
+                       vim
 
 # Install the Cloud Foundry CLI
 RUN wget -q https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key && \
