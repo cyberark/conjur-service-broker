@@ -37,6 +37,3 @@ services:
     command: rails s -p 3005 -b 0.0.0.0 -P tmp/pids/server5.pid -e development
     volumes:
       - "./:/app"
-
-  tests:
-    image: conjur-service-broker-tests-dev

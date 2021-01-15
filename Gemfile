@@ -25,13 +25,6 @@ gem 'puma', '5.1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
-# Everything below the trim marker will be truncated when the project is built
-# to ensure we exclude dev and test dependencies in the compressed service
-# broker. Do not move or delete these lines!
-### ====  v !DO NOT REMOVE! v  ====
-### ===== GEMFILE TRIM MARKER =====
-### ====  ^ !DO NOT REMOVE! ^  ====
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
