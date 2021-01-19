@@ -1,9 +1,19 @@
-FROM conjur-service-broker
+FROM ruby:2.5
+MAINTAINER CyberArk Software Ltd.
 
-RUN apt-get install -y apt-transport-https \
+# This is a Dockerfile for a Service Broker test client image. The repository
+# tree will be volume mounted to test client containers so that any source
+# code changes will be visible from within the container.
+
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    apt-get install -y apt-transport-https \
                        ca-certificates \
+                       build-essential \
+                       libpq-dev \
                        openssl \
-                       vim
+                       vim \
+                       zip
 
 # Install the Cloud Foundry CLI
 RUN wget -q https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key && \
@@ -12,8 +22,15 @@ RUN wget -q https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key &&
     apt-get update && \
     apt-get install -y cf-cli
 
-# Install all the ruby dependencies (including test/dev ones)
+# Install all the ruby dependencies (including test ones)
 COPY Gemfile \
-     Gemfile.lock /app/
+     Gemfile.lock /tmp/
+WORKDIR /tmp
 
-RUN bundle install --no-deployment --frozen --system
+# For bundle version < 2.0, bundle remembers the groups that had been
+# excluded for the previous invocation of bundle. So use `--with`
+# to explicitly include the test group.
+RUN bundle install --no-deployment --frozen --system --with test --without development
+
+RUN mkdir -p /app
+WORKDIR /app
