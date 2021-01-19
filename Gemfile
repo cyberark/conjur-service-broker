@@ -5,6 +5,12 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# Do not use fuzzy version matching (~>) with the Ruby version. It doesn't play
+# nicely with RVM and we should be explicit since Ruby is such a fundamental
+# part of a Rails project. The Ruby version is also locked in place by the
+# Docker base image so it won't be updated with fuzzy matching.
+ruby '2.5.8'
+
 gem 'conjur-api', '~> 5.3.4'
 gem 'activesupport', '~> 5.2.4.3'
 gem 'railties', '~> 5.2.4.3'

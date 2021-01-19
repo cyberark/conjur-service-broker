@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   Dynamic Access Provider v11+ or Conjur OSS v1+.
   [cyberark/conjur-service-broker#203](https://github.com/cyberark/conjur-service-broker/issues/203)
 
+### Fixed
+- The service broker Gemfile now specifies the Ruby version so that the service
+  broker no longer fails to install when using a version of the Ruby Buildpack
+  v1.8.15 or older, due to an incompatibility issue between Ruby and Nokogiri
+  versions.
+  [cyberark/conjur-service-broker#229](https://github.com/cyberark/conjur-service-broker/issues/229)
+
 ## [1.1.4] - 2021-01-11
 
 ### Changed
