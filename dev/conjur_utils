@@ -1,0 +1,66 @@
+#!/bin/bash -x
+
+# A set of utilities for building and running
+# docker-compose commands against the Conjur Quickstart project
+
+QUICKSTART="../conjur-quickstart/docker-compose.yml"
+conjur_compose="docker-compose -f $QUICKSTART"
+
+function downloadQickstart() {
+  if [ ! -d "conjur-quickstart" ]; then
+    echo "Downloading the Conjur quickstart repository..."
+    git clone https://github.com/cyberark/conjur-quickstart.git
+  fi
+  echo "Pulling images..."
+  docker-compose -f "$QUICKSTART" pull
+}
+
+function execConjur() {
+  $conjur_compose exec -T conjur bash -c "$1"
+}
+
+function execClient() {
+  $conjur_compose exec -T client bash -c "$1"
+}
+
+function waitForConjur() {
+  execConjur "conjurctl wait -r 30 -p 80"
+}
+
+function cleanupConjur() {
+  echo "Cleaning up Conjur environment..."
+  $conjur_compose down
+  echo "Done!"
+}
+
+function composeUpConjur() {
+  echo "Starting Conjur environment..."
+  export CONJUR_DATA_KEY="$($conjur_compose run -T --no-deps conjur data-key generate)"
+  $conjur_compose up -d
+  echo "Done!"
+}
+
+function setupAccount() {
+  account_name=$1
+
+  echo "Creating Conjur account: $account_name..."
+  api_key="$(execConjur "conjurctl account create $account_name" | tail -1 | awk '{print $NF}' | xargs)"
+
+  echo "Initializing CLI..."
+  execClient "conjur init -u conjur -a $account_name"
+
+  echo "Authenticating..."
+  $conjur_compose exec -T client conjur authn login -u admin -p ${api_key}
+
+  echo "Done!"
+}
+
+function startConjurEnv() {
+  account_name=$1
+
+  composeUpConjur
+
+  waitForConjur
+
+  setupAccount "$account_name"
+}

@@ -28,13 +28,14 @@ SKIP_CONJUR_V4_TESTS="${SKIP_CONJUR_V4_TESTS:-false}"
 
 # shellcheck disable=SC1091
 . ./utils.sh
+# shellcheck disable=SC1091
+. ./conjur_utils
 
 function cleanup {
   announce 'Cleaning up test environment'
   docker-compose down --rmi 'local' --volumes
   rm -f ../tmp/pids/server*.pid
 }
-#trap cleanup EXIT
 
 SERVICE_BROKERS=( "service-broker-bad-url" \
                   "service-broker-bad-key" \
@@ -42,39 +43,26 @@ SERVICE_BROKERS=( "service-broker-bad-url" \
 
 function main() {
   cleanup
-  startConjur
+  cleanupConjur
 
-  # Run Conjur V5 Tests
-  loadPolicy5
-  startServiceBrokers5
+  announce "Starting Conjur Environment..."
+  startConjurEnv "cucumber"
+
+  loadPolicy
+  startServiceBrokers
   runTests
   cleanUpServiceBrokers
 }
 
-function startConjur() {
-  announce "Starting Conjur environment"
-  docker-compose up -d pg conjur_5
-}
-
-function execConjurCLI() {
-  conjur_cmd=$1
-  docker-compose run --rm --entrypoint bash client -c "$conjur_cmd"
-}
-
-function loadPolicy5() {
-  announce "Waiting for Conjur v5 to come up, and loading policy..."
-
-  docker-compose exec -T conjur_5 conjurctl wait -r 30 -p 80
-
-  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
-  export CONJUR_AUTHN_API_KEY="$api_key"
-
+function loadPolicy() {
+  announce "Loading policies..."
   # load the pcf policy for the non-empty CONJUR_POLICY test
-  execConjurCLI "conjur policy load root /app/dev/policy/policy.yml"
-  execConjurCLI "conjur policy load root /app/dev/policy/cf.yml"
-  execConjurCLI "conjur policy load cf /app/dev/policy/org.yml"
-  execConjurCLI "conjur policy load cf /app/dev/policy/space.yml"
-  execConjurCLI "conjur policy load cf /app/dev/policy/app.yml"
+  docker cp "./policy" "conjur_client:/"
+  execClient "conjur policy load root /policy/policy.yml"
+  execClient "conjur policy load root /policy/cf.yml"
+  execClient "conjur policy load cf /policy/org.yml"
+  execClient "conjur policy load cf /policy/space.yml"
+  execClient "conjur policy load cf /policy/app.yml"
 }
 
 function composeUp() {
@@ -91,33 +79,34 @@ function composeUp() {
   fi
 }
 
-function startServiceBrokers5() {
+function startServiceBrokers() {
   announce "Starting Service Brokers for Conjur V5 testing..."
 
   export CONJUR_VERSION=5
-  export CONJUR_APPLIANCE_URL=http://conjur_5
-  export CONJUR_FOLLOWER_URL=http://conjur_5-follower
+  export CONJUR_APPLIANCE_URL=http://conjur
+  export CONJUR_FOLLOWER_URL=http://conjur-follower
   export CONJUR_SSL_CERTIFICATE=""
 
-  admin_api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
+  admin_api_key=$(execConjur 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
   export CONJUR_AUTHN_API_KEY="$admin_api_key"
+  echo $CONJUR_AUTHN_API_KEY
   composeUp "${SERVICE_BROKERS[@]}"
 
   export CONJUR_POLICY=cf
 
-  CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:cf-service-broker}].api_key" 2>/dev/null')"
+  CONJUR_AUTHN_API_KEY="$(execConjur 'rails r "puts Role[%Q{cucumber:host:cf-service-broker}].api_key" 2>/dev/null')"
   export CONJUR_AUTHN_API_KEY
   services=( "conjur-service-broker" "service-broker-alt-policy" )
   composeUp "${services[@]}"
 
-  bad_host_api_key="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:bad-service-broker}].api_key" 2>/dev/null')"
+  bad_host_api_key="$(execConjur 'rails r "puts Role[%Q{cucumber:host:bad-service-broker}].api_key" 2>/dev/null')"
   export CONJUR_AUTHN_API_KEY=$bad_host_api_key
   services=( "service-broker-bad-host" )
   composeUp "${services[@]}"
 }
 
 function runTests() {
-  announce "Running tests"
+  announce "Running tests..."
 
   if [ "$START_SB_DEV_ENV" = "true" ]; then
     docker-compose run \
