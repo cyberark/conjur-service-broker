@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  # Run this on pushes to master
+  push:
+    branches:
+      - master
+
+  # Or when PR operations are done
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  parse:
+    name: Parse Changelog
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Parse Changelog
+        run: dev/parse-changelog.sh
+
+  unit:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Build containers
+      run: dev/build
+
+    - name: Unit Tests
+      run: dev/test_unit
+
+  integration:
+    name: Integration Tests (Offline)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Build containers
+        run: dev/build
+
+      - name: Integration Tests
+        run: dev/test_integration
