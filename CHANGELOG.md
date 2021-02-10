@@ -22,9 +22,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Previously, our ZIP included our test directories, which increased the size of the service broker. 
-  We've introduced a [manifest.txt](./dev/manifest.txt) within the `dev` directory which
-  dictates what will be included in the final ZIP used in our releases and during installation, and allows
-  us to exclude the test directories and developer scripts.
+  We've introduced a [manifest.txt](https://github.com/cyberark/conjur-service-broker/tree/master/dev/manifest.txt)
+  within the `dev` directory which dictates what will be included in the final ZIP used in our
+  releases and during installation, and allows us to exclude the test directories and developer
+  scripts.
   [cyberark/conjur-service-broker#142](https://github.com/cyberark/conjur-service-broker/issues/142)
 
 ### Fixed
