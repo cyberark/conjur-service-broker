@@ -263,7 +263,7 @@ Feature: Binding
     """
     {
       "error": "PolicyNotFound",
-      "description": "Unable to find {\"id\":\"cucumber:policy:cf/madeup-org-policy\"} policy branch."
+      "description": "Unable to find cucumber:policy:cf/madeup-org-policy policy branch."
     }
     """
 
@@ -292,7 +292,7 @@ Feature: Binding
     """
     {
       "error": "PolicyNotFound",
-      "description": "Unable to find {\"id\":\"cucumber:policy:cf/org-policy-without-space-policy/missing-space-policy\"} policy branch."
+      "description": "Unable to find cucumber:policy:cf/org-policy-without-space-policy/missing-space-policy policy branch."
     }
     """
 
@@ -321,7 +321,7 @@ Feature: Binding
     """
     {
       "error": "PolicyNotFound",
-      "description": "Unable to find {\"id\":\"cucumber:layer:cf/org-space-policy/space-policy-without-layer\"} layer in policy."
+      "description": "Unable to find cucumber:layer:cf/org-space-policy/space-policy-without-layer layer in policy."
     }
     """
 

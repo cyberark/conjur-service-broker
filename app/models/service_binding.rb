@@ -1,5 +1,3 @@
-require 'conjur_client'
-
 module ServiceBinding
   class RoleAlreadyCreated < RuntimeError
   end
@@ -41,12 +39,12 @@ module ServiceBinding
 
     def build_credentials(host_id, api_key)
       {
-        account: ConjurClient.account,
-        appliance_url: ConjurClient.application_conjur_url,
+        account: OpenapiConfig.account,
+        appliance_url: OpenapiConfig.application_conjur_url,
         authn_login: "host/#{host_id}",
         authn_api_key: api_key,
-        ssl_certificate: ConjurClient.ssl_cert || "",
-        version: ConjurClient.version
+        ssl_certificate: OpenapiConfig.ssl_cert || "",
+        version: OpenapiConfig.version
       }
     end
   end

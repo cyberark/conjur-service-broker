@@ -27,6 +27,9 @@ COPY Gemfile \
      Gemfile.lock /tmp/
 WORKDIR /tmp
 
+COPY openapi_client-1.0.0.gem /
+RUN gem install /openapi_client-1.0.0.gem
+
 # For bundle version < 2.0, bundle remembers the groups that had been
 # excluded for the previous invocation of bundle. So use `--with`
 # to explicitly include the test group.

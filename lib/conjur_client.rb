@@ -1,22 +1,12 @@
 require 'conjur-api'
 require 'openssl'
+require 'openapi_client'
 
-class ConjurClient
-
+class OpenapiConfig
   class ConjurAuthenticationError < RuntimeError
   end
 
   class << self
-    def api
-      ConjurClient.new.api(appliance_url)
-    end
-
-    # Returns an API object that may be read-only. It will use
-    # the Conjur Follower URL when available.
-    def readonly_api
-      ConjurClient.new.api(ConjurClient.application_conjur_url)
-    end
-
     def v5?
       version == 5
     end
@@ -60,7 +50,7 @@ class ConjurClient
       ENV['CONJUR_FOLLOWER_URL'].presence || appliance_url
     end
 
-    def policy
+    def policy_name
       ENV['CONJUR_POLICY'].presence || 'root'
     end
 
@@ -71,27 +61,36 @@ class ConjurClient
     def platform
       platform_annotation = ""
       if !login_host_id.nil?
-        host = api.resource("#{account}:host:#{login_host_id}")
-        JSON.parse(host.attributes["annotations"].to_json).each do |annotation|
-          platform_annotation = annotation["value"] if annotation["name"] == "platform"
+        resources_api = OpenapiClient::ResourcesApi.new client
+        resource = resources_api.get_resource(account, "host", login_host_id)
+        resource[:annotations].each do |annotation|
+          platform_annotation = annotation[:value] if annotation[:name] == "platform"
         end
       end
       
       return platform_annotation
     end
-  end
 
-  def api(appliance_url)
-    Conjur.configure do |config|
-      config.account = ConjurClient.account
-      config.appliance_url = appliance_url
-      config.ssl_certificate = ConjurClient.ssl_cert
-      config.version = ConjurClient.version
+    def client(base_url=appliance_url)
+      OpenapiClient.configure do |config|
+        config.username = authn_login
+        config.host = base_url
+        config.ssl_ca_cert = OpenapiConfig.ssl_cert
+
+        authn_instance = OpenapiClient::AuthnApi.new
+        token = authn_instance.authenticate(
+          authenticator="authn",
+          account,
+          authn_login,
+          authn_api_key,
+          opts={accept_encoding: 'base64'}
+        )
+
+        config.api_key_prefix['Authorization'] = 'Token'
+        config.api_key['Authorization'] = "token=\"#{token}\""
+      end
+
+      return OpenapiClient::ApiClient.new
     end
-
-    Conjur.configuration.apply_cert_config!
-
-    Conjur::API.new_from_key ConjurClient.authn_login,
-                             ConjurClient.authn_api_key
   end
 end

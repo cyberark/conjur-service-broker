@@ -1,5 +1,3 @@
-require 'conjur_client'
-
 # Create a Conjur Host identity corresponding to the specified Cloud Foundry
 # space and store its API key in a Conjur Variable.
 class SpaceHostPolicy
@@ -21,14 +19,14 @@ class SpaceHostPolicy
   end
 
   def create
-    result = conjur_api.load_policy(space_policy, template_create, method: Conjur::API::POLICY_METHOD_POST)
+    result = modify_policy(template_create, policy_location: space_policy)
 
-    created_role = result.created_roles.values.first
+    created_role = result[:created_roles].values.first
 
     return if created_role.nil?
 
     variable_id = "#{space_policy}/#{space_host_api_key_variable_id}"
-    set_variable(variable_id, created_role['api_key'])
+    set_variable(variable_id, created_role[:api_key])
   end
 
   private
@@ -45,7 +43,7 @@ class SpaceHostPolicy
         id: #{space_host_api_key_variable_id}
 
       - !permit
-        role: !host /#{ConjurClient.login_host_id}
+        role: !host /#{OpenapiConfig.login_host_id}
         privileges: [read]
         resource: !variable #{space_host_api_key_variable_id}
     YAML

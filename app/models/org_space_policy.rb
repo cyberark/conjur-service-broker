@@ -1,5 +1,3 @@
-require 'conjur_client'
-
 class OrgSpacePolicy
   include ConjurApiModel
 
@@ -40,39 +38,51 @@ class OrgSpacePolicy
   private
 
   def ensure_org_policy
-    raise OrgPolicyNotFound, "Unable to find #{org_policy} policy branch." unless org_policy.exists?
+    raise OrgPolicyNotFound, "Unable to find #{org_policy_id} policy branch." unless org_policy != nil
   end
 
   def org_policy
-    ConjurClient.readonly_api.resource(org_policy_id)
+    begin
+      resources_api.get_resource(OpenapiConfig.account, "policy", "#{policy_base}#{@org_id}")
+    rescue OpenapiClient::ApiError
+      nil
+    end
   end
 
   def org_policy_id
-    "#{ConjurClient.account}:policy:#{policy_base}#{@org_id}"
+    "#{OpenapiConfig.account}:policy:#{policy_base}#{@org_id}"
   end
 
   def ensure_space_policy
-    raise SpacePolicyNotFound, "Unable to find #{space_policy} policy branch." unless space_policy.exists?
+    raise SpacePolicyNotFound, "Unable to find #{space_policy_id} policy branch." unless space_policy != nil
   end
 
   def space_policy
-    ConjurClient.readonly_api.resource(space_policy_id)
+    begin
+      resources_api.get_resource(OpenapiConfig.account, "policy", "#{policy_base}#{@org_id}/#{@space_id}")
+    rescue OpenapiClient::ApiError
+      nil
+    end
   end
 
   def space_policy_id
-    "#{ConjurClient.account}:policy:#{policy_base}#{@org_id}/#{@space_id}"
+    "#{OpenapiConfig.account}:policy:#{policy_base}#{@org_id}/#{@space_id}"
   end
 
   def ensure_space_layer
-    raise SpaceLayerNotFound, "Unable to find #{space_layer} layer in policy." unless space_layer.exists?
+    raise SpaceLayerNotFound, "Unable to find #{space_layer_id} layer in policy." unless space_layer != nil
   end
 
   def space_layer
-    ConjurClient.readonly_api.resource(space_layer_id)
+    begin
+      resources_api.get_resource(OpenapiConfig.account, "layer", "#{policy_base}#{@org_id}/#{@space_id}")
+    rescue OpenapiClient::ApiError
+      nil
+    end
   end
 
   def space_layer_id
-    "#{ConjurClient.account}:layer:#{policy_base}#{@org_id}/#{@space_id}"
+    "#{OpenapiConfig.account}:layer:#{policy_base}#{@org_id}/#{@space_id}"
   end
 
   def template_create_org_space

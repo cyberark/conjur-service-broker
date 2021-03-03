@@ -33,8 +33,8 @@ module ServiceBrokerWorld
   end
 
   def host_annotations
-    host = ConjurClient.api.resource("#{ConjurClient.account}:host:#{host_id}")
-    JSON.parse(host.attributes["annotations"].to_json)
+    host = OpenapiClient::ResourcesApi.new(OpenapiConfig.client).get_resource(OpenapiConfig.account, "host", host_id)
+    host[:annotations]
   end
 
   def ci_secret_org

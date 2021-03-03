@@ -15,9 +15,13 @@ module ServiceBinding
     end
 
     def create
-      host = ConjurClient.readonly_api.role(role_name)
+      begin
+        host = roles_api.get_role(OpenapiConfig.account, "host", host_id)
+      rescue OpenapiClient::ApiError
+        host = nil
+      end
 
-      raise HostNotFound, "No space host identity found." unless host.exists?
+      raise HostNotFound, "No space host identity found." unless host != nil
 
       ServiceBinding.build_credentials(host_id, api_key)
     end
@@ -31,20 +35,23 @@ module ServiceBinding
     end
 
     def role_name
-      "#{ConjurClient.account}:host:#{host_id}"
+      "#{OpenapiConfig.account}:host:#{host_id}"
     end
 
     def api_key
-      api_key_variable = ConjurClient.readonly_api.resource(api_key_name)
+      begin
+        api_key_variable = resources_api.get_resource(OpenapiConfig.account, "variable", "#{policy_base}#{@org_guid}/#{@space_guid}/space-host-api-key")
+      rescue OpenapiClient::ApiError
+        api_key_variable = nil
+      end
+      raise ApiKeyNotFound unless api_key_variable != nil
 
-      raise ApiKeyNotFound unless api_key_variable.exists?
-
-      api_key_variable.value
+      api_key_variable[:value]
     end
 
     def api_key_name
       [
-        ConjurClient.account,
+        OpenapiConfig.account,
         'variable',
         "#{policy_base}#{@org_guid}/#{@space_guid}/space-host-api-key"
       ].join(':')

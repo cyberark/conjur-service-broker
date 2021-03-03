@@ -38,7 +38,7 @@ And(/^the host in "([^"]*)" has annotation "([^"]*)" in Conjur$/) do |memory_id,
 
   has_annotation = false
   host_annotations.each do |host_annotation|
-    host_annotation_hash = { "#{host_annotation['name']}" => host_annotation['value'] }
+    host_annotation_hash = { "#{host_annotation[:name]}" => host_annotation[:value] }
     has_annotation = true if host_annotation_hash == annotation_hash
   end
 

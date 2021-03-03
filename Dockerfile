@@ -13,6 +13,9 @@ WORKDIR /app
 COPY Gemfile \
      Gemfile.lock /app/
 
+COPY openapi_client-1.0.0.gem /
+RUN gem install /openapi_client-1.0.0.gem
+
 # Speed up installs by running installs in parallel and install of
 # nokogiri by telling it to use bundled system libs
 # https://github.com/sparklemotion/nokogiri/blob/7d6690b/ext/nokogiri/extconf.rb#L72
