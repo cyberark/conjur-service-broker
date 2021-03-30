@@ -5,7 +5,7 @@ $LOAD_PATH.unshift File.expand_path('../lib', File.dirname(__FILE__))
 require 'conjur_client'
 
 def login_resource(conjur_client)
-  resource_api = OpenapiClient::ResourcesApi.new conjur_client
+  resource_api = ConjurOpenApi::ResourcesApi.new conjur_client
   resource_id =
     if OpenapiConfig.login_is_host?
       kind = "host"
@@ -16,8 +16,8 @@ def login_resource(conjur_client)
     end
 
   begin
-    resource_api.get_resource(OpenapiConfig.account, kind, id)
-  rescue OpenapiClient::ApiError => err
+    resource_api.show_resource(OpenapiConfig.account, kind, id)
+  rescue ConjurOpenApi::ApiError => err
     if err.code == 404
       nil
     else
@@ -27,11 +27,11 @@ def login_resource(conjur_client)
 end
 
 def policy_resource(conjur_client)
-  resource_api = OpenapiClient::ResourcesApi.new conjur_client
+  resource_api = ConjurOpenApi::ResourcesApi.new conjur_client
 
   begin
-    resource_api.get_resource(OpenapiConfig.account, "policy", OpenapiConfig.policy_name)
-  rescue OpenapiClient::ApiError => err
+    resource_api.show_resource(OpenapiConfig.account, "policy", OpenapiConfig.policy_name)
+  rescue ConjurOpenApi::ApiError => err
     if err.code == 404
       nil
     else

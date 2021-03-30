@@ -33,7 +33,7 @@ module ServiceBrokerWorld
   end
 
   def host_annotations
-    host = OpenapiClient::ResourcesApi.new(OpenapiConfig.client).get_resource(OpenapiConfig.account, "host", host_id)
+    host = ConjurOpenApi::ResourcesApi.new(OpenapiConfig.client).show_resource(OpenapiConfig.account, "host", host_id)
     host[:annotations]
   end
 

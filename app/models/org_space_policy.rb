@@ -43,8 +43,8 @@ class OrgSpacePolicy
 
   def org_policy
     begin
-      resources_api.get_resource(OpenapiConfig.account, "policy", "#{policy_base}#{@org_id}")
-    rescue OpenapiClient::ApiError
+      resources_api.show_resource(OpenapiConfig.account, "policy", "#{policy_base}#{@org_id}")
+    rescue ConjurOpenApi::ApiError
       nil
     end
   end
@@ -59,8 +59,8 @@ class OrgSpacePolicy
 
   def space_policy
     begin
-      resources_api.get_resource(OpenapiConfig.account, "policy", "#{policy_base}#{@org_id}/#{@space_id}")
-    rescue OpenapiClient::ApiError
+      resources_api.show_resource(OpenapiConfig.account, "policy", "#{policy_base}#{@org_id}/#{@space_id}")
+    rescue ConjurOpenApi::ApiError
       nil
     end
   end
@@ -75,8 +75,8 @@ class OrgSpacePolicy
 
   def space_layer
     begin
-      resources_api.get_resource(OpenapiConfig.account, "layer", "#{policy_base}#{@org_id}/#{@space_id}")
-    rescue OpenapiClient::ApiError
+      resources_api.show_resource(OpenapiConfig.account, "layer", "#{policy_base}#{@org_id}/#{@space_id}")
+    rescue ConjurOpenApi::ApiError
       nil
     end
   end

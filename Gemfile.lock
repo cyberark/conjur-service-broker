@@ -43,6 +43,9 @@ GEM
     conjur-api (5.3.4)
       activesupport
       rest-client
+    conjur-sdk (1.0.0)
+      json (~> 2.1, >= 2.1.0)
+      typhoeus (~> 1.0, >= 1.0.1)
     contracts (0.16.0)
     crass (1.0.6)
     cucumber (2.99.0)
@@ -104,9 +107,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.11.1-x86_64-darwin)
       racc (~> 1.4)
-    openapi_client (1.0.0)
-      json (~> 2.1, >= 2.1.0)
-      typhoeus (~> 1.0, >= 1.0.1)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -195,12 +195,12 @@ DEPENDENCIES
   byebug
   ci_reporter_rspec (~> 1)
   conjur-api (~> 5.3.4)
+  conjur-sdk (~> 1.0.0)
   cucumber (~> 2)
   json-schema (~> 2.8)
   json_spec (~> 1.1.5)
   license_finder
   listen (>= 3.0.5, < 3.2)
-  openapi_client (~> 1.0.0)
   pry-byebug
   puma (= 5.1.1)
   rack (~> 2.2.3)

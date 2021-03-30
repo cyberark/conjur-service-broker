@@ -1,14 +1,14 @@
 module ConjurApiModel
   def load_policy(policy, policy_location: OpenapiConfig.policy_name)
-    policy_api.update_policy(OpenapiConfig.account, policy_location, policy)
+    policy_api.load_policy(OpenapiConfig.account, policy_location, policy)
   end
 
   def modify_policy(policy, policy_location: OpenapiConfig.policy_name)
-    policy_api.modify_policy(OpenapiConfig.account, policy_location, policy)
+    policy_api.update_policy(OpenapiConfig.account, policy_location, policy)
   end
 
   def set_variable(resource_id, value)
-    secrets_api.create_variable(
+    secrets_api.create_secret(
       account=OpenapiConfig.account, 
       kind="variable",
       identifier=resource_id,
@@ -21,22 +21,22 @@ module ConjurApiModel
   end
 
   def policy_api
-    OpenapiClient::PoliciesApi.new OpenapiConfig.client
+    ConjurOpenApi::PoliciesApi.new OpenapiConfig.client
   end
 
   def secrets_api
-    OpenapiClient::SecretsApi.new OpenapiConfig.client
+    ConjurOpenApi::SecretsApi.new OpenapiConfig.client
   end
 
   def resources_api
-    OpenapiClient::ResourcesApi.new OpenapiConfig.client
+    ConjurOpenApi::ResourcesApi.new OpenapiConfig.client
   end
 
   def roles_api
-    OpenapiClient::RolesApi.new OpenapiConfig.client
+    ConjurOpenApi::RolesApi.new OpenapiConfig.client
   end
 
   def authn_api
-    OpenapiClient::AuthnApi.new OpenapiConfig.client
+    ConjurOpenApi::AuthenticationApi.new OpenapiConfig.client
   end
 end

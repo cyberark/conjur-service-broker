@@ -20,9 +20,12 @@ module ServiceBinding
     def delete
       raise HostNotFound unless host != nil
 
-      authn_api.rotate_api_key("authn", OpenapiConfig.account, opts={
-        role: "host:#{host_id}"
-      })
+      authn_api.rotate_api_key(
+        OpenapiConfig.account,
+        opts={
+          role: "host:#{host_id}"
+        }
+      )
 
       modify_policy template_delete
     end
@@ -31,20 +34,20 @@ module ServiceBinding
 
     def host
       begin
-        @host ||= roles_api.get_role(OpenapiConfig.account, "host", host_id)
-      rescue OpenapiClient::ApiError => err
+        @host ||= roles_api.show_role(OpenapiConfig.account, "host", host_id)
+      rescue ConjurOpenApi::ApiError => err
         if err.code == 401
           raise RestClient::Unauthorized
         end
         if err.code == 0
-          raise RestClient::ServerBrokeConnection.new "{}"
+          raise RestClient::ServerBrokeConnection
         end
       end
     end
 
     def api_key
       @api_key ||= create_host
-    rescue OpenapiClient::ApiError => err
+    rescue ConjurOpenApi::ApiError => err
       raise OpenapiConfig::ConjurAuthenticationError, "Conjur configuration invalid: #{err.message}"
     end
 
@@ -87,11 +90,11 @@ module ServiceBinding
     end
 
     def load_policy(policy)
-      policy_api.update_policy(OpenapiConfig.account, policy_location, policy)
+      policy_api.load_policy(OpenapiConfig.account, policy_location, policy)
     end
     
     def modify_policy(policy)
-      policy_api.modify_policy(OpenapiConfig.account, policy_location, policy)
+      policy_api.update_policy(OpenapiConfig.account, policy_location, policy)
     end
 
     def policy_location

@@ -22,6 +22,7 @@ class ApplicationController < ActionController::API
   rescue_from ValidationError, with: :failed_validation
 
   rescue_from RestClient::Unauthorized, with: :server_error
+  rescue_from RestClient::ServerBrokeConnection, with: :server_error
 
   before_action :check_headers
   before_action :authenticate
@@ -54,6 +55,7 @@ class ApplicationController < ActionController::API
 
   def server_error e
     logger.warn(e)
+    puts "ERROR:: #{:internal_server_error}"
     render json: {}, status: :internal_server_error
   end
 

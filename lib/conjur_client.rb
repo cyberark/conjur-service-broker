@@ -1,6 +1,6 @@
 require 'conjur-api'
 require 'openssl'
-require 'openapi_client'
+require 'conjur-sdk'
 
 class OpenapiConfig
   class ConjurAuthenticationError < RuntimeError
@@ -47,11 +47,21 @@ class OpenapiConfig
     end
 
     def application_conjur_url
-      ENV['CONJUR_FOLLOWER_URL'].presence || appliance_url
+      follower_url = ENV['CONJUR_FOLLOWER_URL']
+      if follower_url.nil? || follower_url.empty?
+        appliance_url
+      else
+        follower_url
+      end
     end
 
     def policy_name
-      ENV['CONJUR_POLICY'].presence || 'root'
+      policy = ENV['CONJUR_POLICY']
+      if policy.nil? || policy.empty?
+        'root'
+      else
+        policy
+      end
     end
 
     def ssl_cert
@@ -61,8 +71,8 @@ class OpenapiConfig
     def platform
       platform_annotation = ""
       if !login_host_id.nil?
-        resources_api = OpenapiClient::ResourcesApi.new client
-        resource = resources_api.get_resource(account, "host", login_host_id)
+        resources_api = ConjurOpenApi::ResourcesApi.new client
+        resource = resources_api.show_resource(account, "host", login_host_id)
         resource[:annotations].each do |annotation|
           platform_annotation = annotation[:value] if annotation[:name] == "platform"
         end
@@ -72,14 +82,13 @@ class OpenapiConfig
     end
 
     def client(base_url=appliance_url)
-      OpenapiClient.configure do |config|
+      ConjurOpenApi.configure do |config|
         config.username = authn_login
         config.host = base_url
         config.ssl_ca_cert = OpenapiConfig.ssl_cert
 
-        authn_instance = OpenapiClient::AuthnApi.new
-        token = authn_instance.authenticate(
-          authenticator="authn",
+        authn_instance = ConjurOpenApi::AuthenticationApi.new
+        token = authn_instance.get_access_token(
           account,
           authn_login,
           authn_api_key,
@@ -90,7 +99,7 @@ class OpenapiConfig
         config.api_key['Authorization'] = "token=\"#{token}\""
       end
 
-      return OpenapiClient::ApiClient.new
+      return ConjurOpenApi::ApiClient.new
     end
   end
 end

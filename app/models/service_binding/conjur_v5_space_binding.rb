@@ -16,8 +16,8 @@ module ServiceBinding
 
     def create
       begin
-        host = roles_api.get_role(OpenapiConfig.account, "host", host_id)
-      rescue OpenapiClient::ApiError
+        host = roles_api.show_role(OpenapiConfig.account, "host", host_id)
+      rescue ConjurOpenApi::ApiError
         host = nil
       end
 
@@ -40,8 +40,8 @@ module ServiceBinding
 
     def api_key
       begin
-        api_key_variable = resources_api.get_resource(OpenapiConfig.account, "variable", "#{policy_base}#{@org_guid}/#{@space_guid}/space-host-api-key")
-      rescue OpenapiClient::ApiError
+        api_key_variable = resources_api.show_resource(OpenapiConfig.account, "variable", "#{policy_base}#{@org_guid}/#{@space_guid}/space-host-api-key")
+      rescue ConjurOpenApi::ApiError
         api_key_variable = nil
       end
       raise ApiKeyNotFound unless api_key_variable != nil
