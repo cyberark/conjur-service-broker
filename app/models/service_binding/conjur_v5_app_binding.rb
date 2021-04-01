@@ -21,7 +21,7 @@ module ServiceBinding
       raise HostNotFound unless host != nil
 
       authn_api.rotate_api_key(
-        OpenapiConfig.account,
+        ConjurConfig.config.account,
         opts={
           role: "host:#{host_id}"
         }
@@ -34,8 +34,8 @@ module ServiceBinding
 
     def host
       begin
-        @host ||= roles_api.show_role(OpenapiConfig.account, "host", host_id)
-      rescue ConjurOpenApi::ApiError => err
+        @host ||= roles_api.show_role(ConjurConfig.config.account, "host", host_id)
+      rescue ConjurSDK::ApiError => err
         if err.code == 401
           raise RestClient::Unauthorized
         end
@@ -47,8 +47,8 @@ module ServiceBinding
 
     def api_key
       @api_key ||= create_host
-    rescue ConjurOpenApi::ApiError => err
-      raise OpenapiConfig::ConjurAuthenticationError, "Conjur configuration invalid: #{err.message}"
+    rescue ConjurSDK::ApiError => err
+      raise ConjurConfig::ConjurAuthenticationError, "Conjur configuration invalid: #{err.message}"
     end
 
     def create_host
@@ -68,9 +68,9 @@ module ServiceBinding
     def template_create_annotations
       template = <<~YAML.chomp.indent(2)
         annotations:
-          #{OpenapiConfig.platform}: true
+          #{ConjurConfig.platform}: true
       YAML
-      template if OpenapiConfig.platform.to_s.present?
+      template if ConjurConfig.platform.to_s.present?
     end
 
     def template_create_grant
@@ -90,15 +90,15 @@ module ServiceBinding
     end
 
     def load_policy(policy)
-      policy_api.load_policy(OpenapiConfig.account, policy_location, policy)
+      policy_api.load_policy(ConjurConfig.config.account, policy_location, policy)
     end
     
     def modify_policy(policy)
-      policy_api.update_policy(OpenapiConfig.account, policy_location, policy)
+      policy_api.update_policy(ConjurConfig.config.account, policy_location, policy)
     end
 
     def policy_location
-      use_space? ? space_policy : OpenapiConfig.policy_name
+      use_space? ? space_policy : ConjurConfig.policy_name
     end
 
     def host_id
@@ -110,7 +110,7 @@ module ServiceBinding
     end
 
     def role_name
-      "#{OpenapiConfig.account}:host:#{host_id}"
+      "#{ConjurConfig.config.account}:host:#{host_id}"
     end
 
     def use_space?

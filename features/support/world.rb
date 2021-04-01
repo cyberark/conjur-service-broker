@@ -31,7 +31,7 @@ module ServiceBrokerWorld
   end
 
   def host_annotations
-    host = ConjurOpenApi::ResourcesApi.new(OpenapiConfig.client).show_resource(OpenapiConfig.account, "host", host_id)
+    host = ConjurSDK::ResourcesApi.new(ConjurConfig.client).show_resource(ConjurConfig.config.account, "host", host_id)
     host[:annotations]
   end
 
@@ -111,11 +111,11 @@ module ServiceBrokerWorld
   end
 
   def authenticate_from_json(json)
-    config = ConjurOpenApi::Configuration.default
+    config = ConjurSDK::Configuration.default
     config.verify_ssl = false
     creds = JSON.parse(json)["credentials"]
     config.host = creds['appliance_url']
-    authn_api = ConjurOpenApi::AuthenticationApi.new ConjurOpenApi::ApiClient.new config
+    authn_api = ConjurSDK::AuthenticationApi.new ConjurSDK::ApiClient.new config
     authn_api.get_access_token(creds['account'], creds['authn_login'], creds['authn_api_key'], opt={accept_encoding: "base64"})
   end
 end

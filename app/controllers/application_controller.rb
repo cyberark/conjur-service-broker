@@ -1,4 +1,5 @@
 require 'conjur_client'
+require 'conjur-sdk'
 
 class UnknownConjurHostError < RuntimeError
 end
@@ -10,7 +11,7 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
 
   rescue_from UnknownConjurHostError, with: :server_error
-  rescue_from OpenapiConfig::ConjurAuthenticationError, with: :invalid_configuration
+  rescue_from ConjurConfig::ConjurAuthenticationError, with: :invalid_configuration
 
   rescue_from ServiceBinding::HostNotFound, with: :host_not_found
   rescue_from ServiceBinding::RoleAlreadyCreated, with: :conflict_error
@@ -42,9 +43,9 @@ class ApplicationController < ActionController::API
     begin
       yield
     rescue SocketError
-      raise UnknownConjurHostError.new "Invalid Conjur host (#{OpenapiConfig.appliance_url.to_s})"
+      raise UnknownConjurHostError.new "Invalid Conjur host (#{ConjurConfig.appliance_url.to_s})"
     rescue RestClient::Unauthorized => e
-      raise OpenapiConfig::ConjurAuthenticationError.new "Conjur authentication failed: #{e.message}"
+      raise ConjurConfig::ConjurAuthenticationError.new "Conjur authentication failed: #{e.message}"
     end
   end
 
@@ -100,7 +101,7 @@ class ApplicationController < ActionController::API
 
   def use_context?
     # Only create the policy for Conjur V5
-    OpenapiConfig.v5? && org_guid.present? && space_guid.present?
+    ConjurSDK.v5? && org_guid.present? && space_guid.present?
   end
 
   def instance_id

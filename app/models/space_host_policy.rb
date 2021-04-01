@@ -43,7 +43,7 @@ class SpaceHostPolicy
         id: #{space_host_api_key_variable_id}
 
       - !permit
-        role: !host /#{OpenapiConfig.login_host_id}
+        role: !host /#{ConjurConfig.login_host_id}
         privileges: [read]
         resource: !variable #{space_host_api_key_variable_id}
     YAML

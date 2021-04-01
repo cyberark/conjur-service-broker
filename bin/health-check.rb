@@ -5,19 +5,19 @@ $LOAD_PATH.unshift File.expand_path('../lib', File.dirname(__FILE__))
 require 'conjur_client'
 
 def login_resource(conjur_client)
-  resource_api = ConjurOpenApi::ResourcesApi.new conjur_client
+  resource_api = ConjurSDK::ResourcesApi.new conjur_client
   resource_id =
-    if OpenapiConfig.login_is_host?
+    if ConjurConfig.login_is_host?
       kind = "host"
-      id = OpenapiConfig.login_host_id
+      id = ConjurConfig.login_host_id
     else
       kind = "user"
-      id = OpenapiConfig.authn_login
+      id = ConjurConfig.config.username
     end
 
   begin
-    resource_api.show_resource(OpenapiConfig.account, kind, id)
-  rescue ConjurOpenApi::ApiError => err
+    resource_api.show_resource(ConjurConfig.config.account, kind, id)
+  rescue ConjurSDK::ApiError => err
     if err.code == 404
       nil
     else
@@ -27,11 +27,11 @@ def login_resource(conjur_client)
 end
 
 def policy_resource(conjur_client)
-  resource_api = ConjurOpenApi::ResourcesApi.new conjur_client
+  resource_api = ConjurSDK::ResourcesApi.new conjur_client
 
   begin
-    resource_api.show_resource(OpenapiConfig.account, "policy", OpenapiConfig.policy_name)
-  rescue ConjurOpenApi::ApiError => err
+    resource_api.show_resource(ConjurConfig.config.account, "policy", ConjurConfig.policy_name)
+  rescue ConjurSDK::ApiError => err
     if err.code == 404
       nil
     else
@@ -49,7 +49,7 @@ login_resource_exists = false
 
 begin
   # This will throw an exception if Conjur credentials are invalid.
-  master_api = OpenapiConfig.client
+  master_api = ConjurConfig.client
 
   # This will throw an exception if Conjur URL is unreachable.
   login_resource = login_resource(master_api)
@@ -63,11 +63,11 @@ rescue
 end
 
 # When authenticating as a host, ensure that credentials can access host resource.
-if !login_resource_exists && OpenapiConfig.login_is_host?
+if !login_resource_exists && ConjurConfig.login_is_host?
   error("Host identity not privileged to read itself.")
 end
 
-if OpenapiConfig.policy_name != 'root'
+if ConjurConfig.policy_name != 'root'
     policy_resource = policy_resource(master_api)
 
     # This will throw an error if the policy isn't found
@@ -86,7 +86,7 @@ follower_url = ENV['CONJUR_FOLLOWER_URL']
 
 if !(follower_url.nil? || follower_url.empty?)
   begin
-    follower_api = OpenapiConfig.client(follower_url)
+    follower_api = ConjurConfig.client(follower_url)
     
     # This will throw an exception if the follower URL is unreachable.
     login_resource = login_resource(follower_api)

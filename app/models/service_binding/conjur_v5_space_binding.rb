@@ -16,8 +16,8 @@ module ServiceBinding
 
     def create
       begin
-        host = roles_api.show_role(OpenapiConfig.account, "host", host_id)
-      rescue ConjurOpenApi::ApiError
+        host = roles_api.show_role(ConjurConfig.config.account, "host", host_id)
+      rescue ConjurSDK::ApiError
         host = nil
       end
 
@@ -35,13 +35,13 @@ module ServiceBinding
     end
 
     def role_name
-      "#{OpenapiConfig.account}:host:#{host_id}"
+      "#{ConjurConfig.config.account}:host:#{host_id}"
     end
 
     def api_key
       begin
-        api_key_variable = resources_api.show_resource(OpenapiConfig.account, "variable", "#{policy_base}#{@org_guid}/#{@space_guid}/space-host-api-key")
-      rescue ConjurOpenApi::ApiError
+        api_key_variable = resources_api.show_resource(ConjurConfig.config.account, "variable", "#{policy_base}#{@org_guid}/#{@space_guid}/space-host-api-key")
+      rescue ConjurSDK::ApiError
         api_key_variable = nil
       end
       raise ApiKeyNotFound unless api_key_variable != nil
@@ -51,7 +51,7 @@ module ServiceBinding
 
     def api_key_name
       [
-        OpenapiConfig.account,
+        ConjurConfig.config.account,
         'variable',
         "#{policy_base}#{@org_guid}/#{@space_guid}/space-host-api-key"
       ].join(':')

@@ -39,12 +39,12 @@ module ServiceBinding
 
     def build_credentials(host_id, api_key)
       {
-        account: OpenapiConfig.account,
-        appliance_url: OpenapiConfig.application_conjur_url,
+        account: ConjurConfig.config.account,
+        appliance_url: ConjurConfig.application_conjur_url,
         authn_login: "host/#{host_id}",
         authn_api_key: api_key,
-        ssl_certificate: OpenapiConfig.ssl_cert || "",
-        version: OpenapiConfig.version
+        ssl_certificate: ConjurConfig.ssl_cert || "",
+        version: ConjurSDK.version
       }
     end
   end

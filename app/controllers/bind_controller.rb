@@ -25,7 +25,7 @@ class BindController < ApplicationController
 
   def service_binding
     @service_binding ||= ServiceBinding.from_hash(
-      conjur_version: OpenapiConfig.version,
+      conjur_version: ConjurSDK.version,
       enable_space_identity: SpaceHostPolicy.enabled?
     ).new(instance_id, binding_id, org_guid, space_guid)
   end

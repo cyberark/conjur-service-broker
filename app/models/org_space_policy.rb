@@ -43,14 +43,14 @@ class OrgSpacePolicy
 
   def org_policy
     begin
-      resources_api.show_resource(OpenapiConfig.account, "policy", "#{policy_base}#{@org_id}")
-    rescue ConjurOpenApi::ApiError
+      resources_api.show_resource(ConjurConfig.config.account, "policy", "#{policy_base}#{@org_id}")
+    rescue ConjurSDK::ApiError
       nil
     end
   end
 
   def org_policy_id
-    "#{OpenapiConfig.account}:policy:#{policy_base}#{@org_id}"
+    "#{ConjurConfig.config.account}:policy:#{policy_base}#{@org_id}"
   end
 
   def ensure_space_policy
@@ -59,14 +59,14 @@ class OrgSpacePolicy
 
   def space_policy
     begin
-      resources_api.show_resource(OpenapiConfig.account, "policy", "#{policy_base}#{@org_id}/#{@space_id}")
-    rescue ConjurOpenApi::ApiError
+      resources_api.show_resource(ConjurConfig.config.account, "policy", "#{policy_base}#{@org_id}/#{@space_id}")
+    rescue ConjurSDK::ApiError
       nil
     end
   end
 
   def space_policy_id
-    "#{OpenapiConfig.account}:policy:#{policy_base}#{@org_id}/#{@space_id}"
+    "#{ConjurConfig.config.account}:policy:#{policy_base}#{@org_id}/#{@space_id}"
   end
 
   def ensure_space_layer
@@ -75,14 +75,14 @@ class OrgSpacePolicy
 
   def space_layer
     begin
-      resources_api.show_resource(OpenapiConfig.account, "layer", "#{policy_base}#{@org_id}/#{@space_id}")
-    rescue ConjurOpenApi::ApiError
+      resources_api.show_resource(ConjurConfig.config.account, "layer", "#{policy_base}#{@org_id}/#{@space_id}")
+    rescue ConjurSDK::ApiError
       nil
     end
   end
 
   def space_layer_id
-    "#{OpenapiConfig.account}:layer:#{policy_base}#{@org_id}/#{@space_id}"
+    "#{ConjurConfig.config.account}:layer:#{policy_base}#{@org_id}/#{@space_id}"
   end
 
   def template_create_org_space

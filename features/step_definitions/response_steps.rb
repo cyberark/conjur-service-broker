@@ -22,7 +22,7 @@ And(/^the JSON from "([^"]*)" has (in)?valid conjur credentials$/) do |memory_id
   store_json_response(memory_id)
 
   if negate
-    expect{ authenticate_from_json(@response_json) }.to raise_error(ConjurOpenApi::ApiError)
+    expect{ authenticate_from_json(@response_json) }.to raise_error(ConjurSDK::ApiError)
   else
     expect{ authenticate_from_json(@response_json) }.not_to raise_error
   end
