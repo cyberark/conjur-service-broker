@@ -1,4 +1,3 @@
-require 'conjur-api'
 require 'openssl'
 require 'conjur-sdk'
 
@@ -82,21 +81,10 @@ class OpenapiConfig
     end
 
     def client(base_url=appliance_url)
-      ConjurOpenApi.configure do |config|
-        config.username = authn_login
-        config.host = base_url
-        config.ssl_ca_cert = OpenapiConfig.ssl_cert
+      ConjurOpenApi.configure do |conf|
+        conf.host = base_url
 
-        authn_instance = ConjurOpenApi::AuthenticationApi.new
-        token = authn_instance.get_access_token(
-          account,
-          authn_login,
-          authn_api_key,
-          opts={accept_encoding: 'base64'}
-        )
-
-        config.api_key_prefix['Authorization'] = 'Token'
-        config.api_key['Authorization'] = "token=\"#{token}\""
+        conf.setup_access_token
       end
 
       return ConjurOpenApi::ApiClient.new

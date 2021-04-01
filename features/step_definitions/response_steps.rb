@@ -22,14 +22,14 @@ And(/^the JSON from "([^"]*)" has (in)?valid conjur credentials$/) do |memory_id
   store_json_response(memory_id)
 
   if negate
-    expect{ conjur_authenticate_from_json(@response_json) }.to raise_error(RestClient::Unauthorized)
+    expect{ authenticate_from_json(@response_json) }.to raise_error(ConjurOpenApi::ApiError)
   else
-    expect{ conjur_authenticate_from_json(@response_json) }.not_to raise_error
+    expect{ authenticate_from_json(@response_json) }.not_to raise_error
   end
 end
 
 And(/^the JSON has valid conjur credentials$/) do
-  expect{ conjur_authenticate_from_json(last_json) }.not_to raise_error
+  expect{ authenticate_from_json(last_json) }.not_to raise_error
 end
 
 And(/^the host in "([^"]*)" has annotation "([^"]*)" in Conjur$/) do |memory_id, annotation|

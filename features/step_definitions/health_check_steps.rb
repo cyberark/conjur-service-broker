@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 When(/^I run the( buildpack)? health check script$/) do |buildpack|
-  @output = if buildpack.present?
+  @output = if !(buildpack.nil? || buildpack.empty?)
               `./bin/buildpack-health-check`
             else
               `./bin/health-check.rb`
@@ -13,7 +13,7 @@ end
 When(/^I run the( buildpack)? health check script with env ([^"]*)$/) do |buildpack, vars|
   f = Tempfile.open('command.sh')
 
-  command = if buildpack.present?
+  command = if !(buildpack.nil? || buildpack.empty?)
               './bin/buildpack-health-check'
             else
               './bin/health-check.rb'

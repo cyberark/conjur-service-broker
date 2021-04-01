@@ -1,5 +1,4 @@
 require 'rest_client'
-require 'conjur-api'
 require 'conjur_client'
 
 require 'net/http'
@@ -10,7 +9,6 @@ require 'securerandom'
 module ServiceBrokerWorld
   include CfHelper
   include HttpHelper
-  include ConjurHelper 
 
   def basic_auth_username
     'TEST_USER_NAME'
@@ -110,6 +108,15 @@ module ServiceBrokerWorld
     ci_org_guid = org_guid(cf_ci_org)
     ci_space_guid = space_guid(cf_ci_org, cf_ci_space)
     "#{ENV['PCF_CONJUR_ACCOUNT']}:variable:pcf/ci/#{ci_org_guid}/#{ci_space_guid}/space-host-api-key"
+  end
+
+  def authenticate_from_json(json)
+    config = ConjurOpenApi::Configuration.default
+    config.verify_ssl = false
+    creds = JSON.parse(json)["credentials"]
+    config.host = creds['appliance_url']
+    authn_api = ConjurOpenApi::AuthenticationApi.new ConjurOpenApi::ApiClient.new config
+    authn_api.get_access_token(creds['account'], creds['authn_login'], creds['authn_api_key'], opt={accept_encoding: "base64"})
   end
 end
 

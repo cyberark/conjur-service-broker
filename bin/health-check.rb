@@ -84,7 +84,7 @@ puts "Successfully validated Conjur credentials."
 # If a follower URL is provided, test it using the Conjur API.
 follower_url = ENV['CONJUR_FOLLOWER_URL']
 
-if follower_url.present?
+if !(follower_url.nil? || follower_url.empty?)
   begin
     follower_api = OpenapiConfig.client(follower_url)
     
