@@ -4,37 +4,57 @@ $LOAD_PATH.unshift File.expand_path('../lib', File.dirname(__FILE__))
 
 require 'conjur_client'
 
-def login_resource(conjur_api)
+def login_resource(conjur_client)
+  resource_api = ConjurSDK::ResourcesApi.new conjur_client
   resource_id =
-    if ConjurClient.login_is_host?
-      "#{ConjurClient.account}:host:#{ConjurClient.login_host_id}"
+    if ConjurConfig.login_is_host?
+      kind = "host"
+      id = ConjurConfig.login_host_id
     else
-      "#{ConjurClient.account}:user:#{ConjurClient.authn_login}"
+      kind = "user"
+      id = ConjurConfig.config.username
     end
 
-  conjur_api.resource(resource_id)
+  begin
+    resource_api.show_resource(ConjurConfig.config.account, kind, id)
+  rescue ConjurSDK::ApiError => err
+    if err.code == 404
+      nil
+    else
+      raise err
+    end
+  end
 end
 
-def policy_resource(conjur_api)
-  policy_id = "#{ConjurClient.account}:policy:#{ConjurClient.policy}"
+def policy_resource(conjur_client)
+  resource_api = ConjurSDK::ResourcesApi.new conjur_client
 
-  conjur_api.resource(policy_id)
+  begin
+    resource_api.show_resource(ConjurConfig.config.account, "policy", ConjurConfig.policy_name)
+  rescue ConjurSDK::ApiError => err
+    if err.code == 404
+      nil
+    else
+      raise err
+    end
+  end
 end
 
 def error(message)
   raise StandardError.new(message)
 end
 
-master_api = ConjurClient.api
 
 login_resource_exists = false
 
 begin
+  # This will throw an exception if Conjur credentials are invalid.
+  master_api = ConjurConfig.client
+
   # This will throw an exception if Conjur URL is unreachable.
   login_resource = login_resource(master_api)
   
-  # This will throw an exception if Conjur credentials are invalid.
-  login_resource_exists = login_resource.exists?
+  login_resource_exists = !login_resource.nil?
 rescue
   error(
     "Error: There is an issue with your Conjur configuration. Please verify" \
@@ -43,15 +63,15 @@ rescue
 end
 
 # When authenticating as a host, ensure that credentials can access host resource.
-if !login_resource_exists && ConjurClient.login_is_host?
+if !login_resource_exists && ConjurConfig.login_is_host?
   error("Host identity not privileged to read itself.")
 end
 
-if ConjurClient.policy != 'root'
+if ConjurConfig.policy_name != 'root'
     policy_resource = policy_resource(master_api)
 
     # This will throw an error if the policy isn't found
-    if !policy_resource.exists?
+    if policy_resource.nil?
       error(
           "Error: The policy branch specified in your configuration does not exist," \
           " or is incorrect. Please verify that your policy exists and try again."
@@ -64,9 +84,9 @@ puts "Successfully validated Conjur credentials."
 # If a follower URL is provided, test it using the Conjur API.
 follower_url = ENV['CONJUR_FOLLOWER_URL']
 
-if follower_url.present?
+if !(follower_url.nil? || follower_url.empty?)
   begin
-    follower_api = ConjurClient.new.api(follower_url)
+    follower_api = ConjurConfig.client(follower_url)
     
     # This will throw an exception if the follower URL is unreachable.
     login_resource = login_resource(follower_api)

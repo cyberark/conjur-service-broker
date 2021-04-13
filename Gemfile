@@ -11,13 +11,13 @@ end
 # Docker base image so it won't be updated with fuzzy matching.
 ruby '2.5.8'
 
-gem 'conjur-api', '~> 5.3.4'
 gem 'activesupport', '~> 5.2.4.3'
 gem 'railties', '~> 5.2.4.3'
 gem 'actionview', '~> 5.2.4.2'
 gem 'rack', '~> 2.2.3'
 gem 'json-schema', '~> 2.8'
 gem 'listen', '>= 3.0.5', '< 3.2'
+gem 'rest-client'
 
 # Use Puma as the app server
 gem 'puma', '5.1.1'
@@ -47,5 +47,6 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
+gem 'conjur-sdk', '~> 1.0.0'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

@@ -1,55 +1,28 @@
-require 'conjur-api'
 require 'openssl'
+require 'conjur-sdk'
 
-class ConjurClient
-
+class ConjurConfig
   class ConjurAuthenticationError < RuntimeError
   end
 
   class << self
-    def api
-      ConjurClient.new.api(appliance_url)
-    end
-
-    # Returns an API object that may be read-only. It will use
-    # the Conjur Follower URL when available.
-    def readonly_api
-      ConjurClient.new.api(ConjurClient.application_conjur_url)
-    end
-
-    def v5?
-      version == 5
-    end
-
-    def version
-      case ENV['CONJUR_VERSION']
-      when "4"
+    def check_version
+      case ConjurSDK.version
+      when 4
         raise 'Conjur Enterprise v4 is no longer supported. Please use Conjur Service Broker v1.1.4 or earlier.'
-      when "5", "", nil
+      when 5
         5
       else
         raise 'Invalid value for CONJUR_VERSION'
       end
     end
 
-    def account
-      ENV['CONJUR_ACCOUNT']
-    end
-
-    def authn_api_key
-      ENV['CONJUR_AUTHN_API_KEY']
-    end
-
-    def authn_login
-      ENV['CONJUR_AUTHN_LOGIN']
-    end
-
     def login_host_id
-      authn_login.sub /^host\//, "" if login_is_host?
+      config.username.sub /^host\//, "" if login_is_host?
     end
 
     def login_is_host?
-      authn_login.include?("host\/")
+      config.username.include?("host\/")
     end
 
     def appliance_url
@@ -57,11 +30,21 @@ class ConjurClient
     end
 
     def application_conjur_url
-      ENV['CONJUR_FOLLOWER_URL'].presence || appliance_url
+      follower_url = ENV['CONJUR_FOLLOWER_URL']
+      if follower_url.nil? || follower_url.empty?
+        appliance_url
+      else
+        follower_url
+      end
     end
 
-    def policy
-      ENV['CONJUR_POLICY'].presence || 'root'
+    def policy_name
+      policy = ENV['CONJUR_POLICY']
+      if policy.nil? || policy.empty?
+        'root'
+      else
+        policy
+      end
     end
 
     def ssl_cert
@@ -69,29 +52,30 @@ class ConjurClient
     end
 
     def platform
+      puts "config: #{config}, #{config.class}"
       platform_annotation = ""
       if !login_host_id.nil?
-        host = api.resource("#{account}:host:#{login_host_id}")
-        JSON.parse(host.attributes["annotations"].to_json).each do |annotation|
-          platform_annotation = annotation["value"] if annotation["name"] == "platform"
+        resources_api = ConjurSDK::ResourcesApi.new client
+        resource = resources_api.show_resource(config.account, "host", login_host_id)
+        resource[:annotations].each do |annotation|
+          platform_annotation = annotation[:value] if annotation[:name] == "platform"
         end
       end
       
       return platform_annotation
     end
-  end
 
-  def api(appliance_url)
-    Conjur.configure do |config|
-      config.account = ConjurClient.account
-      config.appliance_url = appliance_url
-      config.ssl_certificate = ConjurClient.ssl_cert
-      config.version = ConjurClient.version
+    def config(base_url=appliance_url)
+      ConjurSDK.configure do |config|
+        config.host = base_url
+        config.setup_access_token
+        @@config ||= config
+      end
+      @@config
     end
 
-    Conjur.configuration.apply_cert_config!
-
-    Conjur::API.new_from_key ConjurClient.authn_login,
-                             ConjurClient.authn_api_key
+    def client(base_url=appliance_url)
+      return ConjurSDK::ApiClient.new config(base_url)
+    end
   end
 end

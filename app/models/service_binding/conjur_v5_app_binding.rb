@@ -12,34 +12,48 @@ module ServiceBinding
     end
 
     def create
-      raise RoleAlreadyCreated, "Host identity already exists." if host.exists?
+      raise RoleAlreadyCreated, "Host identity already exists." if host != nil
 
       ServiceBinding.build_credentials(host_id, api_key)
     end
 
     def delete
-      raise HostNotFound unless host.exists?
+      raise HostNotFound unless host != nil
 
-      host.rotate_api_key
+      authn_api.rotate_api_key(
+        ConjurConfig.config.account,
+        opts={
+          role: "host:#{host_id}"
+        }
+      )
 
-      load_policy template_delete, method: Conjur::API::POLICY_METHOD_PATCH
+      modify_policy template_delete
     end
 
     private
 
     def host
-      @host ||= conjur_api.role(role_name)
+      begin
+        @host ||= roles_api.show_role(ConjurConfig.config.account, "host", host_id)
+      rescue ConjurSDK::ApiError => err
+        if err.code == 401
+          raise RestClient::Unauthorized
+        end
+        if err.code == 0
+          raise RestClient::ServerBrokeConnection
+        end
+      end
     end
 
     def api_key
       @api_key ||= create_host
-    rescue RestClient::NotFound => err
-      raise ConjurClient::ConjurAuthenticationError, "Conjur configuration invalid: #{err.message}"
+    rescue ConjurSDK::ApiError => err
+      raise ConjurConfig::ConjurAuthenticationError, "Conjur configuration invalid: #{err.message}"
     end
 
     def create_host
       result = load_policy(template_create)
-      result.created_roles.values.first['api_key']
+      result[:created_roles].values.first[:api_key]
     end
 
     def template_create
@@ -54,9 +68,9 @@ module ServiceBinding
     def template_create_annotations
       template = <<~YAML.chomp.indent(2)
         annotations:
-          #{ConjurClient.platform}: true
+          #{ConjurConfig.platform}: true
       YAML
-      template if ConjurClient.platform.to_s.present?
+      template if ConjurConfig.platform.to_s.present?
     end
 
     def template_create_grant
@@ -75,12 +89,16 @@ module ServiceBinding
       YAML
     end
 
-    def load_policy(policy, method: Conjur::API::POLICY_METHOD_POST)
-      conjur_api.load_policy(policy_location, policy, method: method)
+    def load_policy(policy)
+      policy_api.load_policy(ConjurConfig.config.account, policy_location, policy)
+    end
+    
+    def modify_policy(policy)
+      policy_api.update_policy(ConjurConfig.config.account, policy_location, policy)
     end
 
     def policy_location
-      use_space? ? space_policy : ConjurClient.policy
+      use_space? ? space_policy : ConjurConfig.policy_name
     end
 
     def host_id
@@ -92,7 +110,7 @@ module ServiceBinding
     end
 
     def role_name
-      "#{ConjurClient.account}:host:#{host_id}"
+      "#{ConjurConfig.config.account}:host:#{host_id}"
     end
 
     def use_space?
