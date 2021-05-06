@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Security
+- Updated rails packages (activesupport, railties, actionview) to 5.2.4.6 to resolve CVE-2021-22885
+  [cyberark/conjur-service-broker#241](https://github.com/cyberark/conjur-service-broker/issues/241)
 
 ## [1.1.5] - 2021-03-01
 ### Removed

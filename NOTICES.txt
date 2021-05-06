@@ -16,12 +16,12 @@ SECTION 2: BSD-3-Clause
 
 SECTION 3: MIT
 
->>> https://rubygems.org/gems/actionview/versions/5.2.4.4
->>> https://rubygems.org/gems/activesupport/versions/5.2.4.4
+>>> https://rubygems.org/gems/actionview/versions/5.2.4.6
+>>> https://rubygems.org/gems/activesupport/versions/5.2.4.6
 >>> https://rubygems.org/gems/json-schema/versions/2.8.0
 >>> https://rubygems.org/gems/listen/versions/3.1.5
 >>> https://rubygems.org/gems/rack/versions/2.2.3
->>> https://rubygems.org/gems/railties/versions/5.2.4.4
+>>> https://rubygems.org/gems/railties/versions/5.2.4.6
 
 
 APPENDIX: Standard License Files and Templates
