@@ -1,6 +1,9 @@
 # Ignore artifacts
 cyberark-conjur-service-broker_*.zip
 
+# Ignore buildpack health check source
+/buildpack-health-check/*
+
 # Ignore local libraries
 /vendor/*
 
