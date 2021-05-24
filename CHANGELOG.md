@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Security
+- Updated puma to 5.3.1 to resolve GHSA-q28m-8xjw-8vr5
+  [cyberark/conjur-service-broker#246](https://github.com/cyberark/conjur-service-broker/issues/246)
+- Updated nokogiri to 1.11.5 to resolve GHSA-7rrm-v45f-jp64 
+  [cyberark/conjur-service-broker#246](https://github.com/cyberark/conjur-service-broker/issues/246)
 - Updated rails packages (activesupport, railties, actionview) to 5.2.4.6 to resolve CVE-2021-22885
   [cyberark/conjur-service-broker#241](https://github.com/cyberark/conjur-service-broker/issues/241)
 
