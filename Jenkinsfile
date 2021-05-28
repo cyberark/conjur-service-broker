@@ -24,16 +24,16 @@ pipeline {
       steps { sh './dev/build' }
     }
 
-    stage('Vulnerability Scans') {
-      parallel {
-        stage('Fixable Docker Image Issues') {
-          steps { scanAndReport("conjur-service-broker", "HIGH", false) }
-        }
-        stage('All Docker Image Issues') {
-          steps { scanAndReport("conjur-service-broker", "NONE", true) }
-        }
-      }
-    }
+    //stage('Vulnerability Scans') {
+    //  parallel {
+    //    stage('Fixable Docker Image Issues') {
+    //      steps { scanAndReport("conjur-service-broker", "HIGH", false) }
+    //    }
+    //    stage('All Docker Image Issues') {
+    //      steps { scanAndReport("conjur-service-broker", "NONE", true) }
+    //    }
+    //  }
+    //}
 
     stage('Unit and Integration Testing') {
       parallel {

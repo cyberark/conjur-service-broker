@@ -105,6 +105,10 @@ class ApplicationController < ActionController::API
     params[:instance_id]
   end
 
+  def organization_name
+    params.dig(:context, :organization_name)
+  end
+  
   def org_guid
     params.dig(:context, :organization_guid)
   end
@@ -114,5 +118,9 @@ class ApplicationController < ActionController::API
   # because we do not support service sharing.
   def space_guid
     params.dig(:context, :space_guid)
+  end
+  
+  def space_name
+    params.dig(:context, :space_name)
   end
 end

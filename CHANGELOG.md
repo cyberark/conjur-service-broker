@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Service broker API spec 2.15 and above has organization_name and space_name, if those are available we add them as annotations on the org and space when creating in conjur. 
+
 ### Removed
 - Support for Conjur Enterprise v4 has been removed. We recommend users migrate to
   Dynamic Access Provider v11+ or Conjur OSS v1+.
