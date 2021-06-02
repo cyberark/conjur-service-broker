@@ -1,0 +1,54 @@
+name: Copy Releases to Latest Branch
+on:
+  push:
+    # We trigger this workflow on tag pushes that match v* (eg. `v1.2.3`)
+    tags:
+      - 'v*'
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  copy-release-branch-to-latest:
+    name: Copy Release Branch to Latest
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+      with:
+        ref: main
+
+    - name: Configure Git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Set variables
+      run: |
+        tag_name=$(echo "${GITHUB_REF#refs/tags/}")
+
+        echo "::set-output name=TAG_NAME::${tag_name}"
+        echo "Tag: ${tag_name}"
+
+        branch_name=$(echo "update-latest-with-${tag_name}")
+        echo "::set-output name=UPDATE_BRANCH::${branch_name}"
+      id: data
+
+    - name: Checkout repo
+      uses: actions/checkout@v2
+      with:
+        ref: "${{ steps.data.outputs.TAG_NAME }}"
+
+    - name: Copy the tag code to a branch
+      run: |
+        git push --force "https://${{ github.actor }}:${{secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git" "HEAD:refs/heads/${{ steps.data.outputs.UPDATE_BRANCH }}"
+
+    - name: Open a PR to archive the tag in the latest branch
+      uses: vsoch/pull-request-action@d987bc1 # Pinned v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PULL_REQUEST_FROM_BRANCH: "${{ steps.data.outputs.UPDATE_BRANCH }}"
+        PULL_REQUEST_BRANCH: latest
+        PULL_REQUEST_TITLE: "Action: Update latest branch for ${{ steps.data.outputs.TAG_NAME }}"
+        PULL_REQUEST_BODY: "Auto-generated PR!"

@@ -1,5 +1,10 @@
-FROM ruby:2.5
+FROM ruby:2.5.8
 MAINTAINER CyberArk Software Ltd.
+
+# This is a Dockerfile for the Service Broker image that is used in
+# development. This differs from the production image in that:
+#   - Repository tree will be volume mounted rather than copied
+#   - Gem dependencies from the 'development' group are included
 
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
@@ -7,10 +12,14 @@ RUN apt-get update && \
                        libpq-dev \
                        zip
 
+COPY Gemfile \
+     Gemfile.lock /tmp/
+WORKDIR /tmp
+
+# For bundle version < 2.0, bundle remembers the groups that had been
+# excluded for the previous invocation of bundle. So use `--with`
+# to explicitly include the development group.
+RUN bundle install --no-deployment --frozen --system --with development
+
 RUN mkdir -p /app
 WORKDIR /app
-
-COPY Gemfile \
-     Gemfile.lock /app/
-
-RUN bundle install --no-deployment --frozen --system

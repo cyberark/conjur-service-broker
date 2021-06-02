@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+cd "$(dirname "$0")"
+
 # This is run using 'docker' rather than 'docker-compose' so that this test
 # can be run in parallel with the 'bin/test_integration' test. (Running both
 # on the default docker-compose network could cause a conflict in that
@@ -10,6 +12,7 @@ docker run \
     -e CONJUR_AUTHN_LOGIN=admin \
     -e SECURITY_USER_NAME=TEST_USER_NAME \
     -e SECURITY_USER_PASSWORD=TEST_USER_PASSWORD \
+    -v "$(pwd)"/..:/app \
     conjur-service-broker-test \
     bundle exec rspec \
     --format RspecJunitFormatter \

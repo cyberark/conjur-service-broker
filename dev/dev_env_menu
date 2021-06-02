@@ -9,6 +9,9 @@
 # tests can be discovered.
 cd "$(dirname "$0")/.." || (echo "Could not cd to parent dir"; exit 1)
 
+# shellcheck disable=SC1091
+. ./dev/utils.sh
+
 function main_menu() {
 
   local options=( \
@@ -79,6 +82,7 @@ function dry_run() {
 }
 
 function unit_test() {
+  announce "Running RSpec unit tests"
   bundle exec rspec --format RspecJunitFormatter --out spec/reports/test.xml
 }
 

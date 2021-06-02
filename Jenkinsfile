@@ -56,7 +56,7 @@ pipeline {
           post {
             success {
               script {
-                if (env.BRANCH_NAME == 'master') {
+                if (env.BRANCH_NAME == 'main') {
                   archiveArtifacts artifacts: '*.zip', fingerprint: true
                 }
               }
@@ -79,7 +79,7 @@ pipeline {
       post {
         success {
           script {
-            if (env.BRANCH_NAME == 'master') {
+            if (env.BRANCH_NAME == 'main') {
               archiveArtifacts artifacts: '*.zip', fingerprint: true
             }
           }

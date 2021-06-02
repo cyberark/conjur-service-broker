@@ -4,7 +4,7 @@ class BindController < ApplicationController
 
     credentials =
       with_conjur_exceptions do
-        OrgSpacePolicy.ensure_exists(org_guid, space_guid) if use_context?
+        OrgSpacePolicy.ensure_exists(org_guid, space_guid, organization_name, space_name) if use_context?
         service_binding.create
       end
 

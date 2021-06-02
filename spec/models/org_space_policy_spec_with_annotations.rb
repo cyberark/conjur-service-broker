@@ -4,9 +4,11 @@ describe OrgSpacePolicy do
 
   let(:org_guid) { "my_org" }
   let(:space_guid) { "my_space" }
+  let(:organization_name) { "my_organization_name" }
+  let(:space_name) { "my_space_name" }
   let(:policy_name) { 'cf' }
 
-  subject { OrgSpacePolicy.new(org_guid, space_guid) }   
+  subject { OrgSpacePolicy.new(org_guid, space_guid, organization_name , space_name) }
 
   before do
     allow(ConjurClient).to receive(:policy).and_return(policy_name)    
@@ -20,11 +22,18 @@ describe OrgSpacePolicy do
       ---
       - !policy
         id: #{org_guid}
+        annotations:
+          pcf/type: org  
+          pcf/orgName: #{organization_name}
         body:
           - !layer
 
           - !policy
             id: #{space_guid}
+            annotations:
+              pcf/orgName: #{organization_name}  
+              pcf/type: space  
+              pcf/spaceName: #{space_name}  
             body:
               - !layer
 
@@ -35,14 +44,17 @@ describe OrgSpacePolicy do
   end
 
   describe "#create" do
-    it "loads Conjur policy to create the org and space policy" do
-      expect_any_instance_of(Conjur::API).
-        to receive(:load_policy).
-        with(policy_name, create_policy_body, method: :post)
+    context "when org and space names **are** available from Service Broker API" do
+      it "loads Conjur policy to create the org and space policy **with** annotations" do
+        expect_any_instance_of(Conjur::API).
+            to receive(:load_policy).
+            with(policy_name, create_policy_body, method: :post)
 
-      subject.create
+          subject.create
+      end
     end
   end
+
 
   describe "#ensure_exists" do
     let(:existent_resource) { double("existent", exists?: true) }

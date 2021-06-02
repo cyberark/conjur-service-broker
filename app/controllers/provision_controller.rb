@@ -4,8 +4,8 @@ class ProvisionController < ApplicationController
 
     if use_context?
       with_conjur_exceptions do
-        OrgSpacePolicy.create(org_guid, space_guid)
-        OrgSpacePolicy.ensure_exists(org_guid, space_guid)
+        OrgSpacePolicy.create(org_guid, space_guid, organization_name, space_name)
+        OrgSpacePolicy.ensure_exists(org_guid, space_guid, organization_name, space_name)
         SpaceHostPolicy.create(org_guid, space_guid)
       end
 

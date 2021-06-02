@@ -5,19 +5,42 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Service Broker API spec 2.15 and above provide `organization_name` and `space_name`.
+  If these are available, they are added as annotations on the organization and space policies
+  that are created in Conjur.
+  [cyberark/conjur-service-broker#238](https://github.com/cyberark/conjur-service-broker/issues/238)
 
+
+### Security
+- Updated puma to 5.3.1 to resolve GHSA-q28m-8xjw-8vr5
+  [cyberark/conjur-service-broker#246](https://github.com/cyberark/conjur-service-broker/issues/246)
+- Updated nokogiri to 1.11.5 to resolve GHSA-7rrm-v45f-jp64 
+  [cyberark/conjur-service-broker#246](https://github.com/cyberark/conjur-service-broker/issues/246)
+- Updated rails packages (activesupport, railties, actionview) to 5.2.4.6 to resolve CVE-2021-22885
+  [cyberark/conjur-service-broker#241](https://github.com/cyberark/conjur-service-broker/issues/241)
+
+## [1.1.5] - 2021-03-01
 ### Removed
 - Support for Conjur Enterprise v4 has been removed. We recommend users migrate to
   Dynamic Access Provider v11+ or Conjur OSS v1+.
   [cyberark/conjur-service-broker#203](https://github.com/cyberark/conjur-service-broker/issues/203)
 
+### Fixed
+- The service broker Gemfile now specifies the Ruby version so that the service
+  broker no longer fails to install when using a version of the Ruby Buildpack
+  v1.8.15 or older, due to an incompatibility issue between Ruby and Nokogiri
+  versions.
+  [cyberark/conjur-service-broker#229](https://github.com/cyberark/conjur-service-broker/issues/229)
+
 ## [1.1.4] - 2021-01-11
 
 ### Changed
 - Previously, our ZIP included our test directories, which increased the size of the service broker. 
-  We've introduced a [manifest.txt](./dev/manifest.txt) within the `dev` directory which
-  dictates what will be included in the final ZIP used in our releases and during installation, and allows
-  us to exclude the test directories and developer scripts.
+  We've introduced a [manifest.txt](https://github.com/cyberark/conjur-service-broker/tree/master/dev/manifest.txt)
+  within the `dev` directory which dictates what will be included in the final ZIP used in our
+  releases and during installation, and allows us to exclude the test directories and developer
+  scripts.
   [cyberark/conjur-service-broker#142](https://github.com/cyberark/conjur-service-broker/issues/142)
 
 ### Fixed
@@ -120,7 +143,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.4...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.5...HEAD
+[1.1.5]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.1...v1.1.2

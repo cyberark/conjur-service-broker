@@ -5,26 +5,25 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# Do not use fuzzy version matching (~>) with the Ruby version. It doesn't play
+# nicely with RVM and we should be explicit since Ruby is such a fundamental
+# part of a Rails project. The Ruby version is also locked in place by the
+# Docker base image so it won't be updated with fuzzy matching.
+ruby '2.5.8'
+
 gem 'conjur-api', '~> 5.3.4'
-gem 'activesupport', '~> 5.2.4.3'
-gem 'railties', '~> 5.2.4.3'
-gem 'actionview', '~> 5.2.4.2'
+gem 'activesupport', '~> 5.2.4.6'
+gem 'railties', '~> 5.2.4.6'
+gem 'actionview', '~> 5.2.4.6'
 gem 'rack', '~> 2.2.3'
 gem 'json-schema', '~> 2.8'
 gem 'listen', '>= 3.0.5', '< 3.2'
 
 # Use Puma as the app server
-gem 'puma', '5.1.1'
+gem 'puma', '5.3.1'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
-
-# Everything below the trim marker will be truncated when the project is built
-# to ensure we exclude dev and test dependencies in the compressed service
-# broker. Do not move or delete these lines!
-### ====  v !DO NOT REMOVE! v  ====
-### ===== GEMFILE TRIM MARKER =====
-### ====  ^ !DO NOT REMOVE! ^  ====
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

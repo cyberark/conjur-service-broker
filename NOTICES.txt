@@ -12,16 +12,16 @@ SECTION 1: Apache-2.0
 
 SECTION 2: BSD-3-Clause
 
->>> https://rubygems.org/gems/puma/versions/3.12.5
+>>> https://rubygems.org/gems/puma/versions/5.3.1
 
 SECTION 3: MIT
 
->>> https://rubygems.org/gems/actionview/versions/5.2.4.4
->>> https://rubygems.org/gems/activesupport/versions/5.2.4.4
+>>> https://rubygems.org/gems/actionview/versions/5.2.4.6
+>>> https://rubygems.org/gems/activesupport/versions/5.2.4.6
 >>> https://rubygems.org/gems/json-schema/versions/2.8.0
 >>> https://rubygems.org/gems/listen/versions/3.1.5
 >>> https://rubygems.org/gems/rack/versions/2.2.3
->>> https://rubygems.org/gems/railties/versions/5.2.4.4
+>>> https://rubygems.org/gems/railties/versions/5.2.4.6
 
 
 APPENDIX: Standard License Files and Templates
@@ -56,25 +56,24 @@ limitations under the License.
 
 BSD-3-Clause License is applicable to the following component(s).
 
->>> https://rubygems.org/gems/puma/versions/3.12.5
+>>> https://rubygems.org/gems/puma/versions/5.3.1
 
-Some code copyright (c) 2005, Zed Shaw
-Copyright (c) 2011, Evan Phoenix
+Copyright (c) 2019, Evan Phoenix. Some code by Zed Shaw, (c) 2005.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-list of conditions and the following disclaimer.
+   list of conditions and the following disclaimer.
 
 2. Redistributions in binary form must reproduce the above copyright notice,
-this list of conditions and the following disclaimer in the documentation
-and/or other materials provided with the distribution.
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
-3. Neither the name of the copyright holder nor the names of its contributors
-may be used to endorse or promote products derived from this software without
-specific prior written permission.
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
