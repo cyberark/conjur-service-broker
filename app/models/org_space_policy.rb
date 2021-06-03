@@ -13,18 +13,20 @@ class OrgSpacePolicy
   end
 
   class << self
-    def ensure_exists(org_id, space_id)
-      OrgSpacePolicy.new(org_id, space_id).ensure_exists
+    def ensure_exists(org_id, space_id, organization_name, space_name)
+      OrgSpacePolicy.new(org_id, space_id, organization_name, space_name).ensure_exists
     end
 
-    def create(org_id, space_id)
-      OrgSpacePolicy.new(org_id, space_id).create
+    def create(org_id, space_id, organization_name, space_name)
+      OrgSpacePolicy.new(org_id, space_id, organization_name, space_name).create
     end
   end
 
-  def initialize(org_id, space_id)
+  def initialize(org_id, space_id, organization_name, space_name)
     @org_id = org_id
     @space_id = space_id
+    @organization_name = organization_name
+    @space_name = space_name
   end
 
   def ensure_exists
@@ -34,7 +36,11 @@ class OrgSpacePolicy
   end
 
   def create
-    load_policy(template_create_org_space)
+    if @organization_name.nil?
+      load_policy(template_create_org_space)
+    else
+      load_policy(template_create_org_space_with_annotations)
+    end
   end
 
   private
@@ -93,4 +99,31 @@ class OrgSpacePolicy
           member: !layer #{@space_id}
     YAML
   end
+  
+  def template_create_org_space_with_annotations
+    <<~YAML
+    ---
+    - !policy
+      id: #{@org_id}
+      annotations:
+        pcf/type: org
+        pcf/orgName: #{@organization_name}
+      body:
+        - !layer
+
+        - !policy
+          id: #{@space_id}
+          annotations:
+            pcf/type: space
+            pcf/orgName: #{@organization_name}
+            pcf/spaceName: #{@space_name}
+          body:
+            - !layer
+
+        - !grant
+          role: !layer
+          member: !layer #{@space_id}
+    YAML
+  end
+
 end

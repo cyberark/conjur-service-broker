@@ -228,6 +228,9 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
       # Organization GUID from the platform.
       # This may be obtained by running `cf org --guid {org name}
       id: cbd7a05a-b304-42a9-8f66-6827ae6f78a1
+      annotations:
+        pcf/orgName: my-organization # note that this is only added for Service Broker API 2.15 and up
+        pcf/type: org
       body:
         # Layer to privilege an entire organzation to a resource
         - !layer
@@ -237,6 +240,10 @@ For instructions on installing and using the Conjur Buildpack, please [see the C
           # Space GUID from the platform.
           # This may be obtained by running `cf space --guid {space name}
           id: 8bf39f4a-ebde-437b-9c38-3d234b80631a
+          annotations: #note that this only gets added on service broker api version 2.15 and up, when the attribute is made available to us.
+            pcf/orgName: my-organization # note that this is only added for Service Broker API 2.15 and up
+            pcf/spaceName: my-space
+            pcf/type: space
           body:
             # Layer to privilege an entire space to a resource
             # The service broker adds applications to this layer automatically.
