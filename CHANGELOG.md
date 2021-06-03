@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   that are created in Conjur.
   [cyberark/conjur-service-broker#238](https://github.com/cyberark/conjur-service-broker/issues/238)
 
-
 ### Security
 - Updated puma to 5.3.1 to resolve GHSA-q28m-8xjw-8vr5
   [cyberark/conjur-service-broker#246](https://github.com/cyberark/conjur-service-broker/issues/246)
