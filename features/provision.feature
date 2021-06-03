@@ -53,7 +53,7 @@ Feature: Provisioning
     {
       "context": {
         "organization_guid": "e027f3f6-80fe-4d22-9374-da23a035ba0a",
-        "space_guid": "8c56f85c-c16e-4158-be79-5dac74f970db"
+        "space_guid": "8c56f85c-c16e-4158-be79-5dac74f970db",
         "organization_name": "my-organization",
         "space_name": "my-space"
       },
