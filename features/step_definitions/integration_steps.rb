@@ -53,6 +53,15 @@ Then(/^the policy for the org and space( doesn't)? exist(?:s)?$/) do |negative|
   expect(remote_conjur_resource_exists?(space_policy_id)).to eq(negative.blank?)
 end
 
+Then(/^the policy for the org includes org annotations$/) do
+  expect(remote_conjur_resource_has_annotation?(org_policy_id, "pcf/orgName")).to eq(true)
+end
+
+Then(/^the policy for the space includes org and space annotations$/) do
+  expect(remote_conjur_resource_has_annotation?(space_policy_id, "pcf/orgName")).to eq(true)
+  expect(remote_conjur_resource_has_annotation?(space_policy_id, "pcf/spaceName")).to eq(true)
+end
+
 Then(/^the space host exists$/) do
   expect(remote_conjur_resource_exists?(space_host_id)).to eq(true)
 end

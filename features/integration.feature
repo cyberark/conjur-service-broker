@@ -3,15 +3,17 @@
 # external server is Conjur V5 Enterprise)
 @conjur-version-5
 @integration
-Feature: Integration Tests for PCF 2.4
+Feature: Integration Tests for TAS
 
   Background: 
     Given I create an org and space
     And I install the Conjur service broker
 
-  Scenario: Service broker functions correctly with PCF 2.4 
+  Scenario: Service broker functions correctly with TAS
     When I create a service instance for Conjur
     Then the policy for the org and space exists
+    And the policy for the org includes org annotations
+    And the policy for the space includes org and space annotations
     And the space host exists
     And the space host api key variable exists
 
