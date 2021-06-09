@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.0] - 2021-06-09
 ### Added
 - Service Broker API spec 2.15 and above provide `organization_name` and `space_name`.
   If these are available, they are added as annotations on the organization and space policies
@@ -144,7 +146,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.5...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.2...v1.1.3
