@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Service Broker API spec 2.15 and above provide `organization_name` and `space_name`.
   If these are available, they are added as annotations on the organization and space policies
-  that are created in Conjur.
+  that are created in Conjur. Note that this requires Conjur Open Source v1.3.7+ and Conjur
+  Enterprise (formerly Dynamic Access Provider) v11.3.0+; prior to these versions, Conjur
+  did not support adding annotations to policy resources.
   [cyberark/conjur-service-broker#238](https://github.com/cyberark/conjur-service-broker/issues/238)
 
 ### Security
