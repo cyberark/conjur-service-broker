@@ -25,6 +25,7 @@ logfile
 /spec/reports/
 
 # Ignore build relics
+conjur-quickstart
 /vendor/cache/
 /vendor/bundle/
 .DS_Store
@@ -34,4 +35,3 @@ pkg
 
 # Ignore artifacts
 cyberark-conjur-service-broker_*.zip
-tests/integration/test-app/secrets.yml

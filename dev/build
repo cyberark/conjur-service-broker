@@ -4,11 +4,13 @@
 cd "$(dirname "$0")/.." || (echo "Could not cd to parent dir"; exit 1)
 # shellcheck disable=SC1091
 . ./dev/utils.sh
+# shellcheck disable=SC1091
+. ./dev/conjur_utils
 
 TAG="$(< VERSION)-$(git rev-parse --short HEAD)"
 
 announce "Getting updated images (this may take a few minutes)..."
-docker-compose pull -q conjur_5
+downloadQuickstart
 echo "Done!"
 
 announce "Building Buildpack Health Check executable"
