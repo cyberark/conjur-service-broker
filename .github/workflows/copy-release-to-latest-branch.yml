@@ -45,7 +45,7 @@ jobs:
         git push --force "https://${{ github.actor }}:${{secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git" "HEAD:refs/heads/${{ steps.data.outputs.UPDATE_BRANCH }}"
 
     - name: Open a PR to archive the tag in the latest branch
-      uses: vsoch/pull-request-action@d987bc1 # Pinned v1.0.2
+      uses: vsoch/pull-request-action@1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PULL_REQUEST_FROM_BRANCH: "${{ steps.data.outputs.UPDATE_BRANCH }}"
