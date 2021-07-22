@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   [cyberark/conjur-service-broker#238](https://github.com/cyberark/conjur-service-broker/issues/238)
 
 ### Security
+- Updated addressable to 2.8.0 to resolve GHSA-jxhc-q857-3j6g
+  [cyberark/conjur-service-broker#251](https://github.com/cyberark/conjur-service-broker/pull/251)
 - Updated puma to 5.3.1 to resolve GHSA-q28m-8xjw-8vr5
   [cyberark/conjur-service-broker#246](https://github.com/cyberark/conjur-service-broker/issues/246)
 - Updated nokogiri to 1.11.5 to resolve GHSA-7rrm-v45f-jp64 
