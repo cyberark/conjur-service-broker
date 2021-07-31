@@ -2,3 +2,5 @@
 applications:
 - name: conjur-service-broker
   command: ./bin/start-service-broker.sh
+  buildpacks:
+    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.37

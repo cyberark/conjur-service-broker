@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- The service broker's `./manifest.yml` now explicitly specifies a pinned version of the Ruby Buildpack,
+  [ruby-buildpack.git#v1.8.37](https://github.com/cloudfoundry/ruby-buildpack/releases/tag/v1.8.37),
+  to ensure the pinned Ruby version in the Gemfile is available when the the service broker is deployed
+  onto TAS foundation.
+  [cyberark/conjur-service-broker#254](https://github.com/cyberark/conjur-service-broker/issues/254)
+
 ## [1.2.0] - 2021-06-09
 ### Added
 - Service Broker API spec 2.15 and above provide `organization_name` and `space_name`.
