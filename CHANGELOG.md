@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.1] - 2021-08-02
 ### Fixed
 - The service broker's `./manifest.yml` now explicitly specifies a pinned version of the Ruby Buildpack,
   [ruby-buildpack.git#v1.8.37](https://github.com/cloudfoundry/ruby-buildpack/releases/tag/v1.8.37),
@@ -155,7 +156,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.3...v1.1.4
