@@ -6,7 +6,7 @@ pipeline {
   options {
     timestamps()
     buildDiscarder(logRotator(numToKeepStr: '30'))
-    lock resource: "conjur-service-broker-build"
+    lock resource: "tas-infra"
   }
 
   triggers {
