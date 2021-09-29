@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Security
+- Updated Nokogiri to 1.12.5-x86_64-darwin to resolve 
+  [CVE-2021-41098](https://github.com/advisories/GHSA-2rr5-8q37-2w7h)
+  [cyberark/conjur-service-broker#257](https://github.com/cyberark/conjur-service-broker/pull/257)
 
 ## [1.2.1] - 2021-08-02
 ### Fixed
