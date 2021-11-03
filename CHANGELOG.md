@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.2] - 2021-11-03
 ### Security
 - Updated Nokogiri to 1.12.5-x86_64-darwin to resolve 
   [CVE-2021-41098](https://github.com/advisories/GHSA-2rr5-8q37-2w7h)
@@ -160,7 +162,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.4...v1.1.5
