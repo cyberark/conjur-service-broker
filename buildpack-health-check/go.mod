@@ -1,8 +1,12 @@
 module github.com/cyberark/conjur-service-broker/buildpack-health-check
 
-go 1.15
+go 1.17
+
+require github.com/cyberark/conjur-api-go v0.8.1
 
 require (
-	github.com/cyberark/conjur-api-go v0.6.0
-	golang.org/x/crypto v0.0.0-20201216223049-8b5274cf687f // indirect
+	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
+	github.com/sirupsen/logrus v1.8.1 // indirect
+	golang.org/x/sys v0.0.0-20211214234402-4825e8c3871d // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
