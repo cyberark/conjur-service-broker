@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.3] - 2021-12-31
+### Changed
+- Updated to go 1.17 and conjur-api-go 0.8.1
+  [cyberark/conjur-service-broker#263](https://github.com/cyberark/conjur-service-broker/pull/263)
+
 ## [1.2.2] - 2021-11-03
 ### Security
 - Updated Nokogiri to 1.12.5-x86_64-darwin to resolve 
@@ -162,7 +167,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.3...HEAD
+[1.2.3]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/cyberark/conjur-service-broker/compare/v1.1.5...v1.2.0
