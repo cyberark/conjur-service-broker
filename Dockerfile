@@ -1,4 +1,4 @@
-FROM ruby:2.5.8
+FROM ruby:2.7
 MAINTAINER CyberArk Software Ltd.
 
 RUN apt-get update && \
