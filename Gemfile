@@ -16,7 +16,7 @@ gem 'activesupport', '~> 5.2.6'
 gem 'railties', '~> 5.2.6'
 gem 'actionview', '~> 5.2.6'
 gem 'rack', '~> 2.2.3'
-gem 'json-schema', '~> 2.8'
+gem 'json-schema', '2.8.0'
 gem 'listen', '>= 3.0.5', '< 3.2'
 
 # Use Puma as the app server
