@@ -12,16 +12,16 @@ SECTION 1: Apache-2.0
 
 SECTION 2: BSD-3-Clause
 
->>> https://rubygems.org/gems/puma/versions/5.5.1
+>>> https://rubygems.org/gems/puma/versions/5.6.2
 
 SECTION 3: MIT
 
->>> https://rubygems.org/gems/actionview/versions/5.2.4.6
->>> https://rubygems.org/gems/activesupport/versions/5.2.4.6
+>>> https://rubygems.org/gems/actionview/versions/5.2.6.2
+>>> https://rubygems.org/gems/activesupport/versions/5.2.6.2
 >>> https://rubygems.org/gems/json-schema/versions/2.8.0
 >>> https://rubygems.org/gems/listen/versions/3.1.5
 >>> https://rubygems.org/gems/rack/versions/2.2.3
->>> https://rubygems.org/gems/railties/versions/5.2.4.6
+>>> https://rubygems.org/gems/railties/versions/5.2.6.2
 
 
 APPENDIX: Standard License Files and Templates
@@ -56,7 +56,7 @@ limitations under the License.
 
 BSD-3-Clause License is applicable to the following component(s).
 
->>> https://rubygems.org/gems/puma/versions/5.5.1
+>>> https://rubygems.org/gems/puma/versions/5.6.2
 
 Copyright (c) 2019, Evan Phoenix. Some code by Zed Shaw, (c) 2005.
 All rights reserved.
@@ -90,7 +90,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 MIT License is applicable to the following component(s).
 
->>> https://rubygems.org/gems/actionview/versions/5.2.4.6
+>>> https://rubygems.org/gems/actionview/versions/5.2.6.2
 
 Copyright (c) 2005-2018 David Heinemeier Hansson'
 
@@ -112,7 +112,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
->>> https://rubygems.org/gems/activesupport/versions/5.2.4.6
+>>> https://rubygems.org/gems/activesupport/versions/5.2.6.2
 
 Copyright (c) 2005-2018 David Heinemeier Hansson'
 
@@ -200,7 +200,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
->>> https://rubygems.org/gems/railties/versions/5.2.4.6
+>>> https://rubygems.org/gems/railties/versions/5.2.6.2
 
 Copyright (c) 2005-2018 David Heinemeier Hansson'
 

@@ -5,7 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.4] - 2022-02-14
 ### Security
+- Upgraded rails components to 5.2.6.2 and puma to 5.6.2 to resolve CVE-2022-23633 and 
+  CVE-2022-23634 [cyberark/conjur-service-broker#270](https://github.com/cyberark/conjur-service-broker/pull/270)
 - Updated puma to 5.5.1
   [cyberark/conjur-service-broker#267](https://github.com/cyberark/conjur-service-broker/pull/267)
 
