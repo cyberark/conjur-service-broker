@@ -9,14 +9,14 @@ end
 # nicely with RVM and we should be explicit since Ruby is such a fundamental
 # part of a Rails project. The Ruby version is also locked in place by the
 # Docker base image so it won't be updated with fuzzy matching.
-ruby '2.5.8'
+ruby '~> 2.7'
 
 gem 'conjur-api', '~> 5.3.4'
 gem 'activesupport', '~> 5.2.6'
 gem 'railties', '~> 5.2.6'
 gem 'actionview', '~> 5.2.6'
 gem 'rack', '~> 2.2.3'
-gem 'json-schema', '~> 2.8'
+gem 'json-schema', '2.8.0'
 gem 'listen', '>= 3.0.5', '< 3.2'
 
 # Use Puma as the app server
