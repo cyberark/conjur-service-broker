@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Security
+- Upgraded puma to 5.6.4 to resolve CVE-2022-24790 
+  [cyberark/conjur-service-broker#271](https://github.com/cyberark/conjur-service-broker/pull/271)
 - Upgraded rails components to 5.2.6.2 and puma to 5.6.2 to resolve CVE-2022-23633 and 
   CVE-2022-23634 [cyberark/conjur-service-broker#270](https://github.com/cyberark/conjur-service-broker/pull/270)
 - Updated puma to 5.5.1
