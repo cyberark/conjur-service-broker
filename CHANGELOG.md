@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Security
+- Upgrade nokogiri to 1.13.4 to resolve CVE-2022-24836, CVE-2018-25032, 
+  CVE-2022-24839, and CVE-2022-23437 (not vulnerable to all)
+  [cyberark/conjur-service-broker#273](https://github.com/cyberark/conjur-service-broker/pull/273)
 - Upgraded puma to 5.6.4 to resolve CVE-2022-24790 
   [cyberark/conjur-service-broker#271](https://github.com/cyberark/conjur-service-broker/pull/271)
 - Upgraded rails components to 5.2.6.2 and puma to 5.6.2 to resolve CVE-2022-23633 and 
