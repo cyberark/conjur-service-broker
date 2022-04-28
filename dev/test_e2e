@@ -4,32 +4,105 @@ set -e
 
 # shellcheck disable=SC1091
 . ./utils.sh
+. "$(git rev-parse --show-toplevel)/bash-lib/init"
+
+# Allow hammerfile path to be overidden, but default to hammerfile.json
+# in the root of the repo.
+HAMMERFILE_DEFAULT="$(git rev-parse --show-toplevel)/hammerfile.json"
+export HAMMERFILE="${HAMMERFILE:-"${HAMMERFILE_DEFAULT}"}"
 
 function cleanup {
   announce "Removing test environment"
   docker-compose down --rmi 'local' --volumes
+  if [[ -n "${compute_ip:-}" ]]; then
+    ipmanager remove "${compute_ip}" || true
+  fi
 }
 trap cleanup EXIT
 
 function main() {
+  if [[ -r "${HAMMERFILE}" ]]; then
+    getISVCFCreds
+    addComputeIPToIPManager
+  else
+    echo "Hammerfile not detected"
+  fi
   checkRequiredEnv
   getConjurSSLCert
   runE2ETests
 }
 
+function addComputeIPToIPManager(){
+  announce "Adding TAS Compute IP to IPManager"
+  pushd "$(git rev-parse --show-toplevel)" >/dev/null
+    compute_ip="$(docker run \
+      --rm \
+      -e HAMMERFILE \
+      --volume "${PWD}:${PWD}" \
+      --workdir "${PWD}" \
+      registry.tld/tanzuclis \
+        ./dev/get_compute_ip)"
+    bl_retry_constant 5 30 ipmanager add "${compute_ip}"
+  popd > /dev/null
+  echo "Done"
+}
+
+# Add or remove IP from IPManager's allow list
+function ipmanager(){
+  verb="${1:-add}"
+  ip="${2}"
+  curl \
+  --silent \
+  --show-error \
+  --fail \
+  -X POST  \
+  -H "Content-Type: application/json" \
+  -d "{\"sharedsecret\":\"${IPMANAGER_TOKEN}\", \"ip\":\"${ip}\", \"expiry_hours\": \"2\"}" \
+  https://ipmanager.itp.conjur.net/${verb}ip
+}
+
+function getISVCFCreds(){
+  announce "Configuring ISV TAS cluster via hammerfile"
+  # The hammerfile is written to the root of the repo
+  # So need to run from the root so its accessible
+  # within the container.
+  pushd "$(git rev-parse --show-toplevel)" >/dev/null
+    CF_ADMIN_PASSWORD="$(docker run \
+      --rm \
+      -e HAMMERFILE \
+      --volume "${PWD}:${PWD}" \
+      --workdir "${PWD}" \
+      registry.tld/tanzuclis \
+        bash -c 'source $(hammer -t "${HAMMERFILE}" cf-login --file |tail -n1)>/dev/null; echo $CF_PASSWORD')"
+    # cf-login --file writes a script to a file and outputs its path.
+    # The script exports CF_PASSWORD, so we source the script then echo CF_PASSWORD and capture
+    # it in CF_ADMIN_PASSWORD
+  popd >/dev/null
+
+  CF_API_ENDPOINT="https://api.$(jq -r .sys_domain "${HAMMERFILE}")"
+
+  export CF_ADMIN_PASSWORD
+  export CF_API_ENDPOINT
+  echo "Done"
+}
+
+
 function checkRequiredEnv() {
   announce "Checking required environment variables"
 
   required_env_vars=( \
-    $CF_API_ENDPOINT \
-    $CF_ADMIN_PASSWORD \
-    $PCF_CONJUR_ACCOUNT \
-    $PCF_CONJUR_APPLIANCE_URL \
-    $PCF_CONJUR_USERNAME \
-    $PCF_CONJUR_API_KEY \
+    CF_API_ENDPOINT \
+    CF_ADMIN_PASSWORD \
+    PCF_CONJUR_ACCOUNT \
+    PCF_CONJUR_APPLIANCE_URL \
+    PCF_CONJUR_USERNAME \
+    PCF_CONJUR_API_KEY \
   )
   for env_var in "${required_env_vars[@]}"; do
-    : "${env_var?"Need to set $env_var"}"
+    if [[ -z "${!env_var}" ]]; then
+      echo "Need to set $env_var"
+      exit 1
+    fi
   done
   echo "Done"
 }
