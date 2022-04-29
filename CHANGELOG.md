@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   CVE-2022-23634 [cyberark/conjur-service-broker#270](https://github.com/cyberark/conjur-service-broker/pull/270)
 - Updated puma to 5.5.1
   [cyberark/conjur-service-broker#267](https://github.com/cyberark/conjur-service-broker/pull/267)
+- Update rails components to 5.2.7.1 to resolve CVE-2022-22577 and CVE-2022-27777
+  [cyberark/conjur-service-broker#274](https://github.com/cyberark/conjur-service-broker/pull/274)
 
 ### Fixed
 - Unpin the Ruby Buildpack in the service broker's `manifest.yml` and update the pinned
