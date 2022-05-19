@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.5] - 2022-05-19
+### Security
+- Upgrade nokogiri to 1.13.6 to resolve un-numbered libxml CVEs
+  [cyberark/conjur-service-broker#280](https://github.com/cyberark/conjur-service-broker/pull/280)
+
 ## [1.2.4] - 2022-05-05
 ### Security
 - Upgrade nokogiri to 1.13.4 to resolve CVE-2022-24836, CVE-2018-25032, 
