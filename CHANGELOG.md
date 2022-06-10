@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.4] - 2022-05-05
+### Security
+- Upgrade nokogiri to 1.13.4 to resolve CVE-2022-24836, CVE-2018-25032, 
+  CVE-2022-24839, and CVE-2022-23437 (not vulnerable to all)
+  [cyberark/conjur-service-broker#273](https://github.com/cyberark/conjur-service-broker/pull/273)
+- Upgraded puma to 5.6.4 to resolve CVE-2022-24790 
+  [cyberark/conjur-service-broker#271](https://github.com/cyberark/conjur-service-broker/pull/271)
+- Upgraded rails components to 5.2.6.2 and puma to 5.6.2 to resolve CVE-2022-23633 and 
+  CVE-2022-23634 [cyberark/conjur-service-broker#270](https://github.com/cyberark/conjur-service-broker/pull/270)
+- Updated puma to 5.5.1
+  [cyberark/conjur-service-broker#267](https://github.com/cyberark/conjur-service-broker/pull/267)
+- Update rails components to 5.2.7.1 to resolve CVE-2022-22577 and CVE-2022-27777
+  [cyberark/conjur-service-broker#274](https://github.com/cyberark/conjur-service-broker/pull/274)
+
+### Fixed
+- Unpin the Ruby Buildpack in the service broker's `manifest.yml` and update the pinned
+  Ruby version in the service broker's `Gemfile` to `~> 2.7`. This captures the idea that
+  the service broker works for all 2.x Ruby versions from 2.7 and up, anything less has reached end of life.
+  [cyberark/conjur-service-broker#266](https://github.com/cyberark/conjur-service-broker/pull/266)
+
 ## [1.2.3] - 2021-12-31
 ### Changed
 - Updated to go 1.17 and conjur-api-go 0.8.1
@@ -167,7 +187,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.3...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.4...HEAD
+[1.2.4]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.0...v1.2.1

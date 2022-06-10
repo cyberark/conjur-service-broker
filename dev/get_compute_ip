@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Get the IP of the compute instance in an ISV TAS cluster.
+# This is so the IP can be added to IPManager to allow the service broker to connect to
+# the CI Conjur instance.
+# This is a seperate script to make it easier to run within the tanzuclis docker image.
+
+deployment="$(hammer -t "${HAMMERFILE}" bosh -- deployments --json |jq -r .Tables[0].Rows[0].name)"
+hammer -t "${HAMMERFILE}" bosh -- --deployment "${deployment}" ssh compute --command 'curl\ checkip.amazonaws.com' |grep stdout |cut -d' ' -f 4| tr -dc '0-9.'

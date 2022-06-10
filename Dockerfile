@@ -1,4 +1,4 @@
-FROM ruby:2.5.8
+FROM ruby:2.7
 MAINTAINER CyberArk Software Ltd.
 
 RUN apt-get update && \
@@ -24,4 +24,3 @@ RUN bundle config build.nokogiri --use-system-libraries && \
 RUN bundle install --no-deployment --frozen --system --without development test
 
 COPY . /app/
-

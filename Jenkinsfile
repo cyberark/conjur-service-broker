@@ -72,11 +72,15 @@ pipeline {
     // 'docker-compose down ...'.
     stage('End-to-End Testing') {
       steps {
+        allocateTas()
         sh 'cd dev && summon ./test_e2e'
         junit 'features/reports/**/*.xml, spec/reports/*.xml'
       }
 
       post {
+        always {
+          destroyTas()
+        }
         success {
           script {
             if (env.BRANCH_NAME == 'main') {
@@ -95,8 +99,6 @@ pipeline {
   post {
     always {
       cleanupAndNotify(currentBuild.currentResult)
-      // Remove this Jenkins Agent's IP from AWS security groups
-      removeIPAccess()
     }
   }
 }
