@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ## [1.2.5] - 2022-05-19
+### Changed
+- Upgrade conjur-api-go to v0.10.1
+  [cyberark/conjur-service-broker#285](https://github.com/cyberark/conjur-service-broker/pull/285)
+
 ### Security
 - Upgrade nokogiri to 1.13.6 to resolve un-numbered libxml CVEs
   [cyberark/conjur-service-broker#280](https://github.com/cyberark/conjur-service-broker/pull/280)
