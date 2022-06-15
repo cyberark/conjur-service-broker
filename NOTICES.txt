@@ -20,7 +20,7 @@ SECTION 3: MIT
 >>> https://rubygems.org/gems/activesupport/versions/5.2.7.1
 >>> https://rubygems.org/gems/json-schema/versions/2.8.0
 >>> https://rubygems.org/gems/listen/versions/3.1.5
->>> https://rubygems.org/gems/rack/versions/2.2.3
+>>> https://rubygems.org/gems/rack/versions/2.2.3.1
 >>> https://rubygems.org/gems/railties/versions/5.2.7.1
 
 
@@ -178,7 +178,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
->>> https://rubygems.org/gems/rack/versions/2.2.3
+>>> https://rubygems.org/gems/rack/versions/2.2.3.1
 
 Copyright (c) 2007-2016 Christian Neukirchen <purl.org/net/chneukirchen>'
 

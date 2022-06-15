@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.2.5] - 2022-05-19
 ### Changed
-- Upgrade conjur-api-go to v0.10.1
+- Upgrade conjur-api-go to v0.10.1 and rack to 2.2.3.1
   [cyberark/conjur-service-broker#285](https://github.com/cyberark/conjur-service-broker/pull/285)
 
 ### Security
