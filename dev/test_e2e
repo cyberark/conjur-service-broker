@@ -15,7 +15,11 @@ function cleanup {
   announce "Removing test environment"
   docker-compose down --rmi 'local' --volumes
   if [[ -n "${compute_ip:-}" ]]; then
-    ipmanager remove "${compute_ip}" || true
+    if bl_retry_constant 5 15 ipmanager remove "${compute_ip}"; then
+      echo "Removed TAS Compute  IP from IPManager"
+    else
+      echo "Failed to remove TAS Compute IP From IPManager. Not a problem it will expire out of the prefix list soon."
+    fi
   fi
 }
 trap cleanup EXIT
