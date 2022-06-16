@@ -6,11 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Security
-- Upgrade rack to 2.2.3.1 to resolves CVE-2022-30122 and CVE-2022-30123
-  [cyberark/conjur-service-broker#283](https://github.com/cyberark/conjur-service-broker/pull/283)
-
-## [1.2.5] - 2022-05-19
+## [1.2.5] - 2022-06-16
 ### Changed
 - Upgrade conjur-api-go to v0.10.1 and rack to 2.2.3.1
   [cyberark/conjur-service-broker#285](https://github.com/cyberark/conjur-service-broker/pull/285)
@@ -18,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 - Upgrade nokogiri to 1.13.6 to resolve un-numbered libxml CVEs
   [cyberark/conjur-service-broker#280](https://github.com/cyberark/conjur-service-broker/pull/280)
+- Upgrade rack to 2.2.3.1 to resolves CVE-2022-30122 and CVE-2022-30123
+  [cyberark/conjur-service-broker#283](https://github.com/cyberark/conjur-service-broker/pull/283)
 
 ## [1.2.4] - 2022-05-05
 ### Security
@@ -200,7 +198,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.4...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.5...HEAD
+[1.2.5]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.1...v1.2.2
