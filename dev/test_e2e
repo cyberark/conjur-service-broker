@@ -118,7 +118,7 @@ function getConjurSSLCert() {
   hostname="${PCF_CONJUR_APPLIANCE_URL//http[s]*:\/\//}"
   # Get the Conjur SSL CA certificate chain
   PCF_CONJUR_SSL_CERT="$(openssl s_client -showcerts \
-    -connect "$hostname":443 </dev/null 2>/dev/null \
+    -connect "$hostname":443 </dev/null \
     | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p')"
   export PCF_CONJUR_SSL_CERT
   echo "Done"
