@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Security
+- Updated rails-html-sanitizer to 1.4.3 to resolve CVE-2022-32209
+  [cyberark/conjur-service-broker#288](https://github.com/cyberark/conjur-service-broker/pull/288)
+
 ## [1.2.5] - 2022-06-16
 ### Changed
 - Upgrade conjur-api-go to v0.10.1 and rack to 2.2.3.1
