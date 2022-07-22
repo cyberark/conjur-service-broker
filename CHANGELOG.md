@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Security
+- Updated tzinfo to 1.2.10 in Gemfile.lock and test/integration/test-app/Gemfile.lock to 
+  resolve CVE-2022-31163
+  [cyberark/conjur-service-broker#289](https://github.com/cyberark/conjur-service-broker/pull/289)
 - Updated rails-html-sanitizer to 1.4.3 to resolve CVE-2022-32209
   [cyberark/conjur-service-broker#288](https://github.com/cyberark/conjur-service-broker/pull/288)
 
