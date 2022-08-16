@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.6] - 2022-08-16
 ### Security
 - Updated tzinfo to 1.2.10 in Gemfile.lock and test/integration/test-app/Gemfile.lock to 
   resolve CVE-2022-31163
@@ -205,7 +206,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.5...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.6...HEAD
+[1.2.6]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.5...v1.2.6
 [1.2.5]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.2...v1.2.3
