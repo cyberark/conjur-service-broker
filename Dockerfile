@@ -21,6 +21,9 @@ RUN bundle config build.nokogiri --use-system-libraries && \
 
 # Exclude 'development' and 'test' dependency groups when building the
 # base/production Service Broker image.
-RUN bundle install --no-deployment --frozen --system --without development test
+RUN bundle config set --local frozen 'true' && \
+    bundle config set --local system 'true' && \ 
+    bundle config set --local without 'development test' && \
+    bundle install --no-deployment
 
 COPY . /app/
