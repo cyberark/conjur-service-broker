@@ -28,7 +28,7 @@ gem 'puma', '5.6.4'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'cucumber', '~> 2'
+  gem 'cucumber', '~> 7.1.0'
   gem 'json_spec', '~> 1.1.5'
   gem 'aruba'
   gem 'rspec', '~> 3'
