@@ -72,7 +72,7 @@ pipeline {
     // 'docker-compose down ...'.
     stage('End-to-End Testing') {
       steps {
-        allocateTas()
+        allocateTas('isv_ci_tas_srt_2_13')
         sh 'cd dev && summon ./test_e2e'
         junit 'features/reports/**/*.xml, spec/reports/*.xml'
       }
