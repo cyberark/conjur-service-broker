@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.2.7] - 2022-10-06
 ### Security
+- Upgrade nokogiri to v1.3.9 to resolve GHSA-2qc6-mcvw-92cw
+  [cyberark/conjur-service-broker#296](https://github.com/cyberark/conjur-service-broker/pull/296)
 - Upgrade cucumber (2.99.0 -> 7.1.0) and aruba (1.1.2 -> 2.0.0)
   to resolve medium severity security issue on Snyk
   [cyberark/conjur-service-broker#294](https://github.com/cyberark/conjur-service-broker/pull/294)
