@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.7] - 2022-10-06
+### Security
+- Upgrade cucumber (2.99.0 -> 7.1.0) and aruba (1.1.2 -> 2.0.0)
+  to resolve medium severity security issue on Snyk
+  [cyberark/conjur-service-broker#294](https://github.com/cyberark/conjur-service-broker/pull/294)
+
 ## [1.2.6] - 2022-08-16
 ### Security
 - Updated tzinfo to 1.2.10 in Gemfile.lock and test/integration/test-app/Gemfile.lock to 

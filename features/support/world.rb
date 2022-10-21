@@ -6,6 +6,9 @@ require 'net/http'
 require 'uri'
 require 'securerandom'
 
+require_relative 'cf_helper'
+require_relative 'http_helper'
+require_relative 'conjur_helper'
 
 module ServiceBrokerWorld
   include CfHelper
