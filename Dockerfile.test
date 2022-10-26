@@ -31,7 +31,8 @@ RUN bundle config set --local frozen 'true' && \
     bundle config set --local system 'true' && \
     bundle config set --local with 'test' && \
     bundle config set --local without 'development' && \
-    bundle install --no-deployment
+    bundle config set --local deployment 'false' && \
+    bundle install
 
 RUN mkdir -p /app
 WORKDIR /app

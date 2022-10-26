@@ -24,6 +24,7 @@ RUN bundle config build.nokogiri --use-system-libraries && \
 RUN bundle config set --local frozen 'true' && \
     bundle config set --local system 'true' && \ 
     bundle config set --local without 'development test' && \
-    bundle install --no-deployment
+    bundle config set --local deployment 'false' && \
+    bundle install
 
 COPY . /app/
