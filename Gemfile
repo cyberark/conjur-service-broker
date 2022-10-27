@@ -11,6 +11,14 @@ end
 # Docker base image so it won't be updated with fuzzy matching.
 ruby '~> 2.7'
 
+# We currently use a version of Bundler with known vulnerabilities until we
+# can update this project to use Ruby 3.0. Currently, this Gemfile does not
+# include any gems in ways that trigger those vulnerabilities. However, any
+# changes to this file need to be reviewed to ensure they don't expose us
+# to CVE-2020-36327 or CVE-2021-43809. These CVEs are currently ignored in 
+# our Trivy scans and will not be caught. Adding Gemfile and Gemfile.lock
+# to CODEOWNERS to ensure reviews include security personnel for this reason.
+
 gem 'conjur-api', '~> 5.3.4'
 gem 'activesupport', '~> 5.2.6'
 gem 'railties', '~> 5.2.6'

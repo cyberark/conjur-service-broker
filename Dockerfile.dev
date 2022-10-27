@@ -19,7 +19,8 @@ WORKDIR /tmp
 RUN bundle config set --local frozen 'true' && \
     bundle config set --local system 'true' && \
     bundle config set --local with 'development' && \
-    bundle install --no-deployment
+    bundle config set --local deployment 'false' && \
+    bundle install
 
 RUN mkdir -p /app
 WORKDIR /app
