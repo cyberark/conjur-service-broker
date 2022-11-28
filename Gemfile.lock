@@ -45,7 +45,7 @@ GEM
       activesupport (>= 4.2)
       addressable (~> 2.0)
       rest-client
-    contracts (0.16.1)
+    contracts (0.17)
     crass (1.0.6)
     cucumber (7.1.0)
       builder (~> 3.2, >= 3.2.4)
@@ -92,17 +92,16 @@ GEM
     json_spec (1.1.5)
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
-    license_finder (7.0.1)
+    license_finder (7.1.0)
       bundler
       rubyzip (>= 1, < 3)
       thor (~> 1.2)
       tomlrb (>= 1.3, < 2.1)
       with_env (= 1.1.0)
       xml-simple (~> 1.1.9)
-    listen (3.1.5)
+    listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
-      ruby_dep (~> 1.2)
     loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -110,14 +109,14 @@ GEM
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2022.0105)
-    mini_portile2 (2.8.0)
     minitest (5.16.3)
     multi_json (1.15.0)
     multi_test (0.1.2)
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.13.9)
-      mini_portile2 (~> 2.8.0)
+    nokogiri (1.13.9-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.9-x86_64-linux)
       racc (~> 1.4)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -176,7 +175,6 @@ GEM
     rspec-support (3.9.4)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    ruby_dep (1.5.0)
     rubyzip (2.3.2)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
@@ -224,7 +222,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
 
 RUBY VERSION
-   ruby 2.7.5p203
+   ruby 3.1.2p20
 
 BUNDLED WITH
-   2.1.4
+   2.3.11
