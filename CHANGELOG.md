@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.2.7] - 2022-10-06
+## [1.3.0] - 2022-10-06
+### Changed
+- Upgrade supported Ruby version to 3.x
+
 ### Security
 - Upgrade nokogiri to v1.3.9 to resolve GHSA-2qc6-mcvw-92cw
   [cyberark/conjur-service-broker#296](https://github.com/cyberark/conjur-service-broker/pull/296)

@@ -9,7 +9,7 @@ end
 # nicely with RVM and we should be explicit since Ruby is such a fundamental
 # part of a Rails project. The Ruby version is also locked in place by the
 # Docker base image so it won't be updated with fuzzy matching.
-ruby '~> 2.7'
+ruby '3.0'
 
 # We currently use a version of Bundler with known vulnerabilities until we
 # can update this project to use Ruby 3.0. Currently, this Gemfile does not
