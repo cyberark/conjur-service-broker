@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.3.0] - 2022-01-11
+### Changed
+- Upgrade supported Ruby version to 3.1.x. Resolves CVE-2021-33621, CVE-2020-36327 and CVE-2021-43809
+  [cyberark/conjur-service-broker#306](https://github.com/cyberark/conjur-service-broker/pull/306)
+
 ### Security
 - Update conjur-api-go to v0.10.2 to udpate indirect dependency gopkg.in/yaml.v2
   [cyberark/conjur-service-broker#305](https://github.com/cyberark/conjur-service-broker/pull/305)
