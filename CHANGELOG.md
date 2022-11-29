@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.2.7] - 2022-10-06
+## [1.2.7] - 2022-11-27
 ### Security
 - Upgrade nokogiri to v1.3.9 to resolve GHSA-2qc6-mcvw-92cw
   [cyberark/conjur-service-broker#296](https://github.com/cyberark/conjur-service-broker/pull/296)
@@ -214,7 +214,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.6...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.7...HEAD
+[1.2.7]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.6...v1.2.7
 [1.2.6]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.5...v1.2.6
 [1.2.5]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.3...v1.2.4
