@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Security
+- Upgrade sinatra to 2.2.3 in tests/integration/test-app
+  [cyberark/conjur-service-broker#301](https://github.com/cyberark/conjur-service-broker/pull/301)
 
 ## [1.2.7] - 2022-11-27
 ### Security
