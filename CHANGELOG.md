@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Security
+- Upgrade nokogiri to 1.13.10 to resolve CVE-2022-23476
+  [cyberark/conjur-service-broker#302](https://github.com/cyberark/conjur-service-broker/pull/301)
 - Upgrade sinatra to 2.2.3 in tests/integration/test-app
   [cyberark/conjur-service-broker#301](https://github.com/cyberark/conjur-service-broker/pull/301)
 
