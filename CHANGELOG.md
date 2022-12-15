@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Security
+- Update loofah to 2.19.1 for CVE-2022-23514, CVE-2022-23515 and CVE-2022-23516 (all Not Vulnerable)
+  and rails-html-sanitizr to 1.4.4 for CVE-2022-23517, CVE-2022-23518, CVE-2022-23519, and CVE-2022-23520 (Not vulnerable)
+  [cyberark/conjur-service-broker#304](https://github.com/cyberark/conjur-service-broker/pull/304)
 - Upgrade nokogiri to 1.13.10 to resolve CVE-2022-23476
-  [cyberark/conjur-service-broker#302](https://github.com/cyberark/conjur-service-broker/pull/301)
+  [cyberark/conjur-service-broker#302](https://github.com/cyberark/conjur-service-broker/pull/302)
 - Upgrade sinatra to 2.2.3 in tests/integration/test-app
   [cyberark/conjur-service-broker#301](https://github.com/cyberark/conjur-service-broker/pull/301)
 
