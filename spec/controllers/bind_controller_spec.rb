@@ -48,7 +48,7 @@ RSpec.describe BindController, type: :request do
         put('/v2/service_instances/test_instance/service_bindings/test_binding', 
             params: legacy_params, headers: headers)
 
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response).to have_http_status(:created)
         data = JSON.parse(response.body)
         expect(data["credentials"]).to eq("test_creds")
@@ -67,7 +67,7 @@ RSpec.describe BindController, type: :request do
         put('/v2/service_instances/test_instance/service_bindings/test_binding', 
           params: params, headers: headers)
 
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response).to have_http_status(:created)
       end
     end
@@ -80,7 +80,7 @@ RSpec.describe BindController, type: :request do
         put('/v2/service_instances/test_instance/service_bindings/test_binding', 
           params: params, headers: headers)
 
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response).to have_http_status(:created)
       end
     end
