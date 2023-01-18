@@ -8,7 +8,7 @@ of the license associated with each component.
 
 SECTION 1: Apache-2.0
 
->>> https://rubygems.org/gems/conjur-api/versions/5.3.4
+>>> https://rubygems.org/gems/conjur-api/versions/5.3.7
 
 SECTION 2: BSD-3-Clause
 
@@ -36,7 +36,7 @@ APPENDIX: Standard License Files and Templates
 
 Apache-2.0 License is applicable to the following component(s).
 
->>> https://rubygems.org/gems/conjur-api/versions/5.3.4
+>>> https://rubygems.org/gems/conjur-api/versions/5.3.7
 
 Copyright (c) 2020 CyberArk Software Ltd. All rights reserved.
 
