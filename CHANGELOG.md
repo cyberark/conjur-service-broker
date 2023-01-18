@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   [cyberark/conjur-service-broker#306](https://github.com/cyberark/conjur-service-broker/pull/306)
 
 ### Security
+- Update activesupport in tests/integration/test-app/Gemfile.lock to 7.0.4.1
+  for CVE-2023-22796 (not vulnerable) 
+  [cyberark/conjur-service-broker#307](https://github.com/cyberark/conjur-service-broker/pull/307)
 - Update conjur-api-go to v0.10.2 to udpate indirect dependency gopkg.in/yaml.v2
   [cyberark/conjur-service-broker#305](https://github.com/cyberark/conjur-service-broker/pull/305)
 - Update loofah to 2.19.1 for CVE-2022-23514, CVE-2022-23515 and CVE-2022-23516 (all Not Vulnerable)
