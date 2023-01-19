@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   [cyberark/conjur-service-broker#306](https://github.com/cyberark/conjur-service-broker/pull/306)
 
 ### Security
+- Update activesupport in Gemfile.lock to 6.1.7.1 for CVE-2023-22796 (not vulnerable)
+  [cyberark/conjur-service-broker#310](https://github.com/cyberark/conjur-service-broker/pull/310)
 - Update activesupport in tests/integration/test-app/Gemfile.lock to 7.0.4.1
   for CVE-2023-22796 (not vulnerable) 
   [cyberark/conjur-service-broker#307](https://github.com/cyberark/conjur-service-broker/pull/307)
