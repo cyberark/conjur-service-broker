@@ -11,7 +11,7 @@ gem 'conjur-api', '~> 5.3.4'
 gem 'activesupport', '~> 6.1'
 gem 'railties', '~> 6.1'
 gem 'actionview', '~> 6.1'
-gem 'rack', '~> 2.2.5'
+gem 'rack', '~> 2.2.6'
 gem 'json-schema', '2.8.0'
 gem 'listen', '>= 3.0.5', '< 3.2'
 
