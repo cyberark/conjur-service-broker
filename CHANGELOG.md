@@ -6,14 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.3.0] - 2022-01-11
+## [1.2.8] - 2023-03-02
 ### Changed
 - Upgrade supported Ruby version to 3.1.x. Resolves CVE-2021-33621, CVE-2020-36327 and CVE-2021-43809
   [cyberark/conjur-service-broker#306](https://github.com/cyberark/conjur-service-broker/pull/306)
 
 ### Security
-- Update activesupport in Gemfile.lock to 6.1.7.1 for CVE-2023-22796 (not vulnerable)
-  [cyberark/conjur-service-broker#310](https://github.com/cyberark/conjur-service-broker/pull/310)
+- Update activesupport in Gemfile.lock to 6.1.7.2 for CVE-2023-22796 (not vulnerable)
+  [cyberark/conjur-service-broker#312](https://github.com/cyberark/conjur-service-broker/pull/312)
 - Update activesupport in tests/integration/test-app/Gemfile.lock to 7.0.4.1
   for CVE-2023-22796 (not vulnerable) 
   [cyberark/conjur-service-broker#307](https://github.com/cyberark/conjur-service-broker/pull/307)
@@ -235,7 +235,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.7...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.8...HEAD
+[1.2.8]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.7...v1.2.8
 [1.2.7]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.6...v1.2.7
 [1.2.6]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.5...v1.2.6
 [1.2.5]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.4...v1.2.5
