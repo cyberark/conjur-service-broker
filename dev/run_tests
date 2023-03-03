@@ -131,7 +131,7 @@ function runTests() {
       cucumber \
       --format junit \
       --out features/reports \
-      --tags "~@integration" \
+      --tags "not @integration" \
       --format pretty \
       --backtrace \
       --verbose

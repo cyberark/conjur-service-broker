@@ -274,10 +274,10 @@ ZIP file with the release of the repository with all dependencies.
 1. Verify that `dev/manifest.txt` includes all relevant top-level directories
    and files. These will be copied into a temporary `pkg` directory used when
    zipping, to avoid including unnecessary files in our ZIP.
-1. Run the `./dev/build` script, which will run `bundle pack --all`, which
-   creates a `vendor/cache/` directory with the project dependencies. It
-   will also produce a ZIP file of the project which includes this directory.
-1. Attach the ZIP file to the release draft; the CI for the VMWare Tanzu Tile
+2. Run the `./dev/build` script, which will run `bundle pack` with the cache_all
+   config set to true, which creates a `vendor/cache/` directory with the project dependencies. 
+   It will also produce a ZIP file of the project which includes this directory.
+3. Attach the ZIP file to the release draft; the CI for the VMWare Tanzu Tile
    will use this artifact.
 
 ## Contributing

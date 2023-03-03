@@ -5,4 +5,4 @@ AllCops:
     - 'vendor/**/*'
     - 'spec/fixtures/**/*'
     - 'tmp/**/*'
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.1
