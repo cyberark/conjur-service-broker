@@ -7,6 +7,3 @@
 .codeclimate.yml @cyberark/quality-architects
 # Changes to SECURITY.md require Security Architect approval
 SECURITY.md @cyberark/security-architects
-
-# Need to make sure we don't add something that triggers CVE-2020-36327 or CVE-2021-43809
-Gemfile* @cyberark/security-architects
