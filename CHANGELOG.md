@@ -6,12 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.2.8] - 2023-03-02
+## [1.2.8] - 2023-03-14
 ### Changed
 - Upgrade supported Ruby version to 3.1.x. Resolves CVE-2021-33621, CVE-2020-36327 and CVE-2021-43809
   [cyberark/conjur-service-broker#306](https://github.com/cyberark/conjur-service-broker/pull/306)
 
 ### Security
+- Update rack in Gemfile.lock and tests/integration/test-app/Gemfile.lock to 2.2.6.3
+  for CVE-2023-27630 (not vulnerable)
+  [cyberark/conjur-service-broker#320](https://github.com/cyberark/conjur-service-broker/pull/320)
 - Update activesupport in Gemfile.lock to 6.1.7.2 for CVE-2023-22796 (not vulnerable)
   [cyberark/conjur-service-broker#312](https://github.com/cyberark/conjur-service-broker/pull/312)
 - Update activesupport in tests/integration/test-app/Gemfile.lock to 7.0.4.1
