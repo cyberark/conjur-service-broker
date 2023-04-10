@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.9] - 2023-04-10
 ### Security
 - Update rack in Gemfile.lock and tests/integration/test-app/Gemfile.lock to 2.2.6.4 to address CVE-2023-27539,
   and activesupport in Gemfile.lock and tests/integration/test-app/Gemfile.lock to 6.1.7.3 for CVE-2023-28120 (not vulnerable)
@@ -242,7 +244,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.8...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.9...HEAD
+[1.2.9]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.8...v1.2.9
 [1.2.8]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.7...v1.2.8
 [1.2.7]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.6...v1.2.7
 [1.2.6]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.5...v1.2.6
