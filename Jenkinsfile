@@ -38,7 +38,7 @@ pipeline {
     stage('Unit and Integration Testing') {
       parallel {
         stage('Changelog') {
-          steps { sh './dev/parse-changelog.sh' }
+          steps { parseChangelog() }
         }
 
         stage('Unit Tests') {
