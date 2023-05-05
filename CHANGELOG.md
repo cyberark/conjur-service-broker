@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.10] - 2023-05-04
+### Security
+- Update nokogiri to 1.14.3 to address https://github.com/sparklemotion/nokogiri/security/advisories/GHSA-pxvg-2qj5-37jq
+  [cyberark/conjur-service-broker#326](https://github.com/cyberark/conjur-service-broker/pull/326)
+
 ## [1.2.9] - 2023-04-10
 ### Security
 - Update rack in Gemfile.lock and tests/integration/test-app/Gemfile.lock to 2.2.6.4 to address CVE-2023-27539,
@@ -244,7 +249,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.9...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.10...HEAD
+[1.2.10]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.9...v1.2.10
 [1.2.9]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.8...v1.2.9
 [1.2.8]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.7...v1.2.8
 [1.2.7]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.6...v1.2.7
