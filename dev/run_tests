@@ -58,7 +58,7 @@ function startConjur() {
 
 function execConjurCLI() {
   conjur_cmd=$1
-  docker-compose run --rm --entrypoint bash client -c "$conjur_cmd"
+  docker-compose run --no-deps --rm --entrypoint bash client -c "$conjur_cmd"
 }
 
 function loadPolicy5() {
