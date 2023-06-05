@@ -1,4 +1,4 @@
-FROM ruby:3.1
+FROM ruby:3.2
 MAINTAINER CyberArk Software Ltd.
 
 # This is a Dockerfile for the Service Broker image that is used in
