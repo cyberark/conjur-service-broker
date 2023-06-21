@@ -6,12 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.10] - 2023-06-21
 ### Security
 - Upgrade ruby to 3.2, Go image to 1.20-alpine, and golang.org/x/sys to v0.8.0
   [cyberark/conjur-service-broker#331](https://github.com/cyberark/conjur-service-broker/pull/331)
-
-## [1.2.10] - 2023-05-04
-### Security
 - Update nokogiri to 1.14.3 to address https://github.com/sparklemotion/nokogiri/security/advisories/GHSA-pxvg-2qj5-37jq
   [cyberark/conjur-service-broker#326](https://github.com/cyberark/conjur-service-broker/pull/326)
 
