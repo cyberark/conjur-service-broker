@@ -44,4 +44,8 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # Rails 6 includes a new middleware, Host Authorization. In our development
+  # environment, let's allow requests from all hostnames.
+  config.hosts.clear
 end

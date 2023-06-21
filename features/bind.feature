@@ -20,7 +20,7 @@ Feature: Binding
     And the JSON at "credentials/appliance_url" should be the master address
     And the JSON at "credentials/authn_login" should be a string
     And the JSON at "credentials/authn_api_key" should be a string
-    And the JSON at "credentials/version" should be a Fixnum
+    And the JSON at "credentials/version" should be a Integer
     And the JSON at "credentials/ssl_certificate" should be a string
     And the JSON has valid conjur credentials
 
@@ -66,7 +66,7 @@ Feature: Binding
     And the JSON at "credentials/authn_login" should be a string
     And the JSON at "credentials/authn_login" should include "cf/"
     And the JSON at "credentials/authn_api_key" should be a string
-    And the JSON at "credentials/version" should be a Fixnum
+    And the JSON at "credentials/version" should be a Integer
     And the JSON at "credentials/ssl_certificate" should be a string
     And the JSON has valid conjur credentials
     And the host in "BIND_RESPONSE" has annotation "'cloudfoundry': 'true'" in Conjur
@@ -350,6 +350,6 @@ Feature: Binding
     And the JSON at "credentials/appliance_url" should be the master address
     And the JSON at "credentials/authn_login" should be a string
     And the JSON at "credentials/authn_api_key" should be a string
-    And the JSON at "credentials/version" should be a Fixnum
+    And the JSON at "credentials/version" should be a Integer
     And the JSON at "credentials/ssl_certificate" should be a string
     And the JSON has valid conjur credentials

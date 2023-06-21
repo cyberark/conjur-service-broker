@@ -11,6 +11,6 @@ Before("@enable-space-host") do
   @space_host_enabled = true
 end
 
-Before("~@enable-space-host") do
+Before("not @enable-space-host") do
   @space_host_enabled = false
 end
