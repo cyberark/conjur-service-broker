@@ -2,7 +2,7 @@ version: "2"
 
 services:
   pg:
-    image: postgres:10.15
+    image: postgres:15
     environment:
       POSTGRES_PASSWORD: pa55w0rd
 
