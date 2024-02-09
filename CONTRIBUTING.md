@@ -185,7 +185,7 @@ Service Broker functionality as described in the
 [Testing Functionality After Dependency Version Changes](#testing-functionality-after-dependency-version-changes)
 section below.
 
-### Updating One Dependency at a Time
+### Updating All Dependencies at Once
 
 If you are feeling especially lucky, you might be tempted to update
 all dependencies (direct and indirect), and then build and test to
