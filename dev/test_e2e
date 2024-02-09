@@ -13,7 +13,7 @@ export HAMMERFILE="${HAMMERFILE:-"${HAMMERFILE_DEFAULT}"}"
 
 function cleanup {
   announce "Removing test environment"
-  docker-compose down --rmi 'local' --volumes
+  docker compose down --rmi 'local' --volumes
   if [[ -n "${compute_ip:-}" ]]; then
     if bl_retry_constant 5 15 ipmanager remove "${compute_ip}"; then
       echo "Removed TAS Compute  IP from IPManager"
@@ -128,7 +128,7 @@ function runE2ETests() {
   announce "Running End-to-End tests"
 
   export CONJUR_VERSION=5
-  docker-compose run tests \
+  docker compose run tests \
     cucumber \
     --format junit \
     --out features/reports \
