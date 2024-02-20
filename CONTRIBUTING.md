@@ -11,11 +11,9 @@ environment.
 
 1. [git][get-git] to manage source code
 2. [Docker][get-docker] to manage dependencies and runtime environments
-3. [Docker Compose][get-docker-compose] to orchestrate Docker environments
 
 [get-docker]: https://docs.docker.com/engine/installation
 [get-git]: https://git-scm.com/downloads
-[get-docker-compose]: https://docs.docker.com/compose/install
 
 To test the usage of the Conjur Service Broker within a CF deployment, you can
 follow the demo scripts in the [Cloud Foundry demo repo](https://github.com/conjurinc/cloudfoundry-conjur-demo).
@@ -101,7 +99,7 @@ Then, run the tests with the following command:
 _Note: The integration tests rely on having built `conjur-service-broker`
 and `conjur-service-broker-test`. If you make changes to your local repository
 and would like to see those changes reflected in the test containers, either
-re-run `./dev/build` or run `docker-compose build <service_name>` to rebuild
+re-run `./dev/build` or run `docker compose build <service_name>` to rebuild
 the source image(s) before running the tests._
 
 ### End-to-End (E2E) Integration Testing
@@ -138,7 +136,7 @@ To detect if there are any known security vulnerabilities in gem
 dependencies, run the following:
 
    ```
-   docker-compose run tests bundle audit
+   docker compose run tests bundle audit
    ```
 
 If any known security vulnerabilities are discovered, you will see
@@ -167,19 +165,19 @@ Some examples, ranging from least conservative to most conservative:
 1. To update the vulnerable gem and all of its dependencies.
 
    ```
-   docker-compose run tests bundle update <vulnerable-gem>
+   docker compose run tests bundle update <vulnerable-gem>
    ```
 
 1. To update only the vulnerable gem (i.e. not its dependencies):
 
    ```
-   docker-compose run tests bundle update --conservative <vulnerable-gem>
+   docker compose run tests bundle update --conservative <vulnerable-gem>
    ```
 
 1. To update only the vulnerable gem's patch version:
 
    ```
-   docker-compose run tests bundle update --patch --conservative <vulnerable-gem>
+   docker compose run tests bundle update --patch --conservative <vulnerable-gem>
    ```
 
 After running any of the above commands, you will want to test
@@ -187,7 +185,7 @@ Service Broker functionality as described in the
 [Testing Functionality After Dependency Version Changes](#testing-functionality-after-dependency-version-changes)
 section below.
 
-### Updating One Dependency at a Time
+### Updating All Dependencies at Once
 
 If you are feeling especially lucky, you might be tempted to update
 all dependencies (direct and indirect), and then build and test to
@@ -195,7 +193,7 @@ verify that Service Broker functionality has not been broken.
 This would be done as follows:
 
    ```
-   docker-compose run tests bundle update
+   docker compose run tests bundle update
    ```
 
 However, the chances that such a sweeping change will not break
@@ -224,13 +222,13 @@ Service Broker functionality using this method may be high.
 For example, to update `development` dependencies for the Service Broker:
 
    ```
-   docker-compose run tests bundle update --group development
+   docker compose run tests bundle update --group development
    ```
 
 Or, to update `test` and `development` dependencies:
 
    ```
-   docker-compose run tests bundle update --group test development
+   docker compose run tests bundle update --group test development
    ```
 
 After any gem versions have been updated, you will want to test

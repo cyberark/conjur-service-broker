@@ -67,9 +67,9 @@ pipeline {
     }
 
     // The End-to-End test needs to be run separately from the integration
-    // tests because both use the default docker-compose network, and
+    // tests because both use the default docker compose network, and
     // both cause this network to be deleted when they clean up with
-    // 'docker-compose down ...'.
+    // 'docker compose down ...'.
     stage('End-to-End Testing') {
       steps {
         allocateTas('isv_ci_tas_srt_5_0')

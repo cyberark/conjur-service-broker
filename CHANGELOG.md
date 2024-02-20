@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.11] - 2024-02-09
+### Security
+- Upgrade Puma to 6.4.2
+  [cyberark/conjur-service-broker#339](https://github.com/cyberark/conjur-service-broker/pull/339)
+
 ## [1.2.10] - 2023-06-21
 ### Security
 - Upgrade ruby to 3.2, Go image to 1.20-alpine, and golang.org/x/sys to v0.8.0
