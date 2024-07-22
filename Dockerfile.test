@@ -1,4 +1,4 @@
-FROM ruby:3.2
+FROM ruby:3.3
 MAINTAINER CyberArk Software Ltd.
 
 # This is a Dockerfile for a Service Broker test client image. The repository
