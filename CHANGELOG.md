@@ -6,10 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.2.11] - 2024-07-22
+## [1.2.11] - 2024-07-23
 
 ### Security
-- Upgrade Ruby to 3.3 and Go to 1.22
+- Upgrade Ruby to 3.3, Go to 1.22, and various other dependencies
   [cyberark/conjur-service-broker#340](https://github.com/cyberark/conjur-service-broker/pull/340)
 - Upgrade Puma to 6.4.2
   [cyberark/conjur-service-broker#339](https://github.com/cyberark/conjur-service-broker/pull/339)
