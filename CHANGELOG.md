@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.2.11] - 2024-07-23
+## [1.2.11] - 2024-07-26
 
 ### Security
 - Upgrade Ruby to 3.3, Go to 1.22, and various other dependencies
