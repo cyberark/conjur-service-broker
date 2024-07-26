@@ -128,6 +128,17 @@ cd dev
 summon ./test_e2e
 ```
 
+#### Running End-to-End (E2E) Tests With a Custom TAS Instance
+
+To run the end-to-end tests with a custom TAS instance, such as one created via the VMWare ISV Dashboard, follow these steps:
+
+- Download the Hammer File from the VMWare ISV Dashboard and place it in the root of the repository, named `hammerfile.json`.
+- In `./dev/test_e2e`, comment out the line `bl_retry_constant 5 30 ipmanager add "${compute_ip}"`
+  and replace it with `echo "Add IP $compute_ip to IPManager"`. When the command runs, copy the printed IP
+  and add it manually to IPManager (<https://ipmanager.itp.conjur.net/addip>)
+- Comment out the `IPMANAGER_TOKEN` variable in `./dev/secrets.yml`.
+- Run `summon ./dev/test_e2e`
+
 ## Updating Dependencies
 
 ### Finding and Fixing Security Vulnerabilities
