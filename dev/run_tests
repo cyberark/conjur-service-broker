@@ -31,7 +31,7 @@ SKIP_CONJUR_V4_TESTS="${SKIP_CONJUR_V4_TESTS:-false}"
 
 function cleanup {
   announce 'Cleaning up test environment'
-  docker-compose down --rmi 'local' --volumes
+  docker compose down --rmi 'local' --volumes
   rm -f ../tmp/pids/server*.pid
 }
 #trap cleanup EXIT
@@ -53,20 +53,20 @@ function main() {
 
 function startConjur() {
   announce "Starting Conjur environment"
-  docker-compose up -d pg conjur_5
+  docker compose up -d pg conjur_5
 }
 
 function execConjurCLI() {
   conjur_cmd=$1
-  docker-compose run --rm --entrypoint bash client -c "$conjur_cmd"
+  docker compose run --no-deps --rm --entrypoint bash client -c "$conjur_cmd"
 }
 
 function loadPolicy5() {
   announce "Waiting for Conjur v5 to come up, and loading policy..."
 
-  docker-compose exec -T conjur_5 conjurctl wait -r 30 -p 80
+  docker compose exec -T conjur_5 conjurctl wait -r 30 -p 80
 
-  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
+  api_key=$(docker compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
   export CONJUR_AUTHN_API_KEY="$api_key"
 
   # load the pcf policy for the non-empty CONJUR_POLICY test
@@ -81,13 +81,13 @@ function composeUp() {
   services=("$@")
   if [ "$START_SB_DEV_ENV" = "true" ]; then
     # Use development environment overrides for Docker Compose
-    docker-compose \
+    docker compose \
       -f ../docker-compose.yml \
       -f ../docker-compose.dev-override.yml \
       up -d \
       "${services[@]}"
   else
-    docker-compose up -d "${services[@]}"
+    docker compose up -d "${services[@]}"
   fi
 }
 
@@ -99,18 +99,18 @@ function startServiceBrokers5() {
   export CONJUR_FOLLOWER_URL=http://conjur_5-follower
   export CONJUR_SSL_CERTIFICATE=""
 
-  admin_api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
+  admin_api_key=$(docker compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:user:admin}].api_key" 2>/dev/null')
   export CONJUR_AUTHN_API_KEY="$admin_api_key"
   composeUp "${SERVICE_BROKERS[@]}"
 
   export CONJUR_POLICY=cf
 
-  CONJUR_AUTHN_API_KEY="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:cf-service-broker}].api_key" 2>/dev/null')"
+  CONJUR_AUTHN_API_KEY="$(docker compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:cf-service-broker}].api_key" 2>/dev/null')"
   export CONJUR_AUTHN_API_KEY
   services=( "conjur-service-broker" "service-broker-alt-policy" )
   composeUp "${services[@]}"
 
-  bad_host_api_key="$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:bad-service-broker}].api_key" 2>/dev/null')"
+  bad_host_api_key="$(docker compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{cucumber:host:bad-service-broker}].api_key" 2>/dev/null')"
   export CONJUR_AUTHN_API_KEY=$bad_host_api_key
   services=( "service-broker-bad-host" )
   composeUp "${services[@]}"
@@ -120,18 +120,18 @@ function runTests() {
   announce "Running tests"
 
   if [ "$START_SB_DEV_ENV" = "true" ]; then
-    docker-compose run \
+    docker compose run \
       -e CONJUR_AUTHN_API_KEY="$admin_api_key" \
       -e BAD_HOST_API_KEY="$bad_host_api_key" \
       tests bash -c "./dev/dev_env_menu"
   else
     # Run all cucumber tests except those that require access to PCF/Tanzu.
     # Set BAD_HOST_API_KEY to test an error case in bin/health-check.rb
-    docker-compose run -e CONJUR_AUTHN_API_KEY="$admin_api_key" -e BAD_HOST_API_KEY="$bad_host_api_key" tests \
+    docker compose run -e CONJUR_AUTHN_API_KEY="$admin_api_key" -e BAD_HOST_API_KEY="$bad_host_api_key" tests \
       cucumber \
       --format junit \
       --out features/reports \
-      --tags "~@integration" \
+      --tags "not @integration" \
       --format pretty \
       --backtrace \
       --verbose
@@ -141,7 +141,7 @@ function runTests() {
 function cleanUpServiceBrokers() {
   announce "Cleaning up running service brokers..."
 
-  docker-compose rm -f -s -v "${SERVICE_BROKERS[@]}" service-broker-alt-policy
+  docker compose rm -f -s -v "${SERVICE_BROKERS[@]}" service-broker-alt-policy
 }
 
 main

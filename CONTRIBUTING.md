@@ -11,11 +11,9 @@ environment.
 
 1. [git][get-git] to manage source code
 2. [Docker][get-docker] to manage dependencies and runtime environments
-3. [Docker Compose][get-docker-compose] to orchestrate Docker environments
 
 [get-docker]: https://docs.docker.com/engine/installation
 [get-git]: https://git-scm.com/downloads
-[get-docker-compose]: https://docs.docker.com/compose/install
 
 To test the usage of the Conjur Service Broker within a CF deployment, you can
 follow the demo scripts in the [Cloud Foundry demo repo](https://github.com/conjurinc/cloudfoundry-conjur-demo).
@@ -101,7 +99,7 @@ Then, run the tests with the following command:
 _Note: The integration tests rely on having built `conjur-service-broker`
 and `conjur-service-broker-test`. If you make changes to your local repository
 and would like to see those changes reflected in the test containers, either
-re-run `./dev/build` or run `docker-compose build <service_name>` to rebuild
+re-run `./dev/build` or run `docker compose build <service_name>` to rebuild
 the source image(s) before running the tests._
 
 ### End-to-End (E2E) Integration Testing
@@ -130,6 +128,17 @@ cd dev
 summon ./test_e2e
 ```
 
+#### Running End-to-End (E2E) Tests With a Custom TAS Instance
+
+To run the end-to-end tests with a custom TAS instance, such as one created via the VMWare ISV Dashboard, follow these steps:
+
+- Download the Hammer File from the VMWare ISV Dashboard and place it in the root of the repository, named `hammerfile.json`.
+- In `./dev/test_e2e`, comment out the line `bl_retry_constant 5 30 ipmanager add "${compute_ip}"`
+  and replace it with `echo "Add IP $compute_ip to IPManager"`. When the command runs, copy the printed IP
+  and add it manually to IPManager (<https://ipmanager.itp.conjur.net/addip>)
+- Comment out the `IPMANAGER_TOKEN` variable in `./dev/secrets.yml`.
+- Run `summon ./dev/test_e2e`
+
 ## Updating Dependencies
 
 ### Finding and Fixing Security Vulnerabilities
@@ -138,7 +147,7 @@ To detect if there are any known security vulnerabilities in gem
 dependencies, run the following:
 
    ```
-   docker-compose run tests bundle audit
+   docker compose run tests bundle audit
    ```
 
 If any known security vulnerabilities are discovered, you will see
@@ -167,19 +176,19 @@ Some examples, ranging from least conservative to most conservative:
 1. To update the vulnerable gem and all of its dependencies.
 
    ```
-   docker-compose run tests bundle update <vulnerable-gem>
+   docker compose run tests bundle update <vulnerable-gem>
    ```
 
 1. To update only the vulnerable gem (i.e. not its dependencies):
 
    ```
-   docker-compose run tests bundle update --conservative <vulnerable-gem>
+   docker compose run tests bundle update --conservative <vulnerable-gem>
    ```
 
 1. To update only the vulnerable gem's patch version:
 
    ```
-   docker-compose run tests bundle update --patch --conservative <vulnerable-gem>
+   docker compose run tests bundle update --patch --conservative <vulnerable-gem>
    ```
 
 After running any of the above commands, you will want to test
@@ -187,7 +196,7 @@ Service Broker functionality as described in the
 [Testing Functionality After Dependency Version Changes](#testing-functionality-after-dependency-version-changes)
 section below.
 
-### Updating One Dependency at a Time
+### Updating All Dependencies at Once
 
 If you are feeling especially lucky, you might be tempted to update
 all dependencies (direct and indirect), and then build and test to
@@ -195,7 +204,7 @@ verify that Service Broker functionality has not been broken.
 This would be done as follows:
 
    ```
-   docker-compose run tests bundle update
+   docker compose run tests bundle update
    ```
 
 However, the chances that such a sweeping change will not break
@@ -224,13 +233,13 @@ Service Broker functionality using this method may be high.
 For example, to update `development` dependencies for the Service Broker:
 
    ```
-   docker-compose run tests bundle update --group development
+   docker compose run tests bundle update --group development
    ```
 
 Or, to update `test` and `development` dependencies:
 
    ```
-   docker-compose run tests bundle update --group test development
+   docker compose run tests bundle update --group test development
    ```
 
 After any gem versions have been updated, you will want to test
@@ -274,10 +283,10 @@ ZIP file with the release of the repository with all dependencies.
 1. Verify that `dev/manifest.txt` includes all relevant top-level directories
    and files. These will be copied into a temporary `pkg` directory used when
    zipping, to avoid including unnecessary files in our ZIP.
-1. Run the `./dev/build` script, which will run `bundle pack --all`, which
-   creates a `vendor/cache/` directory with the project dependencies. It
-   will also produce a ZIP file of the project which includes this directory.
-1. Attach the ZIP file to the release draft; the CI for the VMWare Tanzu Tile
+2. Run the `./dev/build` script, which will run `bundle pack` with the cache_all
+   config set to true, which creates a `vendor/cache/` directory with the project dependencies. 
+   It will also produce a ZIP file of the project which includes this directory.
+3. Attach the ZIP file to the release draft; the CI for the VMWare Tanzu Tile
    will use this artifact.
 
 ## Contributing

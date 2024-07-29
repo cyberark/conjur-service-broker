@@ -6,6 +6,78 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.11] - 2024-07-26
+
+### Security
+- Upgrade Ruby to 3.3, Go to 1.22, and various other dependencies
+  [cyberark/conjur-service-broker#340](https://github.com/cyberark/conjur-service-broker/pull/340)
+- Upgrade Puma to 6.4.2
+  [cyberark/conjur-service-broker#339](https://github.com/cyberark/conjur-service-broker/pull/339)
+
+## [1.2.10] - 2023-06-21
+### Security
+- Upgrade ruby to 3.2, Go image to 1.20-alpine, and golang.org/x/sys to v0.8.0
+  [cyberark/conjur-service-broker#331](https://github.com/cyberark/conjur-service-broker/pull/331)
+- Update nokogiri to 1.14.3 to address https://github.com/sparklemotion/nokogiri/security/advisories/GHSA-pxvg-2qj5-37jq
+  [cyberark/conjur-service-broker#326](https://github.com/cyberark/conjur-service-broker/pull/326)
+
+## [1.2.9] - 2023-04-10
+### Security
+- Update rack in Gemfile.lock and tests/integration/test-app/Gemfile.lock to 2.2.6.4 to address CVE-2023-27539,
+  and activesupport in Gemfile.lock and tests/integration/test-app/Gemfile.lock to 6.1.7.3 for CVE-2023-28120 (not vulnerable)
+  [cyberark/conjur-service-broker#323](https://github.com/cyberark/conjur-service-broker/pull/323)
+- Update rack in Gemfile.lock and tests/integration/test-app/Gemfile.lock to 2.2.6.3
+  for CVE-2023-27630 (not vulnerable)
+  [cyberark/conjur-service-broker#320](https://github.com/cyberark/conjur-service-broker/pull/320)
+
+## [1.2.8] - 2023-03-14
+### Changed
+- Upgrade supported Ruby version to 3.1.x. Resolves CVE-2021-33621, CVE-2020-36327 and CVE-2021-43809
+  [cyberark/conjur-service-broker#306](https://github.com/cyberark/conjur-service-broker/pull/306)
+
+### Security
+- Update activesupport in Gemfile.lock to 6.1.7.2 for CVE-2023-22796 (not vulnerable)
+  [cyberark/conjur-service-broker#312](https://github.com/cyberark/conjur-service-broker/pull/312)
+- Update activesupport in tests/integration/test-app/Gemfile.lock to 7.0.4.1
+  for CVE-2023-22796 (not vulnerable) 
+  [cyberark/conjur-service-broker#307](https://github.com/cyberark/conjur-service-broker/pull/307)
+- Update conjur-api-go to v0.10.2 to udpate indirect dependency gopkg.in/yaml.v2
+  [cyberark/conjur-service-broker#305](https://github.com/cyberark/conjur-service-broker/pull/305)
+- Update loofah to 2.19.1 for CVE-2022-23514, CVE-2022-23515 and CVE-2022-23516 (all Not Vulnerable)
+  and rails-html-sanitizr to 1.4.4 for CVE-2022-23517, CVE-2022-23518, CVE-2022-23519, and CVE-2022-23520 (Not vulnerable)
+  [cyberark/conjur-service-broker#304](https://github.com/cyberark/conjur-service-broker/pull/304)
+- Upgrade nokogiri to 1.13.10 to resolve CVE-2022-23476
+  [cyberark/conjur-service-broker#302](https://github.com/cyberark/conjur-service-broker/pull/302)
+- Upgrade sinatra to 2.2.3 in tests/integration/test-app
+  [cyberark/conjur-service-broker#301](https://github.com/cyberark/conjur-service-broker/pull/301)
+
+## [1.2.7] - 2022-11-27
+### Security
+- Upgrade nokogiri to v1.3.9 to resolve GHSA-2qc6-mcvw-92cw
+  [cyberark/conjur-service-broker#296](https://github.com/cyberark/conjur-service-broker/pull/296)
+- Upgrade cucumber (2.99.0 -> 7.1.0) and aruba (1.1.2 -> 2.0.0)
+  to resolve medium severity security issue on Snyk
+  [cyberark/conjur-service-broker#294](https://github.com/cyberark/conjur-service-broker/pull/294)
+
+## [1.2.6] - 2022-08-16
+### Security
+- Updated tzinfo to 1.2.10 in Gemfile.lock and test/integration/test-app/Gemfile.lock to 
+  resolve CVE-2022-31163
+  [cyberark/conjur-service-broker#289](https://github.com/cyberark/conjur-service-broker/pull/289)
+- Updated rails-html-sanitizer to 1.4.3 to resolve CVE-2022-32209
+  [cyberark/conjur-service-broker#288](https://github.com/cyberark/conjur-service-broker/pull/288)
+
+## [1.2.5] - 2022-06-16
+### Changed
+- Upgrade conjur-api-go to v0.10.1 and rack to 2.2.3.1
+  [cyberark/conjur-service-broker#285](https://github.com/cyberark/conjur-service-broker/pull/285)
+
+### Security
+- Upgrade nokogiri to 1.13.6 to resolve un-numbered libxml CVEs
+  [cyberark/conjur-service-broker#280](https://github.com/cyberark/conjur-service-broker/pull/280)
+- Upgrade rack to 2.2.3.1 to resolves CVE-2022-30122 and CVE-2022-30123
+  [cyberark/conjur-service-broker#283](https://github.com/cyberark/conjur-service-broker/pull/283)
+
 ## [1.2.4] - 2022-05-05
 ### Security
 - Upgrade nokogiri to 1.13.4 to resolve CVE-2022-24836, CVE-2018-25032, 
@@ -187,7 +259,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.4...HEAD
+[Unreleased]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.10...HEAD
+[1.2.10]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.9...v1.2.10
+[1.2.9]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.8...v1.2.9
+[1.2.8]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.7...v1.2.8
+[1.2.7]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.6...v1.2.7
+[1.2.6]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.5...v1.2.6
+[1.2.5]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/cyberark/conjur-service-broker/compare/v1.2.1...v1.2.2

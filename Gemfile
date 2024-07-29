@@ -5,22 +5,18 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-# Do not use fuzzy version matching (~>) with the Ruby version. It doesn't play
-# nicely with RVM and we should be explicit since Ruby is such a fundamental
-# part of a Rails project. The Ruby version is also locked in place by the
-# Docker base image so it won't be updated with fuzzy matching.
-ruby '~> 2.7'
+ruby '~> 3.3'
 
 gem 'conjur-api', '~> 5.3.4'
-gem 'activesupport', '~> 5.2.6'
-gem 'railties', '~> 5.2.6'
-gem 'actionview', '~> 5.2.6'
-gem 'rack', '~> 2.2.3'
+gem 'activesupport', '~> 6.1'
+gem 'railties', '~> 6.1'
+gem 'actionview', '~> 6.1'
+gem 'rack', '~> 2.2.6'
 gem 'json-schema', '2.8.0'
 gem 'listen', '>= 3.0.5', '< 3.2'
 
 # Use Puma as the app server
-gem 'puma', '5.6.4'
+gem 'puma', '6.4.2'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
@@ -28,7 +24,7 @@ gem 'puma', '5.6.4'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'cucumber', '~> 2'
+  gem 'cucumber', '~> 7.1.0'
   gem 'json_spec', '~> 1.1.5'
   gem 'aruba'
   gem 'rspec', '~> 3'
@@ -36,7 +32,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rspec_junit_formatter'
   gem 'rest-client'
-  gem 'rspec-rails', '~> 3.7'
+  gem 'rspec-rails', '~> 6.0'
 end
 
 group :development do

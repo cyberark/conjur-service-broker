@@ -1,4 +1,4 @@
-FROM ruby:2.7
+FROM ruby:3.3
 MAINTAINER CyberArk Software Ltd.
 
 # This is a Dockerfile for the Service Broker image that is used in
@@ -16,10 +16,11 @@ COPY Gemfile \
      Gemfile.lock /tmp/
 WORKDIR /tmp
 
-# For bundle version < 2.0, bundle remembers the groups that had been
-# excluded for the previous invocation of bundle. So use `--with`
-# to explicitly include the development group.
-RUN bundle install --no-deployment --frozen --system --with development
+RUN bundle config set --local frozen 'true' && \
+    bundle config set --local system 'true' && \
+    bundle config set --local with 'development' && \
+    bundle config set --local deployment 'false' && \
+    bundle install
 
 RUN mkdir -p /app
 WORKDIR /app

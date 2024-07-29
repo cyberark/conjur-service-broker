@@ -38,7 +38,7 @@ pipeline {
     stage('Unit and Integration Testing') {
       parallel {
         stage('Changelog') {
-          steps { sh './dev/parse-changelog.sh' }
+          steps { parseChangelog() }
         }
 
         stage('Unit Tests') {
@@ -67,29 +67,32 @@ pipeline {
     }
 
     // The End-to-End test needs to be run separately from the integration
-    // tests because both use the default docker-compose network, and
+    // tests because both use the default docker compose network, and
     // both cause this network to be deleted when they clean up with
-    // 'docker-compose down ...'.
-    stage('End-to-End Testing') {
-      steps {
-        allocateTas()
-        sh 'cd dev && summon ./test_e2e'
-        junit 'features/reports/**/*.xml, spec/reports/*.xml'
-      }
+    // 'docker compose down ...'.
 
-      post {
-        always {
-          destroyTas()
-        }
-        success {
-          script {
-            if (env.BRANCH_NAME == 'main') {
-              archiveArtifacts artifacts: '*.zip', fingerprint: true
-            }
-          }
-        }
-      }
-    }
+    // Note: Temporarily disabled due to issues with the ISV CI integration.
+    // These tests must be run manually until the issues are resolved.
+    // stage('End-to-End Testing') {
+    //   steps {
+    //     allocateTas('isv_ci_tas_srt_5_0')
+    //     sh 'cd dev && summon ./test_e2e'
+    //     junit 'features/reports/**/*.xml, spec/reports/*.xml'
+    //   }
+
+    //   post {
+    //     always {
+    //       destroyTas()
+    //     }
+    //     success {
+    //       script {
+    //         if (env.BRANCH_NAME == 'main') {
+    //           archiveArtifacts artifacts: '*.zip', fingerprint: true
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
     stage('Push Docker Image') {
       steps { sh './dev/push-image' }

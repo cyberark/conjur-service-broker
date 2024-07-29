@@ -1,4 +1,4 @@
-## These vulnerabilities impact the kernel version of the container which
+# These vulnerabilities impact the kernel version of the container which
 ## isn't used when the code is being run within Docker
 ## More info: https://docs.docker.com/engine/security/security/
 CVE-2020-12465

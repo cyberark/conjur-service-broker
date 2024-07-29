@@ -49,7 +49,7 @@ RSpec.describe ProvisionController, type: :request do
         put('/v2/service_instances/test_instance', params: params, headers: headers)
 
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response.body).to eq("{}")
       end
     end
@@ -60,7 +60,7 @@ RSpec.describe ProvisionController, type: :request do
 
         put('/v2/service_instances/test_instance', params: legacy_params, headers: headers)
 
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response).to have_http_status(:ok)
         expect(response.body).to eq("{}")
       end
@@ -86,7 +86,7 @@ RSpec.describe ProvisionController, type: :request do
     it 'returns with a 200 OK response' do
       delete(delete_path, params: params, headers: headers)
 
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to eq("application/json; charset=utf-8")
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq("{}")
     end

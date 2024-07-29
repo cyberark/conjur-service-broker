@@ -13,9 +13,13 @@ export HAMMERFILE="${HAMMERFILE:-"${HAMMERFILE_DEFAULT}"}"
 
 function cleanup {
   announce "Removing test environment"
-  docker-compose down --rmi 'local' --volumes
+  docker compose down --rmi 'local' --volumes
   if [[ -n "${compute_ip:-}" ]]; then
-    ipmanager remove "${compute_ip}" || true
+    if bl_retry_constant 5 15 ipmanager remove "${compute_ip}"; then
+      echo "Removed TAS Compute  IP from IPManager"
+    else
+      echo "Failed to remove TAS Compute IP From IPManager. Not a problem it will expire out of the prefix list soon."
+    fi
   fi
 }
 trap cleanup EXIT
@@ -114,7 +118,7 @@ function getConjurSSLCert() {
   hostname="${PCF_CONJUR_APPLIANCE_URL//http[s]*:\/\//}"
   # Get the Conjur SSL CA certificate chain
   PCF_CONJUR_SSL_CERT="$(openssl s_client -showcerts \
-    -connect "$hostname":443 </dev/null 2>/dev/null \
+    -connect "$hostname":443 </dev/null \
     | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p')"
   export PCF_CONJUR_SSL_CERT
   echo "Done"
@@ -124,7 +128,7 @@ function runE2ETests() {
   announce "Running End-to-End tests"
 
   export CONJUR_VERSION=5
-  docker-compose run tests \
+  docker compose run tests \
     cucumber \
     --format junit \
     --out features/reports \

@@ -39,4 +39,8 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Rails 6 includes a new middleware, Host Authorization. In our tests
+  # environment, let's allow requests from all hostnames.
+  config.hosts.clear
 end
