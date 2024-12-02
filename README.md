@@ -1,3 +1,7 @@
+# DEPRECATED
+
+As of December 2, 2024 this project is deprecated and will no longer be maintained. Please use [cyberark/conjur-service-broker-go](https://github.com/cyberark/conjur-service-broker-go) instead.
+
 # CyberArk Conjur Service Broker for Cloud Foundry
 
 The Conjur Service Broker makes it easy to secure credentials used by applications in Cloud Foundry (CF) with CyberArk Conjur. Using the Conjur Service Broker, applications are given a Conjur identity automatically when deployed, allowing them to securely retrieve secrets stored in Conjur.
